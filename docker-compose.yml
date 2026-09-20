@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  # --- DATABASE SERVICE (MariaDB) ---
+  db:
+    image: mariadb:10.11
+    container_name: jhic-db
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_DATABASE=laravel
+      - MYSQL_USER=laravel_user
+      - MYSQL_PASSWORD=laravel_password
+      - MYSQL_ROOT_PASSWORD=root_password
+    volumes:
+      - jhic-db-data:/var/lib/mysql
+    networks:
+      - jhic-network
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # --- BACKEND SERVICE (Laravel) ---
+  backend:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    container_name: jhic-backend
+    ports:
+      - "8000:80"
+    volumes:
+      - ./Backend:/var/www/html
+      - /var/www/html/vendor
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - DB_CONNECTION=mysql
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_DATABASE=laravel
+      - DB_USERNAME=laravel_user
+      - DB_PASSWORD=laravel_password
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - jhic-network
+
+  # --- FRONTEND SERVICE (Vue + Vite) ---
+  frontend:
+    build:
+      context: ./Front-end
+      dockerfile: Dockerfile
+    container_name: jhic-frontend
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./Front-end:/app
+      - /app/node_modules
+    networks:
+      - jhic-network
+
+volumes:
+  jhic-db-data:
+
+networks:
+  jhic-network:
+    driver: bridge
