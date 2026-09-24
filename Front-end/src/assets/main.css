@@ -1,35 +1,41 @@
-@import './base.css';
+@import "tailwindcss";
 
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  font-weight: normal;
+@theme {
+  --color-primary: #355245;
+  --color-primary-hover: #263d33;
+  --color-secondary: #7B9684;
+  --color-surface-soft: #E8EFEA;
+  --color-canvas: #F8FAF6;
+  --color-card: #FFFFFF;
+  --color-border: #E2E7E2;
+
+  --color-status-active: #2E6B4F;
+  --color-status-overdue: #C2410C;
+  --color-status-pending: #B45309;
+  --color-status-closed: #64748B;
+  --color-status-alpha: #991B1B;
 }
 
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-  padding: 3px;
-}
+@layer base {
+  :root {
+    --color-primary: #355245;
+    --color-primary-hover: #263d33;
+    --color-secondary: #7B9684;
+    --color-surface-soft: #E8EFEA;
+    --color-canvas: #F8FAF6;
+    --color-card: #FFFFFF;
+    --color-border: #E2E7E2;
 
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
+    --color-status-active: #2E6B4F;
+    --color-status-overdue: #C2410C;
+    --color-status-pending: #B45309;
+    --color-status-closed: #64748B;
+    --color-status-alpha: #991B1B;
   }
-}
 
-@media (min-width: 1024px) {
   body {
-    display: flex;
-    place-items: center;
-  }
-
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
+    background-color: var(--color-canvas);
+    color: #1F2937;
+    font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
   }
 }
