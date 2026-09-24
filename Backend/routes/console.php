@@ -1,8 +1,13 @@
 <?php
 
-use Illuminate\Foundation\Inspiring;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Schedule;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
-Artisan::command('inspire', function () {
-    $this->comment(Inspiring::quote());
-})->purpose('Display an inspiring quote');
+Schedule::call(function () {
+    DB::table('requests')
+        ->where('status', 'ACTIVE')
+        ->whereNotNull('expiry_time')
+        ->where('expiry_time', '<', Carbon::now())
+        ->update(['status' => 'OVERDUE']);
+})->everyMinute();
