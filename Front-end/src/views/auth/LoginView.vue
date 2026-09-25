@@ -53,10 +53,10 @@
           <p class="text-xs text-slate-500 font-medium mt-1">Masukkan kredensial terdaftar untuk menguji atau mengakses portal.</p>
         </div>
 
-        <!-- Preset Selector for Testing -->
-        <div class="space-y-2">
+        <!-- Preset Selector for Development Testing -->
+        <div v-if="isDevMode" class="space-y-2">
           <div class="flex items-center justify-between text-[11px] font-bold uppercase tracking-wider text-slate-400">
-            <span>UJI COBA AKUN CEPAT (1-CLICK TEST)</span>
+            <span>UJI COBA AKUN CEPAT (DEV ONLY)</span>
             <span class="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded font-mono">pass: password</span>
           </div>
 
@@ -132,6 +132,8 @@ import { User, Lock, ArrowLeft, ShieldCheck, GraduationCap, UserCheck, Shield, H
 const authStore = useAuthStore()
 const toast = useToast()
 
+const isDevMode = import.meta.env.DEV
+
 const presets = [
   { id: 'student', label: 'Siswa', icon: GraduationCap, username: 'siswa1', password: 'password' },
   { id: 'teacher', label: 'Guru', icon: UserCheck, username: 'guru1', password: 'password' },
@@ -139,8 +141,8 @@ const presets = [
   { id: 'bk', label: 'Guru BK', icon: HeartHandshake, username: 'bk1', password: 'password' }
 ]
 
-const identity = ref('siswa1')
-const password = ref('password')
+const identity = ref(isDevMode ? 'siswa1' : '')
+const password = ref(isDevMode ? 'password' : '')
 
 const quickLogin = async (rolePreset) => {
   identity.value = rolePreset.username

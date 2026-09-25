@@ -49,7 +49,7 @@
             variant="primary"
             size="sm"
             block
-            @click="handleApprove(req.request_id)"
+            @click="confirmApprove(req)"
           >
             <template #icon-left><CheckCircle2 class="w-4 h-4" /></template>
             Setujui (QR)
@@ -59,7 +59,7 @@
             variant="danger"
             size="sm"
             block
-            @click="confirmReject(req, 'REJECTED')"
+            @click="confirmReject(req)"
           >
             Tolak Izin
           </BaseButton>
@@ -72,6 +72,17 @@
       v-else
       title="Tidak Ada Antrean Izin"
       description="Saat ini belum ada pengajuan perizinan siswa yang menunggu persetujuan Anda."
+    />
+
+    <!-- Approve Confirm Dialog -->
+    <ConfirmDialog
+      :show="showApproveConfirm"
+      title="Setujui Permohonan Izin"
+      :message="`Apakah Anda yakin ingin menyetujui izin dari ${selectedReq?.student?.name} (${selectedReq?.duration_minutes ? selectedReq.duration_minutes + ' menit' : 'Izin Pulang'})? Tiket QR Pass digital akan langsung diterbitkan.`"
+      variant="warning"
+      confirm-text="Ya, Setujui & Terbitkan QR"
+      @confirm="executeApprove"
+      @cancel="showApproveConfirm = false"
     />
 
     <!-- Reject Confirm Dialog -->
@@ -100,6 +111,7 @@ import { CheckCircle2, RefreshCw } from 'lucide-vue-next'
 const permitStore = usePermitStore()
 const toast = useToast()
 
+const showApproveConfirm = ref(false)
 const showConfirm = ref(false)
 const selectedReq = ref(null)
 
@@ -111,11 +123,17 @@ onMounted(() => {
   loadRequests()
 })
 
-const handleApprove = async (id) => {
+const confirmApprove = (req) => {
+  selectedReq.value = req
+  showApproveConfirm.value = true
+}
+
+const executeApprove = async () => {
+  if (!selectedReq.value) return
   try {
-    await permitStore.approvePermit(id)
+    await permitStore.approvePermit(selectedReq.value.request_id)
     toast.success('Surat izin disetujui & QR Code diterbitkan!')
-    loadRequests()
+    showApproveConfirm.value = false
   } catch (err) {
     toast.error(err.response?.data?.message || 'Gagal menyetujui izin.')
   }
@@ -132,7 +150,6 @@ const executeReject = async () => {
     await permitStore.resolvePermit(selectedReq.value.request_id, 'REJECTED')
     toast.success('Permohonan izin ditolak!')
     showConfirm.value = false
-    loadRequests()
   } catch (err) {
     toast.error('Gagal menolak permohonan izin.')
   }

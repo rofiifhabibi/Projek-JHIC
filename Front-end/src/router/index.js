@@ -55,6 +55,13 @@ const routes = [
       { path: 'kanban', name: 'bk-kanban', component: () => import('@/views/bk/KanbanView.vue') },
       { path: 'global-monitor', name: 'bk-global-monitor', component: () => import('@/views/bk/GlobalMonitorView.vue') }
     ]
+  },
+  // 5. RUTE 404 CATCH-ALL
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'not-found',
+    component: () => import('@/views/public/NotFoundView.vue'),
+    meta: { layout: 'BlankLayout' }
   }
 ]
 
@@ -76,7 +83,11 @@ router.beforeEach((to, from, next) => {
   }
   
   if (to.meta.roles && !to.meta.roles.includes(authStore.userRole)) {
-    return next(authStore.defaultRedirectRoute)
+    const dest = authStore.defaultRedirectRoute
+    if (to.name !== dest.name) {
+      return next(dest)
+    }
+    return next({ name: 'login' })
   }
 
   next()

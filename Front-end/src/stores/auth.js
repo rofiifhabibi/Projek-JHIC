@@ -5,7 +5,15 @@ import router from '@/router'
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     token: localStorage.getItem('token') || null,
-    user: JSON.parse(localStorage.getItem('user')) || null,
+    user: (() => {
+      try {
+        const stored = localStorage.getItem('user')
+        return stored ? JSON.parse(stored) : null
+      } catch (e) {
+        localStorage.removeItem('user')
+        return null
+      }
+    })(),
     loading: false,
     error: null,
   }),

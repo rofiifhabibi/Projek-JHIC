@@ -32,6 +32,14 @@
       </div>
     </header>
 
+    <!-- Offline Alert Banner -->
+    <div v-if="!isOnline" class="bg-rose-500/20 border-b border-rose-500/40 px-4 py-2 text-center">
+      <div class="max-w-md mx-auto flex items-center justify-center gap-2 text-rose-300 text-xs font-semibold">
+        <WifiOff class="w-4 h-4 shrink-0" />
+        <span>Koneksi internet terputus. Pastikan WiFi terhubung untuk validasi QR ke server.</span>
+      </div>
+    </div>
+
     <!-- Main Scanner Interface -->
     <div class="flex-1 relative flex flex-col items-center justify-center p-3 sm:p-6 max-w-md mx-auto w-full space-y-4">
       
@@ -228,7 +236,7 @@
 </template>
 
 <script setup>
-import { ref, nextTick, onUnmounted } from 'vue'
+import { ref, nextTick, onMounted, onUnmounted } from 'vue'
 import { Html5Qrcode } from 'html5-qrcode'
 import { useAuthStore } from '@/stores/auth'
 import { usePermitStore } from '@/stores/permit'
@@ -238,7 +246,7 @@ import BaseButton from '@/components/ui/BaseButton.vue'
 import BaseBadge from '@/components/ui/BaseBadge.vue'
 import ConfirmDialog from '@/components/ui/ConfirmDialog.vue'
 import ToastNotification from '@/components/ui/ToastNotification.vue'
-import { Camera, QrCode, LogOut, CheckCircle2, XCircle } from 'lucide-vue-next'
+import { Camera, QrCode, LogOut, CheckCircle2, XCircle, WifiOff } from 'lucide-vue-next'
 
 const authStore = useAuthStore()
 const permitStore = usePermitStore()
@@ -248,8 +256,24 @@ const scanResult = ref(null)
 const inputQrToken = ref('')
 const isCameraActive = ref(false)
 const showLogoutConfirm = ref(false)
+const isOnline = ref(typeof navigator !== 'undefined' ? navigator.onLine : true)
 
 let html5QrCode = null
+
+const handleOnline = () => {
+  isOnline.value = true
+  toast.success('Koneksi internet terhubung kembali.')
+}
+
+const handleOffline = () => {
+  isOnline.value = false
+  toast.error('Koneksi internet terputus!')
+}
+
+onMounted(() => {
+  window.addEventListener('online', handleOnline)
+  window.addEventListener('offline', handleOffline)
+})
 
 const toggleCamera = async () => {
   if (isCameraActive.value) {
@@ -291,12 +315,24 @@ const stopCamera = async () => {
 
 const scanToken = async (qrToken) => {
   if (!qrToken) return
+  if (!isOnline.value || (typeof navigator !== 'undefined' && !navigator.onLine)) {
+    scanResult.value = {
+      success: false,
+      message: 'Perangkat offline. Tidak dapat memverifikasi QR Token ke server tanpa koneksi internet.'
+    }
+    toast.error('Perangkat pos satpam sedang offline.')
+    return
+  }
+
   try {
     const res = await permitStore.scanQrToken(qrToken)
     scanResult.value = { success: true, message: res.message, data: res.data }
     inputQrToken.value = ''
   } catch (err) {
-    scanResult.value = { success: false, message: err.response?.data?.message || 'QR Code tidak terdaftar atau sudah tidak berlaku' }
+    const errorMsg = !err.response
+      ? 'Koneksi ke server terputus atau waktu habis. Periksa jaringan pos satpam.'
+      : (err.response.data?.message || 'QR Code tidak terdaftar atau sudah tidak berlaku')
+    scanResult.value = { success: false, message: errorMsg }
   }
 }
 
@@ -308,5 +344,7 @@ const handleLogout = () => {
 
 onUnmounted(() => {
   stopCamera()
+  window.removeEventListener('online', handleOnline)
+  window.removeEventListener('offline', handleOffline)
 })
 </script>

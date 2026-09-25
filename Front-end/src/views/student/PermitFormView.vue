@@ -119,10 +119,11 @@
 
         <!-- Step 3: Alasan Izin (Reason) -->
         <div class="space-y-1.5">
-          <label class="text-xs font-semibold uppercase tracking-wider text-slate-700">
+          <label for="permit-reason" class="text-xs font-semibold uppercase tracking-wider text-slate-700">
             3. Alasan Izin Spesifik <span class="text-rose-500">*</span>
           </label>
           <textarea
+            id="permit-reason"
             v-model="form.reason"
             rows="3"
             required
@@ -212,8 +213,13 @@ const handleSubmit = async () => {
     }
   }
 
+  const payload = { ...form.value }
+  if (payload.type === 'EXIT_SCHOOL') {
+    delete payload.duration_minutes
+  }
+
   try {
-    await permitStore.submitPermit(form.value)
+    await permitStore.submitPermit(payload)
     toast.success('Pengajuan izin berhasil dibuat!')
     router.push('/student/permit/pass')
   } catch (err) {

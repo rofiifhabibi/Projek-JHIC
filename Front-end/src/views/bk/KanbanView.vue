@@ -6,10 +6,35 @@
         <h2 class="text-2xl font-black text-slate-900 tracking-tight">Papan Kerja Kanban BK</h2>
         <p class="text-xs text-slate-500 mt-0.5">Penanganan aduan konseling siswa terpusat dengan data profil siswa lengkap.</p>
       </div>
-      <BaseButton variant="outline" size="sm" @click="loadKanban">
+      <BaseButton variant="outline" size="sm" :loading="reportStore.loading" @click="loadKanban">
         <template #icon-left><RefreshCw class="w-3.5 h-3.5" /></template>
         Refresh Kanban
       </BaseButton>
+    </div>
+
+    <!-- Search & Category Filter Toolbar -->
+    <div class="bg-white p-3.5 rounded-2xl border border-slate-200/80 shadow-xs flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+      <div class="relative flex-1">
+        <Search class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+        <input
+          v-model="searchQuery"
+          type="text"
+          placeholder="Cari nama siswa, NIS, atau kata kunci aduan..."
+          class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-2 text-xs text-slate-900 placeholder:text-slate-400 focus:bg-white focus:border-[#355245] focus:outline-none transition"
+        />
+      </div>
+
+      <div class="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 shrink-0">
+        <button
+          v-for="cat in categoryFilters"
+          :key="cat.value"
+          @click="selectedCategory = cat.value"
+          class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap"
+          :class="selectedCategory === cat.value ? 'bg-[#355245] text-white shadow-xs' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'"
+        >
+          {{ cat.label }}
+        </button>
+      </div>
     </div>
 
     <!-- Kanban Board Columns -->
@@ -22,13 +47,13 @@
             <h3 class="font-bold text-sm text-slate-900 uppercase tracking-wider">Aduan Baru (OPEN)</h3>
           </div>
           <span class="px-2.5 py-0.5 rounded-full bg-amber-200/80 text-amber-900 text-xs font-bold">
-            {{ reportStore.kanban.OPEN?.length || 0 }}
+            {{ filteredOpen.length }}
           </span>
         </div>
 
         <div class="space-y-3 overflow-y-auto max-h-[calc(100vh-270px)] pr-1">
           <div
-            v-for="rep in reportStore.kanban.OPEN"
+            v-for="rep in filteredOpen"
             :key="rep.report_id"
             class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3 hover:border-amber-400 transition"
           >
@@ -70,9 +95,9 @@
           </div>
 
           <EmptyState
-            v-if="!reportStore.kanban.OPEN || reportStore.kanban.OPEN.length === 0"
+            v-if="!filteredOpen || filteredOpen.length === 0"
             title="Kosong"
-            description="Tidak ada aduan baru di kolom ini."
+            description="Tidak ada aduan di kolom ini yang sesuai filter."
           />
         </div>
       </div>
@@ -85,13 +110,13 @@
             <h3 class="font-bold text-sm text-slate-900 uppercase tracking-wider">Diproses (IN PROGRESS)</h3>
           </div>
           <span class="px-2.5 py-0.5 rounded-full bg-emerald-200/80 text-emerald-900 text-xs font-bold">
-            {{ reportStore.kanban.IN_PROGRESS?.length || 0 }}
+            {{ filteredInProgress.length }}
           </span>
         </div>
 
         <div class="space-y-3 overflow-y-auto max-h-[calc(100vh-270px)] pr-1">
           <div
-            v-for="rep in reportStore.kanban.IN_PROGRESS"
+            v-for="rep in filteredInProgress"
             :key="rep.report_id"
             class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3 hover:border-emerald-400 transition"
           >
@@ -137,9 +162,9 @@
           </div>
 
           <EmptyState
-            v-if="!reportStore.kanban.IN_PROGRESS || reportStore.kanban.IN_PROGRESS.length === 0"
+            v-if="!filteredInProgress || filteredInProgress.length === 0"
             title="Kosong"
-            description="Tidak ada kasus yang sedang diproses."
+            description="Tidak ada kasus yang sesuai filter di kolom ini."
           />
         </div>
       </div>
@@ -152,13 +177,13 @@
             <h3 class="font-bold text-sm text-slate-900 uppercase tracking-wider">Selesai (RESOLVED)</h3>
           </div>
           <span class="px-2.5 py-0.5 rounded-full bg-slate-200 text-slate-800 text-xs font-bold">
-            {{ reportStore.kanban.RESOLVED?.length || 0 }}
+            {{ filteredResolved.length }}
           </span>
         </div>
 
         <div class="space-y-3 overflow-y-auto max-h-[calc(100vh-270px)] pr-1">
           <div
-            v-for="rep in reportStore.kanban.RESOLVED"
+            v-for="rep in filteredResolved"
             :key="rep.report_id"
             class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3 opacity-90"
           >
@@ -197,9 +222,9 @@
           </div>
 
           <EmptyState
-            v-if="!reportStore.kanban.RESOLVED || reportStore.kanban.RESOLVED.length === 0"
+            v-if="!filteredResolved || filteredResolved.length === 0"
             title="Kosong"
-            description="Belum ada arsip kasus selesai."
+            description="Tidak ada kasus selesai yang sesuai filter."
           />
         </div>
       </div>
@@ -258,14 +283,14 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useReportStore } from '@/stores/report'
 import { useToast } from '@/composables/useToast'
 import BaseButton from '@/components/ui/BaseButton.vue'
 import BaseBadge from '@/components/ui/BaseBadge.vue'
 import BaseModal from '@/components/ui/BaseModal.vue'
 import EmptyState from '@/components/ui/EmptyState.vue'
-import { RefreshCw, User, ArrowRight, FileText, CheckCircle2 } from 'lucide-vue-next'
+import { RefreshCw, User, ArrowRight, FileText, CheckCircle2, Search } from 'lucide-vue-next'
 
 const reportStore = useReportStore()
 const toast = useToast()
@@ -273,6 +298,16 @@ const toast = useToast()
 const showNoteModal = ref(false)
 const selectedReport = ref(null)
 const noteInput = ref('')
+
+const searchQuery = ref('')
+const selectedCategory = ref('ALL')
+
+const categoryFilters = [
+  { label: 'Semua Kategori', value: 'ALL' },
+  { label: 'Perundungan', value: 'BULLYING' },
+  { label: 'Akademik', value: 'ACADEMIC' },
+  { label: 'Konseling Pribadi', value: 'PERSONAL' }
+]
 
 const formatCategory = (cat) => {
   switch (cat) {
@@ -282,6 +317,25 @@ const formatCategory = (cat) => {
     default: return cat
   }
 }
+
+const filterList = (list) => {
+  if (!list) return []
+  return list.filter(rep => {
+    const matchesCat = selectedCategory.value === 'ALL' || rep.category === selectedCategory.value
+    if (!matchesCat) return false
+    if (!searchQuery.value.trim()) return true
+    const q = searchQuery.value.toLowerCase()
+    const studentName = rep.student?.name?.toLowerCase() || ''
+    const studentNis = rep.student?.username?.toLowerCase() || ''
+    const title = rep.title?.toLowerCase() || ''
+    const desc = rep.description?.toLowerCase() || ''
+    return studentName.includes(q) || studentNis.includes(q) || title.includes(q) || desc.includes(q)
+  })
+}
+
+const filteredOpen = computed(() => filterList(reportStore.kanban.OPEN))
+const filteredInProgress = computed(() => filterList(reportStore.kanban.IN_PROGRESS))
+const filteredResolved = computed(() => filterList(reportStore.kanban.RESOLVED))
 
 const loadKanban = async () => {
   await reportStore.fetchKanban()
@@ -295,7 +349,6 @@ const moveStatus = async (id, status) => {
   try {
     await reportStore.updateReportStatus(id, status)
     toast.success(`Status aduan diperbarui ke ${status}!`)
-    loadKanban()
   } catch (err) {
     toast.error('Gagal memperbarui status aduan.')
   }
@@ -316,7 +369,6 @@ const saveNote = async () => {
     await reportStore.addInvestigationNote(selectedReport.value.report_id, noteInput.value)
     toast.success('Catatan investigasi berhasil ditambahkan!')
     showNoteModal.value = false
-    loadKanban()
   } catch (err) {
     toast.error('Gagal menambahkan catatan.')
   }

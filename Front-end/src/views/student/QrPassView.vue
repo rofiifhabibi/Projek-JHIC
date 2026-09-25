@@ -235,11 +235,11 @@ onMounted(async () => {
 
   timerInterval = setInterval(updateCountdown, 1000)
 
-  // Polling sync setiap 3 detik
+  // Polling sync berkala setiap 15 detik (menghemat bandwidth & beban server)
   pollingInterval = setInterval(async () => {
     await permitStore.fetchActivePermit()
     updateCountdown()
-  }, 3000)
+  }, 15000)
 })
 
 onUnmounted(() => {

@@ -188,8 +188,8 @@ const loadMonitoring = async () => {
 
 onMounted(() => {
   loadMonitoring()
-  // Auto sync setiap 4 detik untuk update real-time
-  pollInterval = setInterval(loadMonitoring, 4000)
+  // Auto sync setiap 20 detik untuk efisiensi beban server
+  pollInterval = setInterval(loadMonitoring, 20000)
 })
 
 onUnmounted(() => {
@@ -208,7 +208,6 @@ const executeAction = async () => {
     await permitStore.resolvePermit(selectedItem.value.request_id, selectedAction.value)
     toast.success(`Status perizinan ${selectedItem.value.student?.name} diperbarui!`)
     showConfirm.value = false
-    loadMonitoring()
   } catch (err) {
     toast.error('Gagal memperbarui status perizinan.')
   }
