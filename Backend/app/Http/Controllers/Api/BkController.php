@@ -28,7 +28,7 @@ class BkController extends Controller
     // Papan Kanban Care Report
     public function getKanbanReports()
     {
-        $reports = Report::with('student:user_id,name,username,class_name')
+        $reports = Report::with('student:user_id,name,username,class_name,email')
             ->latest()
             ->get();
 
@@ -82,8 +82,8 @@ class BkController extends Controller
     public function globalMobilityMonitor()
     {
         $permits = PermitRequest::with([
-            'student:user_id,name,username,class_name',
-            'teacher:user_id,name'
+            'student:user_id,name,username,class_name,email',
+            'teacher:user_id,name,email'
         ])
             ->latest()
             ->get();

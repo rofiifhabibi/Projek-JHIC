@@ -19,7 +19,7 @@ class ScannerController extends Controller
         ]);
 
         // Cari perizinan siswa berdasarkan qr_token
-        $permit = PermitRequest::with(['student:user_id,name,username,class_name'])
+        $permit = PermitRequest::with(['student:user_id,name,username,class_name,email'])
             ->where('qr_token', $request->qr_token)
             ->first();
 
@@ -44,8 +44,9 @@ class ScannerController extends Controller
             // Izin Pulang: Langsung ditutup saat melewati gerbang
             $permit->update(['status' => 'CLOSED']);
         } else {
-            // Izin Sementara (TEMP): Diaktifkan jika belum aktif, pertahankan expiry_time yang diset guru
-            $expiryTime = $permit->expiry_time ?? Carbon::now()->addMinutes($permit->duration_minutes ?? 30);
+            // Izin Sementara (TEMP): WAKTU DIHITUNG SEJAK BERHASIL DI-SCAN SATPAM DI GERBANG
+            $duration = $permit->duration_minutes ?? 30;
+            $expiryTime = Carbon::now()->addMinutes($duration);
             $permit->update([
                 'status' => 'ACTIVE',
                 'expiry_time' => $expiryTime,
@@ -59,11 +60,13 @@ class ScannerController extends Controller
                 'request_id' => $permit->request_id,
                 'type' => $permit->type,
                 'status' => $permit->status,
-                'expiry_time' => $permit->expiry_time,
+                'duration_minutes' => $permit->duration_minutes,
+                'expiry_time' => $permit->expiry_time ? Carbon::parse($permit->expiry_time)->toIso8601String() : null,
                 'student' => [
                     'nis' => $permit->student->username,
                     'name' => $permit->student->name,
                     'class_name' => $permit->student->class_name,
+                    'email' => $permit->student->email,
                 ],
             ],
         ]);

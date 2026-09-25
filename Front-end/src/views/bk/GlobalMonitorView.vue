@@ -18,9 +18,15 @@
       search-placeholder="Cari nama siswa, NIS, kelas, atau status..."
     >
       <template #cell-student="{ row }">
-        <div>
-          <p class="font-bold text-slate-900 text-sm">{{ row.student?.name }}</p>
-          <p class="text-slate-400 text-xs">NIS: {{ row.student?.username }} • {{ row.student?.class_name }}</p>
+        <div class="space-y-0.5">
+          <p class="font-bold text-slate-900 text-sm flex items-center gap-1.5">
+            {{ row.student?.name }}
+          </p>
+          <p class="text-slate-500 text-xs">
+            NIS: <span class="font-mono font-bold text-slate-700">{{ row.student?.username }}</span> • 
+            <span class="font-bold text-[#355245] bg-[#E8EFEA] px-1.5 py-0.5 rounded text-[11px]">{{ row.student?.class_name }}</span>
+          </p>
+          <p v-if="row.student?.email" class="text-slate-400 text-[10px]">{{ row.student?.email }}</p>
         </div>
       </template>
 
@@ -34,10 +40,15 @@
         <BaseBadge :status="value" />
       </template>
 
-      <template #cell-[#teacher]="{ row }">
-        <span class="text-xs text-slate-600 font-medium">
-          {{ row.teacher?.name || '-' }}
-        </span>
+      <template #cell-teacher="{ row }">
+        <div class="space-y-0.5">
+          <span class="text-xs text-slate-800 font-bold block">
+            {{ row.teacher?.name || '-' }}
+          </span>
+          <span v-if="row.teacher?.email" class="text-slate-400 text-[10px] block">
+            {{ row.teacher?.email }}
+          </span>
+        </div>
       </template>
     </DataTable>
   </div>
@@ -54,7 +65,7 @@ import { RefreshCw } from 'lucide-vue-next'
 const reportStore = useReportStore()
 
 const columns = [
-  { key: 'student', label: 'Siswa & Rombel' },
+  { key: 'student', label: 'Data Lengkap Siswa' },
   { key: 'type', label: 'Jenis Izin' },
   { key: 'status', label: 'Status Saat Ini' },
   { key: 'teacher', label: 'Guru Penanggung Jawab' }

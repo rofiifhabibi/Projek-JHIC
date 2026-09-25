@@ -77,7 +77,7 @@ class PermitController extends Controller
      */
     public function myActivePermit(Request $request)
     {
-        $permit = PermitRequest::with('student')
+        $permit = PermitRequest::with(['student', 'teacher'])
             ->where('student_id', $request->user()->user_id)
             ->whereIn('status', ['PENDING', 'ACTIVE', 'OVERDUE'])
             ->latest()
@@ -114,7 +114,7 @@ class PermitController extends Controller
 
     /**
      * 5. Guru menyetujui izin (Approve)
-     * Menghasilkan QR Token unik dan durasi waktu kembali (expiry_time)
+     * Menghasilkan QR Token unik. Perhitungan waktu (expiry_time) dimulai saat discan satpam di pos gerbang.
      */
     public function approve(Request $request, $id)
     {
@@ -128,17 +128,11 @@ class PermitController extends Controller
             ], 403);
         }
 
-        // Tentukan batas waktu jika izin keluar sementara
-        $expiryTime = null;
-        if ($permit->type === 'TEMP') {
-            $duration = $permit->duration_minutes ?? 30;
-            $expiryTime = Carbon::now()->addMinutes($duration);
-        }
-
+        // Terbitkan QR Token. expiry_time dibiarkan null sampai divalidasi satpam di gerbang
         $permit->update([
             'status' => 'ACTIVE',
             'qr_token' => Str::uuid()->toString(),
-            'expiry_time' => $expiryTime,
+            'expiry_time' => null,
         ]);
 
         return response()->json([

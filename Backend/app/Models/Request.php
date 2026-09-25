@@ -27,6 +27,11 @@ class Request extends Model
         'qr_token',
     ];
 
+    protected $casts = [
+        'expiry_time' => 'datetime',
+        'duration_minutes' => 'integer',
+    ];
+
     /**
      * Relasi ke siswa yang mengajukan izin
      */
