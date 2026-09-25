@@ -1,7 +1,7 @@
 <template>
   <div class="space-y-6">
     <!-- Header Banner -->
-    <div class="bg-gradient-to-r from-slate-900 to-slate-800 text-white p-6 sm:p-8 rounded-3xl border border-slate-700 shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+    <div class="bg-gradient-to-r from-slate-900 to-slate-800 text-white p-5 sm:p-7 rounded-2xl sm:rounded-3xl border border-slate-700 shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
       <div class="space-y-2">
         <div class="inline-flex items-center gap-2 bg-emerald-500/20 text-emerald-300 text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full border border-emerald-500/30">
           <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
@@ -109,7 +109,7 @@
       </template>
 
       <template #cell-actions="{ row }">
-        <div class="flex items-center justify-end gap-2">
+        <div class="flex items-center justify-end gap-2 whitespace-nowrap shrink-0">
           <BaseButton
             v-if="row.status !== 'COMPLETED' && row.status !== 'CLOSED'"
             variant="primary"

@@ -33,8 +33,8 @@
             :aria-labelledby="titleId"
           >
             <!-- Header -->
-            <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between shrink-0">
-              <h3 :id="titleId" class="text-lg font-bold text-slate-900 flex items-center gap-2">
+            <div class="px-4 sm:px-6 py-3.5 sm:py-4 border-b border-slate-100 flex items-center justify-between shrink-0">
+              <h3 :id="titleId" class="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
                 <slot name="icon" />
                 {{ title }}
               </h3>
@@ -48,12 +48,12 @@
             </div>
 
             <!-- Body -->
-            <div class="px-6 py-5 overflow-y-auto flex-1">
+            <div class="px-4 sm:px-6 py-4 sm:py-5 overflow-y-auto flex-1">
               <slot />
             </div>
 
             <!-- Footer -->
-            <div v-if="$slots.footer" class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-end gap-3 shrink-0">
+            <div v-if="$slots.footer" class="px-4 sm:px-6 py-3.5 sm:py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-end gap-3 shrink-0">
               <slot name="footer" />
             </div>
           </div>

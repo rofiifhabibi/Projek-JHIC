@@ -16,22 +16,22 @@
       <div
         v-for="req in permitStore.pendingApprovals"
         :key="req.request_id"
-        class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-4 hover:border-slate-300 transition"
+        class="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 border border-slate-200 shadow-sm space-y-4 hover:border-slate-300 transition"
       >
-        <div class="flex items-start justify-between">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-full bg-[#E8EFEA] text-[#355245] flex items-center justify-center font-bold text-sm">
+        <div class="flex items-start justify-between gap-3">
+          <div class="flex items-center gap-3 min-w-0">
+            <div class="w-10 h-10 rounded-full bg-[#E8EFEA] text-[#355245] flex items-center justify-center font-bold text-sm shrink-0">
               {{ req.student?.name?.substring(0, 2) || 'SS' }}
             </div>
-            <div>
-              <h3 class="font-bold text-sm text-slate-900">{{ req.student?.name }}</h3>
-              <p class="text-xs text-slate-500">NIS: {{ req.student?.username }} • {{ req.student?.class_name }}</p>
+            <div class="min-w-0">
+              <h3 class="font-bold text-sm text-slate-900 truncate">{{ req.student?.name }}</h3>
+              <p class="text-xs text-slate-500 truncate">NIS: {{ req.student?.username }} • {{ req.student?.class_name }}</p>
             </div>
           </div>
-          <BaseBadge :status="req.status" />
+          <BaseBadge :status="req.status" class="shrink-0" />
         </div>
 
-        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 text-xs space-y-2">
+        <div class="bg-slate-50 p-3.5 sm:p-4 rounded-2xl border border-slate-100 text-xs space-y-2">
           <p class="text-slate-700 font-medium">
             <strong>Tipe:</strong> {{ req.type === 'TEMP' ? 'Keluar Sementara (TEMP)' : 'Izin Pulang Sekolah' }}
           </p>
@@ -44,7 +44,7 @@
         </div>
 
         <!-- Action Buttons -->
-        <div class="flex items-center gap-2 pt-2">
+        <div class="grid grid-cols-2 gap-2.5 pt-1">
           <BaseButton
             variant="primary"
             size="sm"
@@ -58,6 +58,7 @@
           <BaseButton
             variant="danger"
             size="sm"
+            block
             @click="confirmReject(req, 'REJECTED')"
           >
             Tolak Izin

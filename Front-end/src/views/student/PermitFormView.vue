@@ -1,12 +1,12 @@
-﻿<template>
+<template>
   <div class="space-y-6">
-    <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-6">
+    <div class="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 border border-slate-200 shadow-sm space-y-5 sm:space-y-6">
       <div class="border-b border-slate-100 pb-4">
         <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Form Pengajuan Surat Izin</h2>
         <p class="text-xs text-slate-500 mt-0.5">Isi rincian permohonan izin untuk dikonfirmasi oleh guru pengampu kelas.</p>
       </div>
 
-      <form @submit.prevent="handleSubmit" class="space-y-6">
+      <form @submit.prevent="handleSubmit" class="space-y-5 sm:space-y-6">
         <!-- Step 1: Jenis Perizinan -->
         <div class="space-y-3">
           <label class="text-xs font-semibold uppercase tracking-wider text-slate-700">
@@ -42,13 +42,13 @@
           </div>
 
           <!-- Opsi Cepat (Quick Presets) -->
-          <div class="grid grid-cols-4 gap-2">
+          <div class="grid grid-cols-4 gap-1.5 sm:gap-2">
             <button
               v-for="dur in [10, 15, 30, 45]"
               :key="dur"
               type="button"
               @click="setDuration(dur)"
-              class="py-2.5 px-2 rounded-xl border text-xs font-bold transition text-center"
+              class="py-2.5 px-1 sm:px-2 rounded-xl border text-[11px] sm:text-xs font-bold transition text-center"
               :class="form.duration_minutes === dur ? 'border-[#355245] bg-[#E8EFEA] text-[#355245] shadow-xs' : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'"
             >
               {{ dur }} Menit
@@ -56,26 +56,26 @@
           </div>
 
           <!-- Input Durasi Kustom & Stepper -->
-          <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 space-y-3">
+          <div class="bg-slate-50 border border-slate-200 rounded-2xl p-3.5 sm:p-4 space-y-3">
             <div class="flex items-center justify-between text-xs">
-              <span class="font-medium text-slate-700">Atur Waktu Bebas (Kustom):</span>
+              <span class="font-medium text-slate-700">Atur Waktu Bebas:</span>
               <span class="text-[11px] text-slate-400">Rentang: 5 - 180 menit</span>
             </div>
 
-            <div class="flex items-center gap-2 sm:gap-3">
+            <div class="flex items-center gap-1.5 sm:gap-3">
               <!-- Tombol Kurang 5 Menit -->
               <button
                 type="button"
                 @click="adjustDuration(-5)"
                 :disabled="form.duration_minutes <= 5"
-                class="h-10 px-3 rounded-xl bg-white border border-slate-200 text-slate-700 text-xs font-bold hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center transition shadow-xs"
+                class="h-10 px-2.5 sm:px-3 rounded-xl bg-white border border-slate-200 text-slate-700 text-xs font-bold hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center transition shadow-xs shrink-0"
                 title="Kurangi 5 menit"
               >
                 -5 mnt
               </button>
 
               <!-- Input Angka Bebas -->
-              <div class="relative flex-1">
+              <div class="relative flex-1 min-w-0">
                 <input
                   v-model.number="form.duration_minutes"
                   type="number"
@@ -84,9 +84,9 @@
                   step="1"
                   required
                   placeholder="30"
-                  class="w-full text-center font-bold text-slate-900 bg-white border border-slate-200 rounded-xl py-2 px-3 text-sm focus:border-[#355245] focus:ring-2 focus:ring-[#355245] focus:outline-none transition pr-14"
+                  class="w-full text-center font-bold text-slate-900 bg-white border border-slate-200 rounded-xl py-2 px-2 text-sm focus:border-[#355245] focus:ring-2 focus:ring-[#355245] focus:outline-none transition pr-12"
                 />
-                <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-medium text-slate-400 pointer-events-none">
+                <span class="absolute right-2.5 top-1/2 -translate-y-1/2 text-[11px] font-medium text-slate-400 pointer-events-none">
                   Menit
                 </span>
               </div>
@@ -96,7 +96,7 @@
                 type="button"
                 @click="adjustDuration(5)"
                 :disabled="form.duration_minutes >= 180"
-                class="h-10 px-3 rounded-xl bg-white border border-slate-200 text-slate-700 text-xs font-bold hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center transition shadow-xs"
+                class="h-10 px-2.5 sm:px-3 rounded-xl bg-white border border-slate-200 text-slate-700 text-xs font-bold hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center transition shadow-xs shrink-0"
                 title="Tambah 5 menit"
               >
                 +5 mnt

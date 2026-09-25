@@ -19,7 +19,7 @@
 
     <!-- Table -->
     <div class="overflow-x-auto">
-      <table class="w-full text-left text-xs sm:text-sm">
+      <table class="w-full min-w-[640px] text-left text-xs sm:text-sm">
         <thead class="bg-slate-50 border-b border-slate-100 text-slate-500 font-semibold uppercase tracking-wider text-[11px]">
           <tr>
             <th

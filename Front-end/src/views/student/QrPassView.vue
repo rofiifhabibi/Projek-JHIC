@@ -1,14 +1,14 @@
 <template>
   <div class="space-y-6">
     <!-- Active Ticket Card -->
-    <div v-if="activePermit" class="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden">
+    <div v-if="activePermit" class="bg-white rounded-2xl sm:rounded-3xl border border-slate-200 shadow-xl overflow-hidden">
       <!-- Header -->
-      <div class="bg-gradient-to-r from-slate-900 to-slate-800 text-white p-6 relative">
+      <div class="bg-gradient-to-r from-slate-900 to-slate-800 text-white p-4 sm:p-6 relative">
         <div class="flex items-center justify-between">
-          <span class="text-xs font-mono tracking-widest text-slate-400 uppercase">TIKET PERIZINAN DIGITAL</span>
+          <span class="text-[10px] sm:text-xs font-mono tracking-widest text-slate-400 uppercase">TIKET PERIZINAN DIGITAL</span>
           <BaseBadge :status="isTimeExpired ? 'OVERDUE' : activePermit.status" />
         </div>
-        <h2 class="text-xl font-bold mt-2">
+        <h2 class="text-lg sm:text-xl font-bold mt-2">
           {{ activePermit.type === 'TEMP' ? 'Izin Keluar Sementara' : 'Izin Pulang Sekolah' }}
         </h2>
         <p class="text-xs text-slate-400 mt-0.5">
@@ -17,13 +17,13 @@
       </div>
 
       <!-- Content -->
-      <div class="p-6 space-y-6 text-center">
+      <div class="p-4 sm:p-6 space-y-5 sm:space-y-6 text-center">
         <!-- 1. PENDING State: Menunggu Approval Guru -->
-        <div v-if="activePermit.status === 'PENDING'" class="py-8 space-y-3">
-          <div class="w-16 h-16 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center mx-auto animate-bounce">
-            <Clock class="w-8 h-8" />
+        <div v-if="activePermit.status === 'PENDING'" class="py-6 sm:py-8 space-y-3">
+          <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center mx-auto animate-bounce">
+            <Clock class="w-7 h-7 sm:w-8 sm:h-8" />
           </div>
-          <h3 class="text-lg font-bold text-slate-900">Menunggu Persetujuan Guru</h3>
+          <h3 class="text-base sm:text-lg font-bold text-slate-900">Menunggu Persetujuan Guru</h3>
           <p class="text-xs text-slate-500 max-w-xs mx-auto">
             Permohonan izin Anda sedang diverifikasi oleh guru pengampu kelas. QR Code akan terbit otomatis setelah disetujui.
           </p>
@@ -34,11 +34,11 @@
         </div>
 
         <!-- 2. QR Code State (Sudah disetujui Guru) -->
-        <div v-else-if="activePermit.qr_token" class="space-y-6">
-          <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 inline-block shadow-inner">
+        <div v-else-if="activePermit.qr_token" class="space-y-5 sm:space-y-6">
+          <div class="bg-slate-50 p-4 sm:p-6 rounded-2xl border border-slate-200 inline-block shadow-inner max-w-full">
             <qrcode-vue
               :value="activePermit.qr_token"
-              :size="210"
+              :size="190"
               level="H"
               class="mx-auto"
               aria-label="QR Code Perizinan Digital Siswa"

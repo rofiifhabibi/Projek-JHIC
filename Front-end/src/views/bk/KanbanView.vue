@@ -15,8 +15,8 @@
     <!-- Kanban Board Columns -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       <!-- COLUMN 1: OPEN -->
-      <div class="bg-slate-100/70 p-4 rounded-3xl border border-slate-200/80 space-y-4">
-        <div class="flex items-center justify-between px-2">
+      <div class="bg-slate-100/70 p-4 rounded-3xl border border-slate-200/80 space-y-4 flex flex-col">
+        <div class="flex items-center justify-between px-2 shrink-0">
           <div class="flex items-center gap-2">
             <span class="w-3 h-3 rounded-full bg-amber-500"></span>
             <h3 class="font-bold text-sm text-slate-900 uppercase tracking-wider">Aduan Baru (OPEN)</h3>
@@ -26,7 +26,7 @@
           </span>
         </div>
 
-        <div class="space-y-3">
+        <div class="space-y-3 overflow-y-auto max-h-[calc(100vh-270px)] pr-1">
           <div
             v-for="rep in reportStore.kanban.OPEN"
             :key="rep.report_id"
@@ -78,8 +78,8 @@
       </div>
 
       <!-- COLUMN 2: IN_PROGRESS -->
-      <div class="bg-slate-100/70 p-4 rounded-3xl border border-slate-200/80 space-y-4">
-        <div class="flex items-center justify-between px-2">
+      <div class="bg-slate-100/70 p-4 rounded-3xl border border-slate-200/80 space-y-4 flex flex-col">
+        <div class="flex items-center justify-between px-2 shrink-0">
           <div class="flex items-center gap-2">
             <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
             <h3 class="font-bold text-sm text-slate-900 uppercase tracking-wider">Diproses (IN PROGRESS)</h3>
@@ -89,7 +89,7 @@
           </span>
         </div>
 
-        <div class="space-y-3">
+        <div class="space-y-3 overflow-y-auto max-h-[calc(100vh-270px)] pr-1">
           <div
             v-for="rep in reportStore.kanban.IN_PROGRESS"
             :key="rep.report_id"
@@ -145,8 +145,8 @@
       </div>
 
       <!-- COLUMN 3: RESOLVED -->
-      <div class="bg-slate-100/70 p-4 rounded-3xl border border-slate-200/80 space-y-4">
-        <div class="flex items-center justify-between px-2">
+      <div class="bg-slate-100/70 p-4 rounded-3xl border border-slate-200/80 space-y-4 flex flex-col">
+        <div class="flex items-center justify-between px-2 shrink-0">
           <div class="flex items-center gap-2">
             <span class="w-3 h-3 rounded-full bg-slate-500"></span>
             <h3 class="font-bold text-sm text-slate-900 uppercase tracking-wider">Selesai (RESOLVED)</h3>
@@ -156,7 +156,7 @@
           </span>
         </div>
 
-        <div class="space-y-3">
+        <div class="space-y-3 overflow-y-auto max-h-[calc(100vh-270px)] pr-1">
           <div
             v-for="rep in reportStore.kanban.RESOLVED"
             :key="rep.report_id"

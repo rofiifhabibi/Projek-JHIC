@@ -16,62 +16,99 @@
       </div>
     </div>
 
-    <!-- Active Permit Card OR Normal Status -->
+    <!-- Active E-Permit Ticket Card -->
     <div
       v-if="permitStore.activePermit"
-      class="bg-white rounded-3xl p-6 border-2 shadow-lg space-y-4"
-      :class="permitStore.activePermit.status === 'OVERDUE' ? 'border-rose-400 bg-rose-50/20' : 'border-[#355245]/20'"
+      class="bg-white rounded-2xl border shadow-sm overflow-hidden transition-all"
+      :class="permitStore.activePermit.status === 'OVERDUE' ? 'border-rose-200 ring-1 ring-rose-200' : 'border-slate-200'"
     >
-      <div class="flex items-center justify-between">
+      <!-- Ticket Header Strip -->
+      <div
+        class="px-4 sm:px-5 py-3 border-b flex items-center justify-between"
+        :class="permitStore.activePermit.status === 'OVERDUE' ? 'bg-rose-50/70 border-rose-100' : 'bg-slate-50/80 border-slate-100'"
+      >
         <div class="flex items-center gap-2.5">
           <div
-            class="w-10 h-10 rounded-xl flex items-center justify-center font-bold"
+            class="w-7 h-7 rounded-lg flex items-center justify-center font-bold"
             :class="permitStore.activePermit.status === 'OVERDUE' ? 'bg-rose-100 text-rose-700' : 'bg-[#E8EFEA] text-[#355245]'"
           >
-            <QrCode class="w-5 h-5" />
+            <QrCode class="w-4 h-4" />
           </div>
           <div>
-            <h3 class="font-bold text-sm text-slate-900">Surat Izin Digital Aktif</h3>
-            <p class="text-xs text-slate-500 font-mono">Tipe: {{ permitStore.activePermit.type === 'TEMP' ? 'Keluar Sementara' : 'Izin Pulang' }}</p>
+            <h3 class="text-xs font-bold text-slate-900 leading-none">Izin Keluar Aktif</h3>
+            <span class="text-[10px] text-slate-400 font-medium">Presensi Digital Siswa</span>
           </div>
         </div>
         <BaseBadge :status="permitStore.activePermit.status" />
       </div>
 
-      <!-- Overdue Alert Callout if student is late -->
-      <div v-if="permitStore.activePermit.status === 'OVERDUE'" class="p-3.5 bg-rose-50 border border-rose-200 rounded-2xl flex items-center gap-2.5 text-xs text-rose-800 font-semibold">
-        <AlertTriangle class="w-4 h-4 text-rose-600 shrink-0 animate-pulse" />
-        <span>Batas waktu izin telah habis! Segera kembali ke ruang kelas dan laporkan ke Guru Pengampu.</span>
-      </div>
+      <!-- Ticket Body -->
+      <div class="p-4 sm:p-5 space-y-3.5">
+        <!-- Key Info Grid -->
+        <div class="grid grid-cols-2 gap-2.5 text-xs">
+          <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+            <span class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block">Jenis Izin</span>
+            <span class="font-bold text-slate-800 mt-0.5 block truncate">
+              {{ permitStore.activePermit.type === 'TEMP' ? 'Keluar Sementara' : 'Izin Pulang' }}
+            </span>
+          </div>
+          <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+            <span class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block">Durasi Alokasi</span>
+            <span class="font-bold text-slate-800 mt-0.5 block truncate">
+              {{ permitStore.activePermit.duration_minutes || 30 }} Menit
+            </span>
+          </div>
+        </div>
 
-      <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 text-xs space-y-2">
-        <p class="text-slate-600 font-medium">
-          <strong>Alasan:</strong> {{ permitStore.activePermit.reason || 'Tidak ada alasan dicantumkan.' }}
-        </p>
-        <p class="text-slate-500">
-          <strong>Guru Pengampu:</strong> {{ permitStore.activePermit.teacher?.name || 'Guru' }}
-        </p>
-      </div>
+        <!-- Detail Lines -->
+        <div class="space-y-1.5 text-xs border-t border-slate-100 pt-2.5">
+          <div class="flex items-start justify-between gap-3">
+            <span class="text-slate-400 text-[11px] shrink-0">Alasan:</span>
+            <span class="font-semibold text-slate-800 text-right capitalize">
+              {{ permitStore.activePermit.reason || '-' }}
+            </span>
+          </div>
+          <div class="flex items-center justify-between gap-3">
+            <span class="text-slate-400 text-[11px] shrink-0">Guru Pengampu:</span>
+            <span class="font-semibold text-slate-800 text-right">
+              {{ permitStore.activePermit.teacher?.name || '-' }}
+            </span>
+          </div>
+        </div>
 
-      <router-link to="/student/permit/pass">
-        <BaseButton variant="primary" size="md" block>
-          <template #icon-left><QrCode class="w-4 h-4" /></template>
-          Buka Tiket QR Pass Digital
-        </BaseButton>
-      </router-link>
+        <!-- Overdue Notice Banner if Late -->
+        <div
+          v-if="permitStore.activePermit.status === 'OVERDUE'"
+          class="p-3 bg-rose-50 border border-rose-200 rounded-xl flex items-start gap-2.5 text-xs text-rose-900"
+        >
+          <AlertTriangle class="w-4 h-4 text-rose-600 shrink-0 mt-0.5 animate-pulse" />
+          <div class="leading-relaxed">
+            <strong class="font-bold text-rose-950">Waktu Izin Berakhir!</strong>
+            <p class="text-[11px] text-rose-700 mt-0.5">Anda tercatat terlambat oleh sistem. Harap segera kembali ke ruang kelas dan laporkan ke Guru Pengampu.</p>
+          </div>
+        </div>
+
+        <!-- Action Button -->
+        <router-link to="/student/permit/pass" class="block pt-0.5">
+          <BaseButton variant="primary" size="md" block>
+            <template #icon-left><QrCode class="w-4 h-4" /></template>
+            Buka Tiket QR Pass Digital
+          </BaseButton>
+        </router-link>
+      </div>
     </div>
 
     <!-- Normal Presence Banner -->
-    <div v-else class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm flex items-center justify-between gap-4">
+    <div v-else class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
       <div class="space-y-1">
         <div class="flex items-center gap-2">
-          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
-          <span class="text-xs font-bold uppercase tracking-wider text-emerald-700">Status Presensi Belajar</span>
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+          <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-700">Status Presensi Belajar</span>
         </div>
-        <h3 class="text-lg font-bold text-slate-900">Mengikuti Pembelajaran di Kelas</h3>
+        <h3 class="text-base sm:text-lg font-bold text-slate-900">Mengikuti Pembelajaran di Kelas</h3>
         <p class="text-xs text-slate-500">Anda tidak memiliki izin keluar aktif saat ini. Tetap fokus mengikuti KBM.</p>
       </div>
-      <router-link to="/student/permit/create">
+      <router-link to="/student/permit/create" class="shrink-0">
         <BaseButton variant="secondary" size="sm">
           Buat Izin
         </BaseButton>
@@ -94,7 +131,7 @@
 
       <router-link to="/student/report/create" class="group">
         <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:border-[#355245] transition space-y-3">
-          <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-700 flex items-center justify-center group-hover:scale-105 transition">
+          <div class="w-10 h-10 rounded-xl bg-teal-50 text-teal-700 flex items-center justify-center group-hover:scale-105 transition">
             <ShieldAlert class="w-5 h-5" />
           </div>
           <div>

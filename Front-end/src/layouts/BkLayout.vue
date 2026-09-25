@@ -11,7 +11,7 @@
           </div>
           <div>
             <h1 class="text-sm font-extrabold text-white tracking-tight leading-tight">Console BK</h1>
-            <p class="text-[10px] text-emerald-400 font-semibold uppercase tracking-wider mt-0.5">Bimbingan Konseling</p>
+            <p class="text-[10px] text-teal-400 font-semibold uppercase tracking-wider mt-0.5">Bimbingan Konseling</p>
           </div>
         </div>
 
@@ -57,7 +57,7 @@
       <div class="p-4 border-t border-slate-800 bg-slate-950/40 space-y-3">
         <div class="px-2">
           <p class="text-xs font-bold text-white truncate">{{ authStore.userName }}</p>
-          <p class="text-[10px] text-emerald-400 font-semibold">Petugas Konseling BK</p>
+          <p class="text-[10px] text-teal-400 font-semibold">Petugas Konseling BK</p>
         </div>
         <button
           @click="showLogoutConfirm = true"
@@ -113,7 +113,22 @@
         </div>
       </header>
 
-      <div class="p-4 sm:p-6 lg:p-8 flex-1">
+      <!-- Desktop Top Header Bar -->
+      <div class="hidden md:flex h-16 bg-white border-b border-slate-200 px-6 lg:px-8 items-center justify-between sticky top-0 z-20 shadow-xs">
+        <div class="flex items-center gap-2 text-xs font-semibold text-slate-500">
+          <span class="text-slate-400">Pusat Konseling Siswa & Monitor Mobilitas</span>
+          <span>•</span>
+          <span class="text-[#355245] font-bold">SMKN 2 Depok Sleman</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
+            Workstation BK Aktif
+          </span>
+        </div>
+      </div>
+
+      <div class="p-4 sm:p-6 lg:p-8 flex-1 max-w-[1600px] w-full mx-auto">
         <router-view />
       </div>
     </main>

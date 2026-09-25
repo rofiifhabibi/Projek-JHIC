@@ -31,81 +31,33 @@
     </header>
 
     <!-- Hero Section -->
-    <section class="relative overflow-hidden py-16 lg:py-24 bg-gradient-to-b from-white via-white to-[#F4F7F4]">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
-            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#E8EFEA] text-[#273e34] text-xs font-semibold uppercase tracking-wider">
-              <ShieldCheck class="w-4 h-4 text-[#355245]" />
-              Sistem Digitalisasi Sekolah Terpadu
-            </div>
+    <section class="relative overflow-hidden py-16 sm:py-24 lg:py-28 bg-gradient-to-b from-white via-white to-[#F4F7F4]">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#E8EFEA] text-[#273e34] text-xs font-semibold uppercase tracking-wider">
+          <ShieldCheck class="w-4 h-4 text-[#355245]" />
+          Sistem Digitalisasi Sekolah Terpadu
+        </div>
 
-            <h2 class="text-3xl sm:text-5xl font-black text-slate-900 leading-[1.15] tracking-tight">
-              Manajemen Perizinan Siswa & Layanan BK Berstandar Modern
-            </h2>
+        <h2 class="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-900 leading-[1.15] tracking-tight">
+          Manajemen Perizinan Siswa & Layanan BK Berstandar Modern
+        </h2>
 
-            <p class="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto lg:mx-0">
-              Integrasi cerdas 4 entitas sekolah: <strong class="text-slate-900">Siswa, Guru Pengampu, Petugas Gerbang, dan Guru BK</strong>. Memastikan ketertiban, keamanan mobilitas, dan perlindungan siswa secara real-time.
-            </p>
+        <p class="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto">
+          Integrasi cerdas 4 entitas sekolah: <strong class="text-slate-900">Siswa, Guru Pengampu, Petugas Gerbang, dan Guru BK</strong>. Memastikan ketertiban, keamanan mobilitas, dan perlindungan siswa secara real-time.
+        </p>
 
-            <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
-              <router-link to="/login" class="w-full sm:w-auto">
-                <BaseButton variant="primary" size="lg" block>
-                  Buka Portal Login
-                  <template #icon-right><ArrowRight class="w-4 h-4" /></template>
-                </BaseButton>
-              </router-link>
-              <a href="#fitur" class="w-full sm:w-auto">
-                <BaseButton variant="outline" size="lg" block>
-                  Pelajari Selengkapnya
-                </BaseButton>
-              </a>
-            </div>
-          </div>
-
-          <!-- Hero Mockup Card -->
-          <div class="lg:col-span-5 relative">
-            <div class="relative bg-white rounded-3xl shadow-2xl border border-slate-200/80 p-6 space-y-4 backdrop-blur-md">
-              <div class="flex items-center justify-between border-b border-slate-100 pb-4">
-                <div class="flex items-center gap-3">
-                  <div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">
-                    BS
-                  </div>
-                  <div>
-                    <h4 class="font-bold text-sm text-slate-900">Budi Santoso</h4>
-                    <p class="text-xs text-slate-500">XII RPL 1 • NIS 2026001</p>
-                  </div>
-                </div>
-                <BaseBadge status="ACTIVE" label="Izin Aktif" />
-              </div>
-
-              <!-- Ticket Preview -->
-              <div class="bg-slate-900 text-white p-5 rounded-2xl space-y-3">
-                <div class="flex justify-between items-center text-xs text-slate-400">
-                  <span>IZIN KELUAR SEMENTARA (TEMP)</span>
-                  <span class="font-mono text-emerald-400">QR-PASS DIGITAL</span>
-                </div>
-                <div class="text-xs font-medium text-slate-300">
-                  "Izin mengambil berkas sertifikat di ruang Tata Usaha"
-                </div>
-                <div class="flex items-center justify-between pt-2 border-t border-slate-800 text-xs">
-                  <span class="text-slate-400">Batas Kembali:</span>
-                  <span class="font-bold text-amber-400 font-mono">24 Menit 12 Detik</span>
-                </div>
-              </div>
-
-              <div class="grid grid-cols-2 gap-3 pt-2">
-                <div class="bg-[#E8EFEA] p-3 rounded-xl text-center">
-                  <p class="text-[11px] font-semibold text-slate-600 uppercase">Guru Pengampu</p>
-                  <p class="text-xs font-bold text-[#273e34] mt-0.5">Ahmad Dahlan, S.Pd.</p>
-                </div>
-                <div class="bg-slate-100 p-3 rounded-xl text-center">
-                  <p class="text-[11px] font-semibold text-slate-600 uppercase">Pos Gerbang</p>
-                  <p class="text-xs font-bold text-slate-800 mt-0.5">Verified Satpam</p>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
+          <router-link to="/login" class="w-full sm:w-auto">
+            <BaseButton variant="primary" size="lg" block>
+              Buka Portal Login
+              <template #icon-right><ArrowRight class="w-4 h-4" /></template>
+            </BaseButton>
+          </router-link>
+          <a href="#fitur" class="w-full sm:w-auto">
+            <BaseButton variant="outline" size="lg" block>
+              Pelajari Selengkapnya
+            </BaseButton>
+          </a>
         </div>
       </div>
     </section>
@@ -145,7 +97,7 @@
           </div>
 
           <div class="bg-[#F4F7F4] p-6 rounded-2xl border border-slate-200/80 space-y-3 hover:shadow-md transition">
-            <div class="w-12 h-12 rounded-xl bg-amber-700 text-white flex items-center justify-center">
+            <div class="w-12 h-12 rounded-xl bg-teal-700 text-white flex items-center justify-center">
               <HeartHandshake class="w-6 h-6" />
             </div>
             <h4 class="font-bold text-slate-900 text-base">Care Report & Kanban BK</h4>
@@ -165,25 +117,25 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <div class="bg-white p-6 rounded-2xl border border-slate-200 space-y-3 shadow-sm">
-            <span class="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 text-[11px] font-bold uppercase">Siswa</span>
+            <span class="px-2.5 py-1 rounded-full bg-[#E8EFEA] text-[#355245] text-[11px] font-bold uppercase">Siswa</span>
             <h4 class="font-bold text-slate-900 text-base">Portal Siswa</h4>
             <p class="text-xs text-slate-600 leading-relaxed">Mobile-first app untuk pengajuan izin, tiket QR Pass, tracking status, dan pengaduan konseling BK.</p>
           </div>
 
           <div class="bg-white p-6 rounded-2xl border border-slate-200 space-y-3 shadow-sm">
-            <span class="px-2.5 py-1 rounded-full bg-blue-100 text-blue-800 text-[11px] font-bold uppercase">Guru</span>
+            <span class="px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 text-[11px] font-bold uppercase">Guru</span>
             <h4 class="font-bold text-slate-900 text-base">Workstation Guru</h4>
             <p class="text-xs text-slate-600 leading-relaxed">Antrean persetujuan izin siswa, penetapan durasi, dan dashboard pemantauan presensi rombel.</p>
           </div>
 
           <div class="bg-white p-6 rounded-2xl border border-slate-200 space-y-3 shadow-sm">
-            <span class="px-2.5 py-1 rounded-full bg-slate-200 text-slate-800 text-[11px] font-bold uppercase">Satpam</span>
+            <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 text-[11px] font-bold uppercase">Satpam</span>
             <h4 class="font-bold text-slate-900 text-base">Gate Web Scanner</h4>
             <p class="text-xs text-slate-600 leading-relaxed">Portal scanner kamera gerbang untuk validasi token QR siswa saat keluar atau izin pulang.</p>
           </div>
 
           <div class="bg-white p-6 rounded-2xl border border-slate-200 space-y-3 shadow-sm">
-            <span class="px-2.5 py-1 rounded-full bg-purple-100 text-purple-800 text-[11px] font-bold uppercase">Guru BK</span>
+            <span class="px-2.5 py-1 rounded-full bg-teal-50 text-teal-800 border border-teal-200/60 text-[11px] font-bold uppercase">Guru BK</span>
             <h4 class="font-bold text-slate-900 text-base">Console BK & Mobility</h4>
             <p class="text-xs text-slate-600 leading-relaxed">Papan kerja Kanban aduan konseling, rekam investigasi, dan pengawasan mobilitas global siswa.</p>
           </div>
@@ -208,6 +160,5 @@
 
 <script setup>
 import BaseButton from '@/components/ui/BaseButton.vue'
-import BaseBadge from '@/components/ui/BaseBadge.vue'
 import { ArrowRight, QrCode, ShieldCheck, Users, HeartHandshake, LogIn } from 'lucide-vue-next'
 </script>

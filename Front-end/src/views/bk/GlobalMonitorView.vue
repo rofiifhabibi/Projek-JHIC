@@ -101,14 +101,24 @@
         </div>
       </template>
 
-      <template #cell-type="{ value }">
-        <span class="font-semibold text-xs text-slate-700">
-          {{ value === 'TEMP' ? 'Keluar Sementara' : 'Izin Pulang' }}
-        </span>
+      <template #cell-type="{ row }">
+        <div class="space-y-0.5">
+          <span class="font-bold text-xs text-slate-800 block">
+            {{ row.type === 'TEMP' ? 'Keluar Sementara' : 'Izin Pulang' }}
+          </span>
+          <span class="text-[11px] text-slate-500 font-medium block">
+            Alokasi: <strong class="text-slate-700">{{ row.duration_minutes || 30 }} menit</strong>
+          </span>
+        </div>
       </template>
 
       <template #cell-status="{ value }">
-        <BaseBadge :status="value" />
+        <div class="space-y-1">
+          <BaseBadge :status="value" />
+          <p v-if="value === 'OVERDUE'" class="text-[10px] font-bold text-rose-600 uppercase tracking-wide">
+            Perlu Konfirmasi Guru
+          </p>
+        </div>
       </template>
 
       <template #cell-teacher="{ row }">
@@ -139,8 +149,8 @@ let pollInterval = null
 
 const columns = [
   { key: 'student', label: 'Data Lengkap Siswa' },
-  { key: 'type', label: 'Jenis Izin' },
-  { key: 'status', label: 'Status Saat Ini' },
+  { key: 'type', label: 'Jenis & Durasi Izin' },
+  { key: 'status', label: 'Status Terkini' },
   { key: 'teacher', label: 'Guru Penanggung Jawab' }
 ]
 
