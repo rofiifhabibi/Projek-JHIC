@@ -19,12 +19,8 @@ class BkController extends Controller
                 'reports_open' => Report::where('status', 'OPEN')->count(),
                 'reports_in_progress' => Report::where('status', 'IN_PROGRESS')->count(),
                 'reports_resolved' => Report::where('status', 'RESOLVED')->count(),
-                'permits_active_today' => PermitRequest::whereIn('status', ['ACTIVE', 'OVERDUE'])
-                    ->whereDate('created_at', Carbon::today())
-                    ->count(),
-                'permits_overdue_today' => PermitRequest::where('status', 'OVERDUE')
-                    ->whereDate('created_at', Carbon::today())
-                    ->count(),
+                'permits_active_today' => PermitRequest::whereIn('status', ['ACTIVE', 'OVERDUE'])->count(),
+                'permits_overdue_today' => PermitRequest::where('status', 'OVERDUE')->count(),
             ],
         ]);
     }
@@ -89,7 +85,6 @@ class BkController extends Controller
             'student:user_id,name,username,class_name',
             'teacher:user_id,name'
         ])
-            ->whereIn('status', ['ACTIVE', 'OVERDUE'])
             ->latest()
             ->get();
 

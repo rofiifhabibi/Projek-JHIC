@@ -33,15 +33,24 @@ class TeacherController extends Controller
             ->pluck('class_name')
             ->unique();
 
+        if ($activeClasses->isEmpty()) {
+            $activeClasses = Schedule::where('teacher_id', $teacher->user_id)
+                ->pluck('class_name')
+                ->unique();
+        }
+
+        if ($activeClasses->isEmpty()) {
+            $activeClasses = collect(['XII RPL 1']);
+        }
+
         // Ambil user_id seluruh siswa di rombel tersebut
-        $studentIds = User::whereIn('class_name', $activeClasses)
+        $studentIds = User::whereIn('class_name', $activeClasses->toArray())
             ->pluck('user_id');
 
         // Siswa yang berizin aktif, terlambat, atau sudah izin pulang
         $permits = PermitRequest::with(['student:user_id,name,username,class_name'])
             ->whereIn('student_id', $studentIds)
-            ->whereIn('status', ['ACTIVE', 'OVERDUE', 'CLOSED'])
-            ->whereDate('created_at', Carbon::today())
+            ->whereIn('status', ['PENDING', 'ACTIVE', 'OVERDUE', 'COMPLETED', 'CLOSED'])
             ->latest()
             ->get();
 
@@ -49,7 +58,7 @@ class TeacherController extends Controller
             'status' => 'success',
             'data' => [
                 'day' => $currentDay,
-                'classes' => $activeClasses,
+                'classes' => $activeClasses->values(),
                 'active_permits' => $permits,
             ],
         ]);

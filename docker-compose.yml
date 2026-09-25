@@ -1,12 +1,10 @@
-version: '3.8'
-
 services:
   # --- DATABASE SERVICE (MariaDB) ---
   db:
     image: mariadb:10.11
     container_name: jhic-db
     ports:
-      - "3306:3306"
+      - "3307:3306"
     environment:
       - MYSQL_DATABASE=laravel
       - MYSQL_USER=laravel_user
@@ -33,7 +31,6 @@ services:
       - "8000:80"
     volumes:
       - ./Backend:/var/www/html
-      - /var/www/html/vendor
     environment:
       - APP_ENV=local
       - APP_DEBUG=true

@@ -20,7 +20,9 @@ class Request extends Model
         'student_id',
         'initial_teacher_id',
         'type',        // 'TEMP' atau 'EXIT_SCHOOL'
-        'status',      // 'PENDING', 'ACTIVE', 'OVERDUE', 'COMPLETED', 'ALPHA', 'CLOSED'
+        'status',      // 'PENDING', 'ACTIVE', 'OVERDUE', 'COMPLETED', 'ALPHA', 'CLOSED', 'REJECTED'
+        'reason',
+        'duration_minutes',
         'expiry_time',
         'qr_token',
     ];

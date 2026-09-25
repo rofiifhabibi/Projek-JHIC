@@ -44,10 +44,11 @@ class ScannerController extends Controller
             // Izin Pulang: Langsung ditutup saat melewati gerbang
             $permit->update(['status' => 'CLOSED']);
         } else {
-            // Izin Sementara (TEMP): Diaktifkan dan waktu hitung mundur dimulai
+            // Izin Sementara (TEMP): Diaktifkan jika belum aktif, pertahankan expiry_time yang diset guru
+            $expiryTime = $permit->expiry_time ?? Carbon::now()->addMinutes($permit->duration_minutes ?? 30);
             $permit->update([
                 'status' => 'ACTIVE',
-                'expiry_time' => Carbon::now()->addMinutes(30), // Batas kembali 30 menit
+                'expiry_time' => $expiryTime,
             ]);
         }
 

@@ -15,9 +15,11 @@ return new class extends Migration
             $table->id('request_id');
             $table->unsignedBigInteger('student_id');
             $table->unsignedBigInteger('initial_teacher_id'); // Guru pengampu yang pertama menyetujui[cite: 3]
-            $table->enum('type', ['TEMP', 'EXIT_SCHOOL']); // TEMP = Izin keluar sementara, EXIT_SCHOOL = Izin pulang[cite: 3]
-            $table->enum('status', ['PENDING', 'ACTIVE', 'OVERDUE', 'COMPLETED', 'ALPHA', 'CLOSED'])->default('PENDING'); //[cite: 3]
-            $table->dateTime('expiry_time')->nullable(); // Batas kembali siswa sebelum status OVERDUE[cite: 3]
+            $table->enum('type', ['TEMP', 'EXIT_SCHOOL']); // TEMP = Izin keluar sementara, EXIT_SCHOOL = Izin pulang
+            $table->enum('status', ['PENDING', 'ACTIVE', 'OVERDUE', 'COMPLETED', 'ALPHA', 'CLOSED', 'REJECTED'])->default('PENDING');
+            $table->text('reason')->nullable();
+            $table->integer('duration_minutes')->default(30);
+            $table->dateTime('expiry_time')->nullable(); // Batas kembali siswa sebelum status OVERDUE
             $table->string('qr_token')->unique()->nullable(); // Token acak untuk QR Code di HP siswa[cite: 3]
             $table->timestamps();
 

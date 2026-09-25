@@ -13,17 +13,29 @@ class ReportController extends Controller
     {
         $request->validate([
             'category' => ['required', 'in:BULLYING,FACILITY,ACADEMIC,PERSONAL,OTHERS'],
-            'title' => ['required', 'string', 'max:255'],
+            'title' => ['nullable', 'string', 'max:255'],
             'description' => ['required', 'string'],
             'is_anonymous' => ['nullable', 'boolean'],
         ]);
 
         $studentId = $request->boolean('is_anonymous') ? null : $request->user()->user_id;
 
+        $title = $request->input('title');
+        if (!$title) {
+            $categoryNames = [
+                'BULLYING' => 'Laporan Perundungan / Bullying',
+                'FACILITY' => 'Laporan Kerusakan Fasilitas',
+                'ACADEMIC' => 'Konseling Pembelajaran / Akademik',
+                'PERSONAL' => 'Konseling Personal / Pribadi',
+                'OTHERS' => 'Laporan / Aduan Umum'
+            ];
+            $title = $categoryNames[$request->category] ?? 'Laporan Care BK';
+        }
+
         $report = Report::create([
             'student_id' => $studentId,
             'category' => $request->category,
-            'title' => $request->title,
+            'title' => $title,
             'description' => $request->description,
             'status' => 'OPEN',
         ]);

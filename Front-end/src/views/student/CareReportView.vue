@@ -1,52 +1,113 @@
 <template>
-  <div class="bg-white rounded-2xl border border-border p-5 shadow-sm">
-    <h2 class="text-lg font-bold text-gray-800 mb-1">Lapor BK / Care Report</h2>
-    <p class="text-sm text-gray-500 mb-4">Laporan Anda ditangani secara rahasia.</p>
-    
-    <form @submit.prevent="submitReport" class="space-y-4">
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
-        <select v-model="form.category" class="w-full border border-gray-300 rounded-lg p-2.5 outline-none focus:ring-2 focus:ring-primary">
-          <option value="BULLYING">Perundungan (Bullying)</option>
-          <option value="FACILITY">Fasilitas Sekolah</option>
-          <option value="ACADEMIC">Masalah Akademik</option>
-          <option value="PERSONAL">Masalah Personal</option>
-          <option value="OTHERS">Lainnya</option>
-        </select>
-      </div>
-
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Detail Kejadian / Keluhan</label>
-        <textarea v-model="form.description" rows="4" class="w-full border border-gray-300 rounded-lg p-2.5 outline-none focus:ring-2 focus:ring-primary" placeholder="Ceritakan dengan detail..."></textarea>
-      </div>
-
-      <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-200">
-        <div>
-          <p class="text-sm font-medium text-gray-800">Kirim Anonim</p>
-          <p class="text-xs text-gray-500">Nama Anda disembunyikan</p>
+  <div class="space-y-6">
+    <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-6">
+      <div class="border-b border-slate-100 pb-4">
+        <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-purple-50 text-purple-700 text-xs font-bold uppercase tracking-wider mb-2">
+          <ShieldAlert class="w-3.5 h-3.5" /> Care BK — Layanan Konseling Rahasia
         </div>
-        <label class="relative inline-flex items-center cursor-pointer">
-          <input type="checkbox" v-model="form.is_anonymous" class="sr-only peer">
-          <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-        </label>
+        <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Formulir Pengaduan & Konseling Siswa</h2>
+        <p class="text-xs text-slate-500 mt-0.5">Sampaikan kendala perundungan, fasilitas, akademik, atau pribadi secara aman ke Guru BK.</p>
       </div>
 
-      <button type="submit" class="w-full bg-primary text-white py-2.5 rounded-lg font-medium hover:bg-primary-hover transition-colors mt-2">
-        Kirim Laporan
-      </button>
-    </form>
+      <form @submit.prevent="handleSubmit" class="space-y-6">
+        <!-- Kategori Aduan -->
+        <div class="space-y-3">
+          <label class="text-xs font-semibold uppercase tracking-wider text-slate-700">
+            1. Kategori Kasus / Aduan <span class="text-rose-500">*</span>
+          </label>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <RadioCard v-model="form.category" value="BULLYING" name="report-cat" title="Perundungan (Bullying)" description="Intimidasi, pemerasan, atau kekerasan verbal/fisik." />
+            <RadioCard v-model="form.category" value="FACILITY" name="report-cat" title="Fasilitas & Lab" description="Kerusakan alat praktikum, LCD, atau fasilitas kelas." />
+            <RadioCard v-model="form.category" value="ACADEMIC" name="report-cat" title="Kendala Pembelajaran" description="Kesulitan belajar, tugas, atau konseling nilai." />
+            <RadioCard v-model="form.category" value="PERSONAL" name="report-cat" title="Konseling Pribadi" description="Kesehatan mental, keluh kesah, atau masalah keluarga." />
+          </div>
+        </div>
+
+        <!-- Judul & Kronologi -->
+        <BaseInput
+          id="report-title"
+          label="2. Judul Aduan Singkat"
+          placeholder="Misal: Tindakan intimidasi di area kantin belakang..."
+          v-model="form.title"
+          required
+        />
+
+        <div class="space-y-1.5">
+          <label class="text-xs font-semibold uppercase tracking-wider text-slate-700">
+            3. Rincian Kronologi Kejadian <span class="text-rose-500">*</span>
+          </label>
+          <textarea
+            v-model="form.description"
+            rows="4"
+            required
+            placeholder="Ceritakan waktu, tempat, dan rincian kejadian secara lengkap..."
+            class="w-full rounded-xl border border-slate-200 bg-white p-3.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#355245] focus:ring-2 focus:ring-[#355245] focus:outline-none transition"
+          ></textarea>
+        </div>
+
+        <!-- Anonymous Toggle -->
+        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between gap-4">
+          <div class="space-y-0.5">
+            <div class="flex items-center gap-2 font-bold text-xs text-slate-900">
+              <Shield class="w-4 h-4 text-purple-600" />
+              Laporkan Secara Anonim (Rahasiakan Identitas)
+            </div>
+            <p class="text-[11px] text-slate-500">Nama dan kelas Anda tidak akan tercatat dalam laporan BK.</p>
+          </div>
+          <input
+            type="checkbox"
+            v-model="form.is_anonymous"
+            class="w-5 h-5 accent-[#355245] rounded cursor-pointer"
+          />
+        </div>
+
+        <BaseButton
+          type="submit"
+          variant="primary"
+          size="lg"
+          block
+          :loading="reportStore.loading"
+        >
+          Kirim Laporan BK
+        </BaseButton>
+      </form>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useReportStore } from '@/stores/report'
+import { useToast } from '@/composables/useToast'
+import RadioCard from '@/components/ui/RadioCard.vue'
+import BaseInput from '@/components/ui/BaseInput.vue'
+import BaseButton from '@/components/ui/BaseButton.vue'
+import { ShieldAlert, Shield } from 'lucide-vue-next'
 
 const router = useRouter()
-const form = ref({ category: 'BULLYING', description: '', is_anonymous: true })
+const reportStore = useReportStore()
+const toast = useToast()
 
-const submitReport = () => {
-  alert('Laporan berhasil dikirim ke BK.')
-  router.push('/student/dashboard')
+const form = ref({
+  category: 'BULLYING',
+  title: '',
+  description: '',
+  is_anonymous: false
+})
+
+const handleSubmit = async () => {
+  if (!form.value.title.trim() || !form.value.description.trim()) {
+    toast.warning('Judul dan kronologi aduan wajib diisi!')
+    return
+  }
+
+  try {
+    await reportStore.submitReport(form.value)
+    toast.success('Laporan pengaduan berhasil dikirim ke Guru BK!')
+    router.push('/student/tracking')
+  } catch (err) {
+    toast.error(err.response?.data?.message || 'Gagal mengirim laporan.')
+  }
 }
 </script>

@@ -1,65 +1,173 @@
 <template>
-  <div>
-    <h2 class="text-2xl font-bold text-gray-800 mb-6">Monitoring Kelas Saat Ini</h2>
-    
-    <div class="grid md:grid-cols-3 gap-6">
-      <div class="col-span-2 bg-white rounded-xl shadow-sm border border-border overflow-hidden">
-        <div class="p-4 border-b border-border bg-gray-50 flex justify-between items-center">
-          <h3 class="font-semibold text-gray-700">Daftar Siswa Berizin (Kelas XII RPL 1)</h3>
-          <span class="text-sm text-gray-500">Jam: 08:00 - 09:30</span>
+  <div class="space-y-6">
+    <!-- Header Banner -->
+    <div class="bg-gradient-to-r from-slate-900 to-slate-800 text-white p-6 sm:p-8 rounded-3xl border border-slate-700 shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div class="space-y-2">
+        <div class="inline-flex items-center gap-2 bg-emerald-500/20 text-emerald-300 text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full border border-emerald-500/30">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+          <span>Monitoring Presensi (Hari {{ permitStore.monitoringData.day || 'Senin' }})</span>
         </div>
-        <div class="p-0">
-          <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-50">
-              <tr>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Siswa</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sisa Waktu</th>
-              </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-              <tr>
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="text-sm font-medium text-gray-900">Budi Santoso</div>
-                  <div class="text-sm text-gray-500">12345 / Izin Toilet</div>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">ACTIVE</span>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">05:23</td>
-              </tr>
-              <tr>
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="text-sm font-medium text-gray-900">Siti Aminah</div>
-                  <div class="text-sm text-gray-500">12346 / Ke UKS</div>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">OVERDUE</span>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-red-600 font-bold">-02:15</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <h2 class="text-2xl sm:text-3xl font-black tracking-tight text-white">Monitoring Presensi & Mobilitas</h2>
+        <p class="text-xs text-slate-400">Pengawasan siswa berizin, aktif, dan terlambat di rombel yang Anda ampu.</p>
       </div>
-      
-      <div class="bg-surface-soft rounded-xl border border-secondary p-5">
-        <h3 class="font-semibold text-primary mb-4">Ringkasan</h3>
-        <div class="space-y-4">
-          <div class="flex justify-between items-center">
-            <span class="text-gray-600">Total Siswa</span>
-            <span class="font-bold">32</span>
-          </div>
-          <div class="flex justify-between items-center">
-            <span class="text-gray-600">Di Kelas</span>
-            <span class="font-bold">30</span>
-          </div>
-          <div class="flex justify-between items-center text-orange-600">
-            <span class="font-medium">Sedang Izin</span>
-            <span class="font-bold">2</span>
-          </div>
-        </div>
+
+      <div class="bg-slate-800/90 p-4 rounded-2xl border border-slate-700 text-right min-w-[220px]">
+        <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Rombel / Kelas Aktif</p>
+        <p class="text-lg font-black text-emerald-400">
+          {{ permitStore.monitoringData.classes?.join(', ') || 'XII RPL 1' }}
+        </p>
+        <p class="text-xs text-slate-300 mt-0.5">Lab RPL 1 • Jam Mengajar Active</p>
       </div>
     </div>
+
+    <!-- Stat Widgets Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <MetricCard
+        label="Sedang Izin (Active)"
+        :value="activeCount"
+        color="warning"
+        description="Siswa yang sedang di luar kelas"
+      >
+        <template #icon><Clock class="w-6 h-6 text-amber-600" /></template>
+      </MetricCard>
+
+      <MetricCard
+        label="Terlambat (Overdue)"
+        :value="overdueCount"
+        color="danger"
+        description="Melewati batas durasi izin"
+      >
+        <template #icon><AlertCircle class="w-6 h-6 text-rose-600" /></template>
+      </MetricCard>
+
+      <MetricCard
+        label="Total Mobilitas Hari Ini"
+        :value="totalMobilityCount"
+        color="primary"
+        description="Total perizinan terdaftar"
+      >
+        <template #icon><Users class="w-6 h-6 text-[#355245]" /></template>
+      </MetricCard>
+    </div>
+
+    <!-- Real-time Table -->
+    <DataTable
+      :columns="columns"
+      :data="permitStore.monitoringData.active_permits || []"
+      search-placeholder="Cari siswa, NIS, atau jenis izin..."
+    >
+      <template #cell-student="{ row }">
+        <div>
+          <p class="font-bold text-slate-900 text-sm">{{ row.student?.name }}</p>
+          <p class="text-slate-400 text-xs">NIS: {{ row.student?.username }} • {{ row.student?.class_name }}</p>
+        </div>
+      </template>
+
+      <template #cell-type="{ value }">
+        <span class="font-semibold text-xs text-slate-700">
+          {{ value === 'TEMP' ? 'Keluar Sementara' : 'Izin Pulang' }}
+        </span>
+      </template>
+
+      <template #cell-status="{ value }">
+        <BaseBadge :status="value" />
+      </template>
+
+      <template #cell-actions="{ row }">
+        <div class="flex items-center justify-end gap-2">
+          <BaseButton
+            v-if="row.status !== 'COMPLETED' && row.status !== 'CLOSED'"
+            variant="primary"
+            size="sm"
+            @click="confirmAction(row, 'COMPLETED')"
+          >
+            Kembali Ke Kelas
+          </BaseButton>
+          <BaseButton
+            v-if="row.status !== 'ALPHA' && row.status !== 'CLOSED'"
+            variant="outline"
+            size="sm"
+            @click="confirmAction(row, 'ALPHA')"
+          >
+            Tandai Alpha
+          </BaseButton>
+        </div>
+      </template>
+    </DataTable>
+
+    <!-- Confirm Modal -->
+    <ConfirmDialog
+      :show="showConfirm"
+      :title="selectedAction === 'COMPLETED' ? 'Konfirmasi Kembali ke Kelas' : 'Konfirmasi Status Alpha'"
+      :message="`Apakah Anda yakin ingin mengubah status perizinan siswa ${selectedItem?.student?.name} menjadi ${selectedAction}?`"
+      :variant="selectedAction === 'ALPHA' ? 'danger' : 'primary'"
+      confirm-text="Ya, Ubah Status"
+      @confirm="executeAction"
+      @cancel="showConfirm = false"
+    />
   </div>
 </template>
+
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import { usePermitStore } from '@/stores/permit'
+import { useToast } from '@/composables/useToast'
+import MetricCard from '@/components/ui/MetricCard.vue'
+import DataTable from '@/components/ui/DataTable.vue'
+import BaseBadge from '@/components/ui/BaseBadge.vue'
+import BaseButton from '@/components/ui/BaseButton.vue'
+import ConfirmDialog from '@/components/ui/ConfirmDialog.vue'
+import { Clock, AlertCircle, Users } from 'lucide-vue-next'
+
+const permitStore = usePermitStore()
+const toast = useToast()
+
+const columns = [
+  { key: 'student', label: 'Siswa & Identitas' },
+  { key: 'type', label: 'Jenis Izin' },
+  { key: 'status', label: 'Status' },
+  { key: 'actions', label: 'Aksi Konfirmasi Guru', class: 'text-right' }
+]
+
+const showConfirm = ref(false)
+const selectedItem = ref(null)
+const selectedAction = ref('')
+
+const activeCount = computed(() => {
+  return permitStore.monitoringData.active_permits?.filter(p => p.status === 'ACTIVE').length || 0
+})
+
+const overdueCount = computed(() => {
+  return permitStore.monitoringData.active_permits?.filter(p => p.status === 'OVERDUE').length || 0
+})
+
+const totalMobilityCount = computed(() => {
+  return permitStore.monitoringData.active_permits?.length || 0
+})
+
+const loadMonitoring = async () => {
+  await permitStore.fetchTeacherMonitoring()
+}
+
+onMounted(() => {
+  loadMonitoring()
+})
+
+const confirmAction = (item, action) => {
+  selectedItem.value = item
+  selectedAction.value = action
+  showConfirm.value = true
+}
+
+const executeAction = async () => {
+  if (!selectedItem.value) return
+  try {
+    await permitStore.resolvePermit(selectedItem.value.request_id, selectedAction.value)
+    toast.success(`Status perizinan ${selectedItem.value.student?.name} diperbarui!`)
+    showConfirm.value = false
+    loadMonitoring()
+  } catch (err) {
+    toast.error('Gagal memperbarui status perizinan.')
+  }
+}
+</script>

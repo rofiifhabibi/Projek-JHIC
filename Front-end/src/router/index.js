@@ -4,7 +4,9 @@ import { useAuthStore } from '@/stores/auth'
 const routes = [
   {
     path: '/',
-    redirect: '/login'
+    name: 'landing',
+    component: () => import('@/views/public/LandingPage.vue'),
+    meta: { layout: 'BlankLayout', requiresGuest: true }
   },
   {
     path: '/login',

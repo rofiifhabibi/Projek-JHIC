@@ -37,7 +37,9 @@ class PermitController extends Controller
     {
         $request->validate([
             'teacher_id' => ['required', 'exists:users,user_id'],
-            'type' => ['required', 'in:TEMP,EXIT_SCHOOL'], // TEMP = Keluar Sementara, EXIT_SCHOOL = Pulang
+            'type' => ['required', 'in:TEMP,EXIT_SCHOOL'],
+            'reason' => ['required', 'string', 'max:500'],
+            'duration_minutes' => ['nullable', 'integer', 'min:5', 'max:180'],
         ]);
 
         $student = $request->user();
@@ -58,6 +60,8 @@ class PermitController extends Controller
             'student_id' => $student->user_id,
             'initial_teacher_id' => $request->teacher_id,
             'type' => $request->type,
+            'reason' => $request->reason,
+            'duration_minutes' => $request->duration_minutes ?? 30,
             'status' => 'PENDING',
         ]);
 
@@ -124,15 +128,16 @@ class PermitController extends Controller
             ], 403);
         }
 
-        // Tentukan batas waktu jika izin keluar sementara (misal: 30 menit)
+        // Tentukan batas waktu jika izin keluar sementara
         $expiryTime = null;
         if ($permit->type === 'TEMP') {
-            $expiryTime = Carbon::now()->addMinutes(30);
+            $duration = $permit->duration_minutes ?? 30;
+            $expiryTime = Carbon::now()->addMinutes($duration);
         }
 
         $permit->update([
             'status' => 'ACTIVE',
-            'qr_token' => Str::uuid()->toString(), // Token unik untuk di-render jadi QR Code di HP siswa
+            'qr_token' => Str::uuid()->toString(),
             'expiry_time' => $expiryTime,
         ]);
 
@@ -144,15 +149,23 @@ class PermitController extends Controller
     }
 
     /**
-     * 6. Guru menyelesaikan izin (Siswa kembali ke kelas) atau menandai Alpha
+     * 6. Guru menyelesaikan izin (Siswa kembali ke kelas), menolak (REJECTED), atau menandai Alpha
      */
     public function resolve(Request $request, $id)
     {
         $request->validate([
-            'action' => ['required', 'in:COMPLETED,ALPHA'],
+            'action' => ['required', 'in:COMPLETED,ALPHA,REJECTED'],
         ]);
 
         $permit = PermitRequest::findOrFail($id);
+
+        // Check authorization
+        if ($permit->initial_teacher_id !== $request->user()->user_id) {
+            return response()->json([
+                'status' => 'forbidden',
+                'message' => 'Anda tidak memiliki wewenang untuk mengubah status izin ini.',
+            ], 403);
+        }
 
         $permit->update([
             'status' => $request->action,

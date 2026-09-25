@@ -1,41 +1,48 @@
 @import "tailwindcss";
+@source "../**/*.vue";
+@source "../**/*.js";
 
 @theme {
   --color-primary: #355245;
-  --color-primary-hover: #263d33;
+  --color-primary-hover: #273e34;
+  --color-primary-light: #486e5d;
   --color-secondary: #7B9684;
   --color-surface-soft: #E8EFEA;
-  --color-canvas: #F8FAF6;
+  --color-canvas: #F4F7F4;
   --color-card: #FFFFFF;
-  --color-border: #E2E7E2;
-
-  --color-status-active: #2E6B4F;
+  --color-border: #E2E8E3;
+  --color-status-active: #15803D;
   --color-status-overdue: #C2410C;
   --color-status-pending: #B45309;
-  --color-status-closed: #64748B;
+  --color-status-closed: #475569;
   --color-status-alpha: #991B1B;
+  --color-status-rejected: #BE123C;
 }
 
-@layer base {
-  :root {
-    --color-primary: #355245;
-    --color-primary-hover: #263d33;
-    --color-secondary: #7B9684;
-    --color-surface-soft: #E8EFEA;
-    --color-canvas: #F8FAF6;
-    --color-card: #FFFFFF;
-    --color-border: #E2E7E2;
+body {
+  background-color: var(--color-canvas);
+  color: #111827;
+  font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
 
-    --color-status-active: #2E6B4F;
-    --color-status-overdue: #C2410C;
-    --color-status-pending: #B45309;
-    --color-status-closed: #64748B;
-    --color-status-alpha: #991B1B;
-  }
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
 
-  body {
-    background-color: var(--color-canvas);
-    color: #1F2937;
-    font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
-  }
+/* Focus Ring Utility */
+.focus-ring {
+  @apply focus:outline-none focus:ring-2 focus:ring-[#355245] focus:ring-offset-2;
 }
