@@ -19,20 +19,37 @@
           <div class="px-3 py-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Menu Konseling</div>
           <router-link
             to="/bk/kanban"
-            class="flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold transition-all text-slate-300 hover:text-white hover:bg-slate-800"
+            class="flex items-center justify-between px-4 py-3 rounded-xl text-xs font-bold transition-all text-slate-300 hover:text-white hover:bg-slate-800"
             active-class="bg-[#355245] text-white shadow-md"
           >
-            <Kanban class="w-4 h-4" />
-            <span>Papan Kanban BK</span>
+            <div class="flex items-center gap-3">
+              <Kanban class="w-4 h-4" />
+              <span>Papan Kanban BK</span>
+            </div>
+            <span
+              v-if="openCasesCount > 0"
+              class="bg-amber-500 text-white text-[10px] font-black px-2 py-0.5 rounded-full"
+            >
+              {{ openCasesCount }}
+            </span>
           </router-link>
 
           <router-link
             to="/bk/global-monitor"
-            class="flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold transition-all text-slate-300 hover:text-white hover:bg-slate-800"
+            class="flex items-center justify-between px-4 py-3 rounded-xl text-xs font-bold transition-all text-slate-300 hover:text-white hover:bg-slate-800"
             active-class="bg-[#355245] text-white shadow-md"
           >
-            <Globe class="w-4 h-4" />
-            <span>Monitor Mobilitas</span>
+            <div class="flex items-center gap-3">
+              <Globe class="w-4 h-4" />
+              <span>Monitor Mobilitas</span>
+            </div>
+            <span
+              v-if="overdueCount > 0"
+              class="bg-rose-500 text-white text-[10px] font-black px-2 py-0.5 rounded-full animate-pulse flex items-center gap-1 shadow-sm"
+            >
+              <span class="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span>
+              {{ overdueCount }} Terlambat
+            </span>
           </router-link>
         </nav>
       </div>
@@ -69,17 +86,29 @@
         <div class="bg-slate-800 px-4 py-2 flex justify-around border-t border-slate-700/80">
           <router-link
             to="/bk/kanban"
-            class="text-xs font-bold py-1.5 px-3 rounded-lg text-slate-300"
+            class="text-xs font-bold py-1.5 px-3 rounded-lg text-slate-300 flex items-center gap-1.5"
             active-class="bg-[#355245] text-white"
           >
-            Kanban BK
+            <span>Kanban BK</span>
+            <span
+              v-if="openCasesCount > 0"
+              class="bg-amber-500 text-white text-[10px] font-black px-1.5 py-0.5 rounded-full"
+            >
+              {{ openCasesCount }}
+            </span>
           </router-link>
           <router-link
             to="/bk/global-monitor"
-            class="text-xs font-bold py-1.5 px-3 rounded-lg text-slate-300"
+            class="text-xs font-bold py-1.5 px-3 rounded-lg text-slate-300 flex items-center gap-1.5"
             active-class="bg-[#355245] text-white"
           >
-            Mobilitas Global
+            <span>Mobilitas Global</span>
+            <span
+              v-if="overdueCount > 0"
+              class="bg-rose-500 text-white text-[10px] font-black px-1.5 py-0.5 rounded-full animate-pulse"
+            >
+              {{ overdueCount }}
+            </span>
           </router-link>
         </div>
       </header>
@@ -103,14 +132,42 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useAuthStore } from '@/stores/auth'
+import { useReportStore } from '@/stores/report'
 import ToastNotification from '@/components/ui/ToastNotification.vue'
 import ConfirmDialog from '@/components/ui/ConfirmDialog.vue'
 import { Kanban, Globe, LogOut } from 'lucide-vue-next'
 
 const authStore = useAuthStore()
+const reportStore = useReportStore()
 const showLogoutConfirm = ref(false)
+let pollTimer = null
+
+const overdueCount = computed(() => {
+  return reportStore.globalMobility?.filter(p => p.status === 'OVERDUE').length || 0
+})
+
+const openCasesCount = computed(() => {
+  return reportStore.kanban?.OPEN?.length || 0
+})
+
+const syncData = async () => {
+  await Promise.allSettled([
+    reportStore.fetchGlobalMobility(),
+    reportStore.fetchKanban(),
+    reportStore.fetchBkMetrics()
+  ])
+}
+
+onMounted(() => {
+  syncData()
+  pollTimer = setInterval(syncData, 4000)
+})
+
+onUnmounted(() => {
+  if (pollTimer) clearInterval(pollTimer)
+})
 
 const handleLogout = () => {
   showLogoutConfirm.value = false

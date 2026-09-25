@@ -11,12 +11,35 @@
         <p class="text-xs text-slate-400">Pengawasan siswa berizin, aktif, dan terlambat di rombel yang Anda ampu.</p>
       </div>
 
-      <div class="bg-slate-800/90 p-4 rounded-2xl border border-slate-700 text-right min-w-[220px]">
+      <div class="bg-slate-800/90 p-4 rounded-2xl border border-slate-700 text-left md:text-right min-w-[220px]">
         <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Rombel / Kelas Aktif</p>
         <p class="text-lg font-black text-emerald-400">
           {{ permitStore.monitoringData.classes?.join(', ') || 'XII RPL 1' }}
         </p>
-        <p class="text-xs text-slate-300 mt-0.5">Lab RPL 1 • Jam Mengajar Active</p>
+        <p class="text-xs text-slate-300 mt-0.5">Jam Mengajar Aktif</p>
+      </div>
+    </div>
+
+    <!-- OVERDUE ALERT BANNER (Tampil mencolok jika ada siswa terlambat) -->
+    <div
+      v-if="overdueCount > 0"
+      class="bg-rose-50 border-2 border-rose-300 rounded-3xl p-5 shadow-sm flex items-start gap-4 transition-all"
+    >
+      <div class="w-10 h-10 rounded-2xl bg-rose-600 text-white flex items-center justify-center shrink-0 shadow-md">
+        <AlertTriangle class="w-6 h-6 animate-pulse" />
+      </div>
+      <div class="space-y-1 flex-1">
+        <div class="flex items-center gap-2 flex-wrap">
+          <h3 class="text-base font-extrabold text-rose-950">
+            PERINGATAN: {{ overdueCount }} Siswa Melewati Batas Waktu Izin!
+          </h3>
+          <span class="px-2.5 py-0.5 rounded-full bg-rose-200 text-rose-900 text-xs font-black animate-pulse">
+            OVERDUE
+          </span>
+        </div>
+        <p class="text-xs text-rose-800 leading-relaxed">
+          Terdapat siswa yang belum kembali ke ruang kelas setelah alokasi durasi izin habis. Harap segera konfirmasi kepulangan siswa atau tandai <strong>Alpha</strong> jika siswa terindikasi membolos.
+        </p>
       </div>
     </div>
 
@@ -34,7 +57,7 @@
       <MetricCard
         label="Terlambat (Overdue)"
         :value="overdueCount"
-        color="danger"
+        :color="overdueCount > 0 ? 'danger' : 'secondary'"
         description="Melewati batas durasi izin"
       >
         <template #icon><AlertCircle class="w-6 h-6 text-rose-600" /></template>
@@ -54,12 +77,24 @@
     <DataTable
       :columns="columns"
       :data="permitStore.monitoringData.active_permits || []"
-      search-placeholder="Cari siswa, NIS, atau jenis izin..."
+      search-placeholder="Cari nama siswa, NIS, kelas, atau jenis izin..."
     >
       <template #cell-student="{ row }">
-        <div>
-          <p class="font-bold text-slate-900 text-sm">{{ row.student?.name }}</p>
-          <p class="text-slate-400 text-xs">NIS: {{ row.student?.username }} • {{ row.student?.class_name }}</p>
+        <div :class="{ 'pl-2 border-l-4 border-rose-500 rounded-l': row.status === 'OVERDUE' }">
+          <p class="font-bold text-slate-900 text-sm flex items-center gap-2">
+            <span>{{ row.student?.name }}</span>
+            <span v-if="row.status === 'OVERDUE'" class="text-[10px] font-black uppercase text-rose-600 bg-rose-100 px-2 py-0.5 rounded">
+              TERLAMBAT
+            </span>
+          </p>
+          <p class="text-slate-500 text-xs mt-0.5">
+            NIS: <span class="font-mono font-semibold">{{ row.student?.username }}</span> • 
+            <span class="font-bold text-[#355245]">{{ row.student?.class_name }}</span>
+          </p>
+          <p class="text-slate-400 text-[11px] mt-0.5">
+            Durasi: <strong>{{ row.duration_minutes || 30 }} menit</strong>
+            <span v-if="row.reason"> • {{ row.reason }}</span>
+          </p>
         </div>
       </template>
 
@@ -81,11 +116,11 @@
             size="sm"
             @click="confirmAction(row, 'COMPLETED')"
           >
-            Kembali Ke Kelas
+            Siswa Kembali
           </BaseButton>
           <BaseButton
             v-if="row.status !== 'ALPHA' && row.status !== 'CLOSED'"
-            variant="outline"
+            :variant="row.status === 'OVERDUE' ? 'danger' : 'outline'"
             size="sm"
             @click="confirmAction(row, 'ALPHA')"
           >
@@ -99,7 +134,7 @@
     <ConfirmDialog
       :show="showConfirm"
       :title="selectedAction === 'COMPLETED' ? 'Konfirmasi Kembali ke Kelas' : 'Konfirmasi Status Alpha'"
-      :message="`Apakah Anda yakin ingin mengubah status perizinan siswa ${selectedItem?.student?.name} menjadi ${selectedAction}?`"
+      :message="`Apakah Anda yakin ingin menandai perizinan ${selectedItem?.student?.name} sebagai ${selectedAction === 'COMPLETED' ? 'Siswa Kembali ke Kelas' : 'ALPHA (Membolos)'}?`"
       :variant="selectedAction === 'ALPHA' ? 'danger' : 'primary'"
       confirm-text="Ya, Ubah Status"
       @confirm="executeAction"
@@ -109,7 +144,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { usePermitStore } from '@/stores/permit'
 import { useToast } from '@/composables/useToast'
 import MetricCard from '@/components/ui/MetricCard.vue'
@@ -117,13 +152,15 @@ import DataTable from '@/components/ui/DataTable.vue'
 import BaseBadge from '@/components/ui/BaseBadge.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
 import ConfirmDialog from '@/components/ui/ConfirmDialog.vue'
-import { Clock, AlertCircle, Users } from 'lucide-vue-next'
+import { Clock, AlertCircle, Users, AlertTriangle } from 'lucide-vue-next'
 
 const permitStore = usePermitStore()
 const toast = useToast()
 
+let pollInterval = null
+
 const columns = [
-  { key: 'student', label: 'Siswa & Identitas' },
+  { key: 'student', label: 'Siswa & Keterangan Izin' },
   { key: 'type', label: 'Jenis Izin' },
   { key: 'status', label: 'Status' },
   { key: 'actions', label: 'Aksi Konfirmasi Guru', class: 'text-right' }
@@ -151,6 +188,12 @@ const loadMonitoring = async () => {
 
 onMounted(() => {
   loadMonitoring()
+  // Auto sync setiap 4 detik untuk update real-time
+  pollInterval = setInterval(loadMonitoring, 4000)
+})
+
+onUnmounted(() => {
+  if (pollInterval) clearInterval(pollInterval)
 })
 
 const confirmAction = (item, action) => {

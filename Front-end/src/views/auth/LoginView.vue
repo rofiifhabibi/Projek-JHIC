@@ -60,17 +60,19 @@
             <span class="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded font-mono">pass: password</span>
           </div>
 
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
             <button
               v-for="role in presets"
               :key="role.id"
               type="button"
               @click="quickLogin(role)"
               :disabled="authStore.loading"
-              class="flex flex-col items-center justify-center p-3 rounded-xl border border-slate-200 hover:border-[#355245] bg-slate-50/60 hover:bg-[#E8EFEA]/50 transition-all text-center group active:scale-95 disabled:opacity-50"
+              class="flex flex-col items-center justify-center p-3 rounded-2xl border border-slate-200 hover:border-[#355245] bg-slate-50/70 hover:bg-[#E8EFEA]/60 transition-all text-center group active:scale-95 disabled:opacity-50 shadow-2xs"
             >
-              <span class="text-xl mb-1">{{ role.icon }}</span>
-              <span class="text-xs font-bold text-slate-900 group-hover:text-[#355245]">{{ role.label }}</span>
+              <div class="w-8 h-8 rounded-xl bg-white border border-slate-200 flex items-center justify-center mb-1.5 text-[#355245] group-hover:bg-[#355245] group-hover:text-white transition-all shadow-xs">
+                <component :is="role.icon" class="w-4 h-4" />
+              </div>
+              <span class="text-xs font-bold text-slate-800 group-hover:text-[#355245]">{{ role.label }}</span>
               <span class="text-[10px] text-slate-400 font-mono mt-0.5">{{ role.username }}</span>
             </button>
           </div>
@@ -125,16 +127,16 @@ import { useToast } from '@/composables/useToast'
 import BaseInput from '@/components/ui/BaseInput.vue'
 import PasswordInput from '@/components/ui/PasswordInput.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
-import { User, Lock, ArrowLeft, ShieldCheck } from 'lucide-vue-next'
+import { User, Lock, ArrowLeft, ShieldCheck, GraduationCap, UserCheck, Shield, HeartHandshake } from 'lucide-vue-next'
 
 const authStore = useAuthStore()
 const toast = useToast()
 
 const presets = [
-  { id: 'student', label: 'Siswa', icon: '🧑‍🎓', username: 'siswa1', password: 'password' },
-  { id: 'teacher', label: 'Guru', icon: '👨‍🏫', username: 'guru1', password: 'password' },
-  { id: 'satpam', label: 'Satpam', icon: '👮', username: 'satpam1', password: 'password' },
-  { id: 'bk', label: 'Guru BK', icon: '📋', username: 'bk1', password: 'password' }
+  { id: 'student', label: 'Siswa', icon: GraduationCap, username: 'siswa1', password: 'password' },
+  { id: 'teacher', label: 'Guru', icon: UserCheck, username: 'guru1', password: 'password' },
+  { id: 'satpam', label: 'Satpam', icon: Shield, username: 'satpam1', password: 'password' },
+  { id: 'bk', label: 'Guru BK', icon: HeartHandshake, username: 'bk1', password: 'password' }
 ]
 
 const identity = ref('siswa1')

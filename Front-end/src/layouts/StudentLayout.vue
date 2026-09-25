@@ -43,7 +43,7 @@
         <router-link
           to="/student/dashboard"
           class="flex flex-col items-center py-2 px-3.5 rounded-xl text-slate-500 hover:text-[#355245] transition-all"
-          active-class="bg-[#355245] text-white! font-bold shadow-md shadow-[#355245]/20"
+          active-class="bg-[#355245] !text-white font-bold shadow-md shadow-[#355245]/20"
         >
           <Home class="w-5 h-5" />
           <span class="text-[10px] font-bold mt-1 tracking-wider uppercase">Beranda</span>
@@ -52,7 +52,7 @@
         <router-link
           to="/student/permit/create"
           class="flex flex-col items-center py-2 px-3.5 rounded-xl text-slate-500 hover:text-[#355245] transition-all"
-          active-class="bg-[#355245] text-white! font-bold shadow-md shadow-[#355245]/20"
+          active-class="bg-[#355245] !text-white font-bold shadow-md shadow-[#355245]/20"
         >
           <FilePlus class="w-5 h-5" />
           <span class="text-[10px] font-bold mt-1 tracking-wider uppercase">Form Izin</span>
@@ -61,7 +61,7 @@
         <router-link
           to="/student/report/create"
           class="flex flex-col items-center py-2 px-3.5 rounded-xl text-slate-500 hover:text-[#355245] transition-all"
-          active-class="bg-[#355245] text-white! font-bold shadow-md shadow-[#355245]/20"
+          active-class="bg-[#355245] !text-white font-bold shadow-md shadow-[#355245]/20"
         >
           <ShieldAlert class="w-5 h-5" />
           <span class="text-[10px] font-bold mt-1 tracking-wider uppercase">Lapor BK</span>
@@ -70,7 +70,7 @@
         <router-link
           to="/student/tracking"
           class="flex flex-col items-center py-2 px-3.5 rounded-xl text-slate-500 hover:text-[#355245] transition-all"
-          active-class="bg-[#355245] text-white! font-bold shadow-md shadow-[#355245]/20"
+          active-class="bg-[#355245] !text-white font-bold shadow-md shadow-[#355245]/20"
         >
           <Clock class="w-5 h-5" />
           <span class="text-[10px] font-bold mt-1 tracking-wider uppercase">Tracking</span>

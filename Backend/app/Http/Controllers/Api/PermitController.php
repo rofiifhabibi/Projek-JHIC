@@ -44,6 +44,8 @@ class PermitController extends Controller
 
         $student = $request->user();
 
+        PermitRequest::syncOverdueStatuses();
+
         // Cegah siswa mengajukan izin baru jika masih punya izin PENDING atau ACTIVE
         $hasActivePermit = PermitRequest::where('student_id', $student->user_id)
             ->whereIn('status', ['PENDING', 'ACTIVE', 'OVERDUE'])
@@ -77,6 +79,8 @@ class PermitController extends Controller
      */
     public function myActivePermit(Request $request)
     {
+        PermitRequest::syncOverdueStatuses();
+
         $permit = PermitRequest::with(['student', 'teacher'])
             ->where('student_id', $request->user()->user_id)
             ->whereIn('status', ['PENDING', 'ACTIVE', 'OVERDUE'])
@@ -100,7 +104,7 @@ class PermitController extends Controller
     {
         $teacherId = $request->user()->user_id;
 
-        $requests = PermitRequest::with(['student:user_id,name,username,class_name'])
+        $requests = PermitRequest::with(['student:user_id,name,username,class_name,email'])
             ->where('initial_teacher_id', $teacherId)
             ->where('status', 'PENDING')
             ->latest()

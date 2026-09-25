@@ -25,7 +25,7 @@ const badgeStyle = computed(() => {
     case 'OPEN':
       return 'bg-amber-50 text-amber-700 border border-amber-200'
     case 'OVERDUE':
-      return 'bg-orange-50 text-orange-700 border border-orange-200 animate-pulse'
+      return 'bg-rose-100 text-rose-800 border border-rose-300 font-extrabold animate-pulse'
     case 'COMPLETED':
     case 'RESOLVED':
     case 'CLOSED':
@@ -47,7 +47,7 @@ const dotStyle = computed(() => {
     case 'OPEN':
       return 'bg-amber-500'
     case 'OVERDUE':
-      return 'bg-orange-500'
+      return 'bg-rose-600'
     case 'COMPLETED':
     case 'RESOLVED':
     case 'CLOSED':

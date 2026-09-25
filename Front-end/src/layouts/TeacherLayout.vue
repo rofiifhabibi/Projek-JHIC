@@ -21,17 +21,30 @@
             <nav class="hidden md:flex items-center gap-2 ml-4 bg-black/15 p-1 rounded-xl border border-white/10">
               <router-link
                 to="/teacher/monitoring"
-                class="px-4 py-2 rounded-lg text-xs font-bold transition-all text-emerald-100 hover:text-white"
+                class="px-4 py-2 rounded-lg text-xs font-bold transition-all text-emerald-100 hover:text-white flex items-center gap-2"
                 active-class="bg-white text-[#355245] shadow-sm font-extrabold"
               >
-                Monitoring Kelas
+                <span>Monitoring Kelas</span>
+                <span
+                  v-if="overdueCount > 0"
+                  class="bg-rose-500 text-white text-[10px] font-black px-2 py-0.5 rounded-full animate-pulse flex items-center gap-1 shadow-sm"
+                >
+                  <span class="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span>
+                  {{ overdueCount }} Terlambat
+                </span>
               </router-link>
               <router-link
                 to="/teacher/approvals"
-                class="px-4 py-2 rounded-lg text-xs font-bold transition-all text-emerald-100 hover:text-white"
+                class="px-4 py-2 rounded-lg text-xs font-bold transition-all text-emerald-100 hover:text-white flex items-center gap-2"
                 active-class="bg-white text-[#355245] shadow-sm font-extrabold"
               >
-                Antrean Persetujuan
+                <span>Antrean Persetujuan</span>
+                <span
+                  v-if="pendingCount > 0"
+                  class="bg-amber-500 text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow-sm"
+                >
+                  {{ pendingCount }}
+                </span>
               </router-link>
             </nav>
           </div>
@@ -57,17 +70,29 @@
       <div class="md:hidden bg-black/20 border-t border-white/10 px-4 py-2 flex justify-around">
         <router-link
           to="/teacher/monitoring"
-          class="text-xs font-bold py-1.5 px-3 rounded-lg text-emerald-100"
+          class="text-xs font-bold py-1.5 px-3 rounded-lg text-emerald-100 flex items-center gap-1.5"
           active-class="bg-white text-[#355245]"
         >
-          Monitoring Kelas
+          <span>Monitoring Kelas</span>
+          <span
+            v-if="overdueCount > 0"
+            class="bg-rose-500 text-white text-[10px] font-black px-1.5 py-0.5 rounded-full animate-pulse"
+          >
+            {{ overdueCount }}
+          </span>
         </router-link>
         <router-link
           to="/teacher/approvals"
-          class="text-xs font-bold py-1.5 px-3 rounded-lg text-emerald-100"
+          class="text-xs font-bold py-1.5 px-3 rounded-lg text-emerald-100 flex items-center gap-1.5"
           active-class="bg-white text-[#355245]"
         >
-          Antrean Izin
+          <span>Antrean Izin</span>
+          <span
+            v-if="pendingCount > 0"
+            class="bg-amber-500 text-white text-[10px] font-black px-1.5 py-0.5 rounded-full"
+          >
+            {{ pendingCount }}
+          </span>
         </router-link>
       </div>
     </header>
@@ -91,14 +116,41 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useAuthStore } from '@/stores/auth'
+import { usePermitStore } from '@/stores/permit'
 import ToastNotification from '@/components/ui/ToastNotification.vue'
 import ConfirmDialog from '@/components/ui/ConfirmDialog.vue'
 import { LogOut } from 'lucide-vue-next'
 
 const authStore = useAuthStore()
+const permitStore = usePermitStore()
 const showLogoutConfirm = ref(false)
+let pollTimer = null
+
+const overdueCount = computed(() => {
+  return permitStore.monitoringData?.active_permits?.filter(p => p.status === 'OVERDUE').length || 0
+})
+
+const pendingCount = computed(() => {
+  return permitStore.pendingApprovals?.length || 0
+})
+
+const syncData = async () => {
+  await Promise.allSettled([
+    permitStore.fetchTeacherMonitoring(),
+    permitStore.fetchPendingApprovals()
+  ])
+}
+
+onMounted(() => {
+  syncData()
+  pollTimer = setInterval(syncData, 4000)
+})
+
+onUnmounted(() => {
+  if (pollTimer) clearInterval(pollTimer)
+})
 
 const handleLogout = () => {
   showLogoutConfirm.value = false

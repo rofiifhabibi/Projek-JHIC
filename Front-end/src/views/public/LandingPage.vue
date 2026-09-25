@@ -36,7 +36,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
             <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#E8EFEA] text-[#273e34] text-xs font-semibold uppercase tracking-wider">
-              <Sparkles class="w-4 h-4 text-[#355245]" />
+              <ShieldCheck class="w-4 h-4 text-[#355245]" />
               Sistem Digitalisasi Sekolah Terpadu
             </div>
 
@@ -149,7 +149,7 @@
               <HeartHandshake class="w-6 h-6" />
             </div>
             <h4 class="font-bold text-slate-900 text-base">Care Report & Kanban BK</h4>
-            <p class="text-xs text-slate-600 leading-relaxed">Portal aduan konseling rahasia (opsional anonim) yang dikelola Guru BK via papan Kanban interaktif.</p>
+            <p class="text-xs text-slate-600 leading-relaxed">Portal aduan konseling rahasia terisolasi yang dikelola Guru BK via papan Kanban interaktif.</p>
           </div>
         </div>
       </div>
@@ -209,5 +209,5 @@
 <script setup>
 import BaseButton from '@/components/ui/BaseButton.vue'
 import BaseBadge from '@/components/ui/BaseBadge.vue'
-import { Sparkles, ArrowRight, QrCode, ShieldCheck, Users, HeartHandshake, LogIn } from 'lucide-vue-next'
+import { ArrowRight, QrCode, ShieldCheck, Users, HeartHandshake, LogIn } from 'lucide-vue-next'
 </script>

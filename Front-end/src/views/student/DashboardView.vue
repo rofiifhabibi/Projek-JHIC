@@ -4,7 +4,7 @@
     <div class="bg-gradient-to-r from-[#355245] to-[#273e34] rounded-3xl p-6 text-white shadow-xl shadow-[#355245]/10 relative overflow-hidden">
       <div class="relative z-10 space-y-2">
         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-emerald-200 text-xs font-semibold backdrop-blur-md">
-          <Sparkles class="w-3.5 h-3.5" />
+          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
           {{ greetingText }}
         </div>
         <h2 class="text-2xl sm:text-3xl font-black tracking-tight">
@@ -17,10 +17,17 @@
     </div>
 
     <!-- Active Permit Card OR Normal Status -->
-    <div v-if="permitStore.activePermit" class="bg-white rounded-3xl p-6 border-2 border-[#355245]/20 shadow-lg space-y-4">
+    <div
+      v-if="permitStore.activePermit"
+      class="bg-white rounded-3xl p-6 border-2 shadow-lg space-y-4"
+      :class="permitStore.activePermit.status === 'OVERDUE' ? 'border-rose-400 bg-rose-50/20' : 'border-[#355245]/20'"
+    >
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-2.5">
-          <div class="w-10 h-10 rounded-xl bg-[#E8EFEA] text-[#355245] flex items-center justify-center font-bold">
+          <div
+            class="w-10 h-10 rounded-xl flex items-center justify-center font-bold"
+            :class="permitStore.activePermit.status === 'OVERDUE' ? 'bg-rose-100 text-rose-700' : 'bg-[#E8EFEA] text-[#355245]'"
+          >
             <QrCode class="w-5 h-5" />
           </div>
           <div>
@@ -29,6 +36,12 @@
           </div>
         </div>
         <BaseBadge :status="permitStore.activePermit.status" />
+      </div>
+
+      <!-- Overdue Alert Callout if student is late -->
+      <div v-if="permitStore.activePermit.status === 'OVERDUE'" class="p-3.5 bg-rose-50 border border-rose-200 rounded-2xl flex items-center gap-2.5 text-xs text-rose-800 font-semibold">
+        <AlertTriangle class="w-4 h-4 text-rose-600 shrink-0 animate-pulse" />
+        <span>Batas waktu izin telah habis! Segera kembali ke ruang kelas dan laporkan ke Guru Pengampu.</span>
       </div>
 
       <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 text-xs space-y-2">
@@ -100,7 +113,7 @@ import { useAuthStore } from '@/stores/auth'
 import { usePermitStore } from '@/stores/permit'
 import BaseButton from '@/components/ui/BaseButton.vue'
 import BaseBadge from '@/components/ui/BaseBadge.vue'
-import { Sparkles, QrCode, FilePlus, ShieldAlert } from 'lucide-vue-next'
+import { QrCode, FilePlus, ShieldAlert, AlertTriangle } from 'lucide-vue-next'
 
 const authStore = useAuthStore()
 const permitStore = usePermitStore()

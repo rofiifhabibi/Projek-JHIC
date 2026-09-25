@@ -63,7 +63,8 @@
 
             <div class="pt-2 border-t border-slate-100 flex items-center justify-end text-xs">
               <BaseButton variant="secondary" size="sm" @click="moveStatus(rep.report_id, 'IN_PROGRESS')">
-                Mulai Investigasi →
+                <span>Mulai Investigasi</span>
+                <template #icon-right><ArrowRight class="w-3.5 h-3.5" /></template>
               </BaseButton>
             </div>
           </div>
@@ -125,10 +126,12 @@
 
             <div class="pt-2 border-t border-slate-100 flex flex-col gap-2">
               <BaseButton variant="outline" size="sm" block @click="openNoteModal(rep)">
-                + Catatan Investigasi
+                <template #icon-left><FileText class="w-3.5 h-3.5" /></template>
+                Catatan Investigasi
               </BaseButton>
               <BaseButton variant="primary" size="sm" block @click="moveStatus(rep.report_id, 'RESOLVED')">
-                Tandai Tuntas (RESOLVED) ✓
+                <template #icon-left><CheckCircle2 class="w-3.5 h-3.5" /></template>
+                Tandai Tuntas (RESOLVED)
               </BaseButton>
             </div>
           </div>
@@ -262,7 +265,7 @@ import BaseButton from '@/components/ui/BaseButton.vue'
 import BaseBadge from '@/components/ui/BaseBadge.vue'
 import BaseModal from '@/components/ui/BaseModal.vue'
 import EmptyState from '@/components/ui/EmptyState.vue'
-import { RefreshCw, User } from 'lucide-vue-next'
+import { RefreshCw, User, ArrowRight, FileText, CheckCircle2 } from 'lucide-vue-next'
 
 const reportStore = useReportStore()
 const toast = useToast()

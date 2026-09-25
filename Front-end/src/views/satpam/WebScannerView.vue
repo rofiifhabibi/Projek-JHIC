@@ -3,92 +3,150 @@
     <ToastNotification />
 
     <!-- Top Bar -->
-    <header class="bg-slate-900 border-b border-slate-800 p-4 flex justify-between items-center shadow-lg">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 bg-[#355245] rounded-xl flex items-center justify-center font-extrabold text-xs text-white shadow-md">
-          SP
+    <header class="bg-slate-900 border-b border-slate-800 p-4 sticky top-0 z-30 shadow-xl">
+      <div class="max-w-4xl mx-auto flex justify-between items-center">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-[#355245] rounded-xl flex items-center justify-center font-extrabold text-sm text-white shadow-md border border-emerald-500/20">
+            SP
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h1 class="font-extrabold text-base tracking-wide text-white">Portal Web Scanner Satpam</h1>
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-bold border border-emerald-500/30">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+                Siaga
+              </span>
+            </div>
+            <p class="text-[10px] text-slate-400 font-medium uppercase tracking-wider mt-0.5">Pos Gerbang Utama • SMKN 2 Depok Sleman</p>
+          </div>
         </div>
-        <div>
-          <h1 class="font-black text-base tracking-wide text-white">Portal Web Scanner Satpam</h1>
-          <p class="text-[10px] text-emerald-400 font-semibold uppercase tracking-wider">POS GERBANG UTAMA SMKN 2 DEPOK</p>
-        </div>
+        <button
+          @click="showLogoutConfirm = true"
+          class="text-xs bg-slate-800 hover:bg-slate-700 active:scale-95 px-3.5 py-2 rounded-xl font-bold border border-slate-700 transition-all text-white flex items-center gap-1.5 shadow-sm"
+        >
+          <LogOut class="w-3.5 h-3.5" />
+          <span>Keluar</span>
+        </button>
       </div>
-      <button @click="showLogoutConfirm = true" class="text-xs bg-slate-800 hover:bg-slate-700 px-3.5 py-2 rounded-xl font-bold border border-slate-700 transition-all text-white flex items-center gap-1.5">
-        <LogOut class="w-3.5 h-3.5" />
-        <span>Keluar</span>
-      </button>
     </header>
 
     <!-- Main Scanner Interface -->
-    <div class="flex-1 relative flex flex-col items-center justify-center p-4 max-w-lg mx-auto w-full space-y-6">
+    <div class="flex-1 relative flex flex-col items-center justify-center p-4 sm:p-6 max-w-lg mx-auto w-full space-y-6">
       
       <!-- Camera Reader Container -->
-      <div class="w-full bg-slate-900 rounded-3xl border-2 border-slate-800 p-6 flex flex-col items-center shadow-2xl relative overflow-hidden space-y-4">
-        <div class="flex items-center justify-between w-full border-b border-slate-800 pb-3">
+      <div class="w-full bg-slate-900 rounded-3xl border border-slate-800 p-6 flex flex-col items-center shadow-2xl relative overflow-hidden space-y-5">
+        <div class="flex items-center justify-between w-full border-b border-slate-800/80 pb-3">
           <div class="flex items-center gap-2">
             <Camera class="w-4 h-4 text-emerald-400" />
             <span class="text-xs font-bold uppercase tracking-wider text-slate-300">Pemindai Barcode Kamera</span>
           </div>
           <button
             @click="toggleCamera"
-            class="text-[11px] font-bold px-3 py-1 rounded-lg border transition"
-            :class="isCameraActive ? 'border-rose-500 bg-rose-500/20 text-rose-300' : 'border-emerald-500 bg-emerald-500/20 text-emerald-300'"
+            class="text-[11px] font-bold px-3 py-1.5 rounded-xl border transition-all active:scale-95 flex items-center gap-1.5"
+            :class="isCameraActive ? 'border-rose-500/50 bg-rose-500/15 text-rose-300 hover:bg-rose-500/25' : 'border-emerald-500/50 bg-emerald-500/15 text-emerald-300 hover:bg-emerald-500/25'"
           >
+            <span class="w-1.5 h-1.5 rounded-full" :class="isCameraActive ? 'bg-rose-400' : 'bg-emerald-400'"></span>
             {{ isCameraActive ? 'Matikan Kamera' : 'Nyalakan Kamera' }}
           </button>
         </div>
 
-        <!-- Video Reader Element -->
-        <div class="w-full min-h-[240px] bg-slate-950 rounded-2xl border border-slate-800 overflow-hidden flex items-center justify-center relative">
+        <!-- Video Reader Element with Viewfinder Styling -->
+        <div class="w-full min-h-[240px] bg-slate-950 rounded-2xl border border-slate-800/90 overflow-hidden flex items-center justify-center relative shadow-inner">
           <div id="qr-reader" class="w-full"></div>
           <div v-if="!isCameraActive" class="text-center p-6 text-slate-500 space-y-2">
-            <QrCode class="w-12 h-12 mx-auto text-slate-700" />
-            <p class="text-xs font-medium">Klik "Nyalakan Kamera" untuk mulai memindai QR Code di HP siswa.</p>
+            <div class="w-14 h-14 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center mx-auto text-slate-600">
+              <QrCode class="w-8 h-8 text-slate-500" />
+            </div>
+            <p class="text-xs font-medium text-slate-400">Klik "Nyalakan Kamera" untuk memindai QR Code di layar HP siswa.</p>
+            <p class="text-[11px] text-slate-600">Atau pilih simulasi uji cepat di bawah.</p>
           </div>
         </div>
 
-        <!-- Quick Test Buttons (Dev Mode) -->
-        <div class="w-full space-y-2 bg-slate-950 p-4 rounded-2xl border border-slate-800/80">
-          <p class="text-[10px] font-extrabold uppercase tracking-widest text-emerald-400 text-center mb-1">
-            UJI SCAN TOKEN (TEST SEED DATA)
-          </p>
+        <!-- Quick Simulation Selector (Clean Security Post Station Style) -->
+        <div class="w-full space-y-2.5 bg-slate-950/70 p-4 rounded-2xl border border-slate-800/80">
+          <div class="flex items-center justify-between text-[11px] font-bold uppercase tracking-wider text-slate-400 px-1">
+            <span>UJI SIMULASI GERBANG (3 SKENARIO)</span>
+            <span class="text-emerald-400 font-mono text-[10px]">1-Click Scan</span>
+          </div>
+
           <div class="grid grid-cols-1 gap-2">
+            <!-- Skenario 1: Siti (TEMP Normal) -->
             <button
               @click="scanToken('QR-ACTIVE-XII-RPL1-002')"
-              class="w-full bg-slate-800 hover:bg-emerald-950 border border-slate-700 hover:border-emerald-500 text-slate-200 hover:text-emerald-300 text-xs font-bold py-2 px-3 rounded-xl transition-all flex justify-between items-center"
+              class="w-full bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-emerald-500/60 p-3 rounded-xl transition-all text-left flex items-center justify-between group"
             >
-              <span>Scan QR Siti (Active TEMP)</span>
-              <span class="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded">TEMP</span>
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-bold text-xs border border-emerald-500/20">
+                  SR
+                </div>
+                <div>
+                  <div class="text-xs font-bold text-slate-200 group-hover:text-emerald-300 transition-colors">
+                    Siti Rahmawati (XII RPL 1)
+                  </div>
+                  <div class="text-[10px] text-slate-500">Izin Sementara UKS • Token Aktif</div>
+                </div>
+              </div>
+              <span class="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                ACTIVE
+              </span>
             </button>
+
+            <!-- Skenario 2: Andi (Overdue) -->
             <button
               @click="scanToken('QR-OVERDUE-XII-TKJ2-003')"
-              class="w-full bg-slate-800 hover:bg-red-950 border border-slate-700 hover:border-red-500 text-slate-200 hover:text-red-300 text-xs font-bold py-2 px-3 rounded-xl transition-all flex justify-between items-center"
+              class="w-full bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-rose-500/60 p-3 rounded-xl transition-all text-left flex items-center justify-between group"
             >
-              <span>Scan QR Andi (Overdue TEMP)</span>
-              <span class="text-[10px] bg-red-500/20 text-red-300 px-2 py-0.5 rounded">OVERDUE</span>
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-lg bg-rose-500/10 text-rose-400 flex items-center justify-center font-bold text-xs border border-rose-500/20">
+                  AS
+                </div>
+                <div>
+                  <div class="text-xs font-bold text-slate-200 group-hover:text-rose-300 transition-colors">
+                    Andi Saputra (XII TKJ 2)
+                  </div>
+                  <div class="text-[10px] text-slate-500">Izin Sementara TU • Durasi Terlampaui</div>
+                </div>
+              </div>
+              <span class="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30">
+                OVERDUE
+              </span>
             </button>
+
+            <!-- Skenario 3: Rizky (Exit School) -->
             <button
               @click="scanToken('QR-EXIT-X-AK3-005')"
-              class="w-full bg-slate-800 hover:bg-amber-950 border border-slate-700 hover:border-amber-500 text-slate-200 hover:text-amber-300 text-xs font-bold py-2 px-3 rounded-xl transition-all flex justify-between items-center"
+              class="w-full bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-amber-500/60 p-3 rounded-xl transition-all text-left flex items-center justify-between group"
             >
-              <span>Scan QR Rizky (Izin Pulang)</span>
-              <span class="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded">EXIT</span>
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center font-bold text-xs border border-amber-500/20">
+                  RP
+                </div>
+                <div>
+                  <div class="text-xs font-bold text-slate-200 group-hover:text-amber-300 transition-colors">
+                    Rizky Pratama (X AK 3)
+                  </div>
+                  <div class="text-[10px] text-slate-500">Izin Pulang Sekolah • Sakit Demam</div>
+                </div>
+              </div>
+              <span class="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                PULANG
+              </span>
             </button>
           </div>
         </div>
 
         <!-- Manual Token Form -->
         <form @submit.prevent="scanToken(inputQrToken)" class="w-full space-y-2">
-          <label class="block text-[10px] font-extrabold uppercase tracking-widest text-slate-400">Atau Masukkan / Paste Token QR Manual</label>
+          <label class="block text-[10px] font-extrabold uppercase tracking-widest text-slate-400">Atau Masukkan / Tempel Token QR</label>
           <div class="flex gap-2">
             <input
               v-model="inputQrToken"
               type="text"
               placeholder="Paste QR Token UUID..."
-              class="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs outline-none focus:border-emerald-500 text-white font-mono"
+              class="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs outline-none focus:border-emerald-500 text-white font-mono placeholder:text-slate-600 transition"
             />
             <BaseButton type="submit" variant="primary" size="sm" :disabled="!inputQrToken">
-              Scan Token
+              Scan
             </BaseButton>
           </div>
         </form>

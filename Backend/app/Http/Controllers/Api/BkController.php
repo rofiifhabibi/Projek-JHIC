@@ -13,6 +13,8 @@ class BkController extends Controller
     // Statistik metrik dashboard BK
     public function metrics()
     {
+        PermitRequest::syncOverdueStatuses();
+
         return response()->json([
             'status' => 'success',
             'data' => [
@@ -81,6 +83,8 @@ class BkController extends Controller
     // Global Mobility Monitor (Pengawasan seluruh izin aktif/overdue sekolah - Read Only)
     public function globalMobilityMonitor()
     {
+        PermitRequest::syncOverdueStatuses();
+
         $permits = PermitRequest::with([
             'student:user_id,name,username,class_name,email',
             'teacher:user_id,name,email'
