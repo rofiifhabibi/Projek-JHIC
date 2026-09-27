@@ -93,7 +93,7 @@ class DatabaseSeeder extends Seeder
             'type' => 'EXIT_SCHOOL',
             'reason' => 'Izin pulang awal karena demam tinggi (ada konfirmasi orang tua)',
             'duration_minutes' => 0,
-            'status' => 'CLOSED',
+            'status' => 'APPROVED',
             'qr_token' => 'QR-EXIT-X-AK3-005',
         ]);
 

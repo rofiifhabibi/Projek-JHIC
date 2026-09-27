@@ -3,12 +3,12 @@
     <!-- Header -->
     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
       <div>
-        <h2 class="text-2xl font-black text-slate-900 tracking-tight">Papan Kerja Kanban BK</h2>
-        <p class="text-xs text-slate-500 mt-0.5">Penanganan aduan konseling siswa terpusat dengan data profil siswa lengkap.</p>
+        <h2 class="text-2xl font-black text-slate-900 tracking-tight">Penanganan Kasus & Konseling BK</h2>
+        <p class="text-xs text-slate-500 mt-0.5">Kelola laporan siswa dan pantau perkembangan pendampingan konseling.</p>
       </div>
       <BaseButton variant="outline" size="sm" :loading="reportStore.loading" @click="loadKanban">
         <template #icon-left><RefreshCw class="w-3.5 h-3.5" /></template>
-        Refresh Kanban
+        Segarkan
       </BaseButton>
     </div>
 
@@ -44,7 +44,7 @@
         <div class="flex items-center justify-between px-2 shrink-0">
           <div class="flex items-center gap-2">
             <span class="w-3 h-3 rounded-full bg-amber-500"></span>
-            <h3 class="font-bold text-sm text-slate-900 uppercase tracking-wider">Aduan Baru (OPEN)</h3>
+            <h3 class="font-bold text-sm text-slate-900 uppercase tracking-wider">Aduan Masuk</h3>
           </div>
           <span class="px-2.5 py-0.5 rounded-full bg-amber-200/80 text-amber-900 text-xs font-bold">
             {{ filteredOpen.length }}
@@ -58,15 +58,25 @@
             class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3 hover:border-amber-400 transition"
           >
             <div class="flex items-start justify-between gap-2">
-              <span class="px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-amber-50 text-amber-800 uppercase border border-amber-200">
+              <span class="px-2.5 py-0.5 rounded-md text-xs font-bold bg-amber-50 text-amber-800 uppercase border border-amber-200">
                 {{ formatCategory(rep.category) }}
               </span>
-              <span class="text-[10px] font-mono text-slate-400">
+              <span class="text-xs font-mono text-slate-400">
                 #REP-{{ rep.report_id }}
               </span>
             </div>
 
             <h4 class="font-bold text-sm text-slate-900 leading-snug">{{ rep.title }}</h4>
+            
+            <!-- Linked Permit Pill -->
+            <div v-if="rep.permit || rep.request_id" class="px-2.5 py-1.5 rounded-xl bg-amber-50 border border-amber-200/80 text-xs text-amber-900 flex items-center justify-between">
+              <span class="flex items-center gap-1 font-semibold">
+                <AlertOctagon class="w-3.5 h-3.5 text-rose-600 shrink-0" />
+                Terkait Izin #{{ rep.request_id }} ({{ rep.permit?.status || 'ALPHA' }})
+              </span>
+              <span class="text-xs text-amber-700">Klarifikasi</span>
+            </div>
+
             <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed">{{ rep.description }}</p>
 
             <!-- Data Lengkap Siswa -->
@@ -76,19 +86,19 @@
                   <User class="w-3.5 h-3.5 text-[#355245]" />
                   {{ rep.student?.name || 'Siswa' }}
                 </span>
-                <span class="text-[10px] font-bold text-[#355245] bg-[#E8EFEA] px-2 py-0.5 rounded">
+                <span class="text-xs font-bold text-[#355245] bg-[#E8EFEA] px-2 py-0.5 rounded">
                   {{ rep.student?.class_name || '-' }}
                 </span>
               </div>
-              <div class="flex items-center justify-between text-[11px] text-slate-500 pt-1 border-t border-slate-200/60">
+              <div class="flex items-center justify-between text-xs text-slate-500 pt-1 border-t border-slate-200/60">
                 <span>NIS: <strong class="font-mono text-slate-700">{{ rep.student?.username || '-' }}</strong></span>
-                <span v-if="rep.student?.email" class="text-slate-400 text-[10px] truncate max-w-[150px]">{{ rep.student?.email }}</span>
+                <span v-if="rep.student?.email" class="text-slate-400 text-xs truncate max-w-[150px]">{{ rep.student?.email }}</span>
               </div>
             </div>
 
             <div class="pt-2 border-t border-slate-100 flex items-center justify-end text-xs">
               <BaseButton variant="secondary" size="sm" @click="moveStatus(rep.report_id, 'IN_PROGRESS')">
-                <span>Mulai Investigasi</span>
+                <span>Tindak Lanjuti</span>
                 <template #icon-right><ArrowRight class="w-3.5 h-3.5" /></template>
               </BaseButton>
             </div>
@@ -107,7 +117,7 @@
         <div class="flex items-center justify-between px-2 shrink-0">
           <div class="flex items-center gap-2">
             <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
-            <h3 class="font-bold text-sm text-slate-900 uppercase tracking-wider">Diproses (IN PROGRESS)</h3>
+            <h3 class="font-bold text-sm text-slate-900 uppercase tracking-wider">Sedang Ditangani</h3>
           </div>
           <span class="px-2.5 py-0.5 rounded-full bg-emerald-200/80 text-emerald-900 text-xs font-bold">
             {{ filteredInProgress.length }}
@@ -121,15 +131,25 @@
             class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3 hover:border-emerald-400 transition"
           >
             <div class="flex items-start justify-between gap-2">
-              <span class="px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-emerald-50 text-emerald-800 uppercase border border-emerald-200">
+              <span class="px-2.5 py-0.5 rounded-md text-xs font-bold bg-emerald-50 text-emerald-800 uppercase border border-emerald-200">
                 {{ formatCategory(rep.category) }}
               </span>
-              <span class="text-[10px] font-mono text-slate-400">
+              <span class="text-xs font-mono text-slate-400">
                 #REP-{{ rep.report_id }}
               </span>
             </div>
 
             <h4 class="font-bold text-sm text-slate-900 leading-snug">{{ rep.title }}</h4>
+
+            <!-- Linked Permit Pill -->
+            <div v-if="rep.permit || rep.request_id" class="px-2.5 py-1.5 rounded-xl bg-amber-50 border border-amber-200/80 text-xs text-amber-900 flex items-center justify-between">
+              <span class="flex items-center gap-1 font-semibold">
+                <AlertOctagon class="w-3.5 h-3.5 text-rose-600 shrink-0" />
+                Terkait Izin #{{ rep.request_id }} ({{ rep.permit?.status || 'ALPHA' }})
+              </span>
+              <span class="text-xs text-amber-700">Klarifikasi</span>
+            </div>
+
             <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed">{{ rep.description }}</p>
 
             <!-- Data Lengkap Siswa -->
@@ -139,24 +159,24 @@
                   <User class="w-3.5 h-3.5 text-[#355245]" />
                   {{ rep.student?.name || 'Siswa' }}
                 </span>
-                <span class="text-[10px] font-bold text-[#355245] bg-[#E8EFEA] px-2 py-0.5 rounded">
+                <span class="text-xs font-bold text-[#355245] bg-[#E8EFEA] px-2 py-0.5 rounded">
                   {{ rep.student?.class_name || '-' }}
                 </span>
               </div>
-              <div class="flex items-center justify-between text-[11px] text-slate-500 pt-1 border-t border-slate-200/60">
+              <div class="flex items-center justify-between text-xs text-slate-500 pt-1 border-t border-slate-200/60">
                 <span>NIS: <strong class="font-mono text-slate-700">{{ rep.student?.username || '-' }}</strong></span>
-                <span v-if="rep.student?.email" class="text-slate-400 text-[10px] truncate max-w-[150px]">{{ rep.student?.email }}</span>
+                <span v-if="rep.student?.email" class="text-slate-400 text-xs truncate max-w-[150px]">{{ rep.student?.email }}</span>
               </div>
             </div>
 
             <div class="pt-2 border-t border-slate-100 flex flex-col gap-2">
               <BaseButton variant="outline" size="sm" block @click="openNoteModal(rep)">
                 <template #icon-left><FileText class="w-3.5 h-3.5" /></template>
-                Catatan Investigasi
+                Catatan Konseling
               </BaseButton>
-              <BaseButton variant="primary" size="sm" block @click="moveStatus(rep.report_id, 'RESOLVED')">
-                <template #icon-left><CheckCircle2 class="w-3.5 h-3.5" /></template>
-                Tandai Tuntas (RESOLVED)
+              <BaseButton variant="primary" size="sm" block :loading="reportStore.loading" @click="requestResolve(rep)">
+                <template #icon-left><CheckCircle class="w-3.5 h-3.5" :stroke-width="2.25" /></template>
+                Tandai Selesai
               </BaseButton>
             </div>
           </div>
@@ -174,7 +194,7 @@
         <div class="flex items-center justify-between px-2 shrink-0">
           <div class="flex items-center gap-2">
             <span class="w-3 h-3 rounded-full bg-slate-500"></span>
-            <h3 class="font-bold text-sm text-slate-900 uppercase tracking-wider">Selesai (RESOLVED)</h3>
+            <h3 class="font-bold text-sm text-slate-900 uppercase tracking-wider">Selesai Ditangani</h3>
           </div>
           <span class="px-2.5 py-0.5 rounded-full bg-slate-200 text-slate-800 text-xs font-bold">
             {{ filteredResolved.length }}
@@ -188,13 +208,23 @@
             class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3 opacity-90"
           >
             <div class="flex items-start justify-between gap-2">
-              <span class="px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-slate-100 text-slate-700 uppercase">
+              <span class="px-2.5 py-0.5 rounded-md text-xs font-bold bg-slate-100 text-slate-700 uppercase">
                 {{ formatCategory(rep.category) }}
               </span>
               <BaseBadge status="RESOLVED" />
             </div>
 
-            <h4 class="font-bold text-sm text-slate-900 line-through decoration-slate-400">{{ rep.title }}</h4>
+            <h4 class="font-bold text-sm text-slate-900">{{ rep.title }}</h4>
+
+            <!-- Linked Permit Pill -->
+            <div v-if="rep.permit || rep.request_id" class="px-2.5 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-700 flex items-center justify-between">
+              <span class="flex items-center gap-1 font-semibold">
+                <CheckCircle class="w-3.5 h-3.5 text-emerald-600 shrink-0" :stroke-width="2.25" />
+                Izin #{{ rep.request_id }} Dipulihkan
+              </span>
+              <span class="text-xs text-slate-500">Selesai</span>
+            </div>
+
             <p class="text-xs text-slate-500 line-clamp-2 leading-relaxed">{{ rep.description }}</p>
 
             <!-- Data Lengkap Siswa -->
@@ -204,19 +234,19 @@
                   <User class="w-3.5 h-3.5 text-[#355245]" />
                   {{ rep.student?.name || 'Siswa' }}
                 </span>
-                <span class="text-[10px] font-bold text-[#355245] bg-[#E8EFEA] px-2 py-0.5 rounded">
+                <span class="text-xs font-bold text-[#355245] bg-[#E8EFEA] px-2 py-0.5 rounded">
                   {{ rep.student?.class_name || '-' }}
                 </span>
               </div>
-              <div class="flex items-center justify-between text-[11px] text-slate-500 pt-1 border-t border-slate-200/60">
+              <div class="flex items-center justify-between text-xs text-slate-500 pt-1 border-t border-slate-200/60">
                 <span>NIS: <strong class="font-mono text-slate-700">{{ rep.student?.username || '-' }}</strong></span>
-                <span v-if="rep.student?.email" class="text-slate-400 text-[10px] truncate max-w-[150px]">{{ rep.student?.email }}</span>
+                <span v-if="rep.student?.email" class="text-slate-400 text-xs truncate max-w-[150px]">{{ rep.student?.email }}</span>
               </div>
             </div>
 
             <div class="pt-2 border-t border-slate-100 flex justify-end">
               <BaseButton variant="ghost" size="sm" @click="moveStatus(rep.report_id, 'IN_PROGRESS')">
-                Re-open Kasus
+                Tangani Kembali
               </BaseButton>
             </div>
           </div>
@@ -230,10 +260,10 @@
       </div>
     </div>
 
-    <!-- Investigation Note Modal -->
+    <!-- Catatan Konseling Modal -->
     <BaseModal
       :show="showNoteModal"
-      title="Tambah Catatan Investigasi Konseling"
+      title="Tambah Catatan Konseling"
       max-width="md"
       @close="showNoteModal = false"
     >
@@ -249,7 +279,7 @@
               {{ selectedReport.student.class_name }}
             </span>
           </div>
-          <div class="text-[11px] text-slate-500 flex items-center justify-between pt-1 border-t border-slate-200/60">
+          <div class="text-xs text-slate-500 flex items-center justify-between pt-1 border-t border-slate-200/60">
             <span>NIS: <strong class="font-mono text-slate-800">{{ selectedReport.student.username }}</strong></span>
             <span>{{ selectedReport.student.email }}</span>
           </div>
@@ -257,16 +287,16 @@
 
         <div class="bg-amber-50 p-3 rounded-xl border border-amber-200 text-xs">
           <p class="text-amber-800">
-            Kasus: <strong class="text-amber-950">{{ selectedReport?.title }}</strong>
+            Aduan / Masalah: <strong class="text-amber-950">{{ selectedReport?.title }}</strong>
           </p>
         </div>
 
         <div class="space-y-1.5">
-          <label class="text-xs font-semibold uppercase tracking-wider text-slate-700">Catatan Tindak Lanjut</label>
+          <label class="text-xs font-semibold uppercase tracking-wider text-slate-700">Catatan Konseling / Tindak Lanjut</label>
           <textarea
             v-model="noteInput"
             rows="4"
-            placeholder="Ketik catatan hasil pemanggilan siswa / tindak lanjut BK..."
+            placeholder="Tulis catatan konseling, pembinaan, atau kesepakatan tindak lanjut..."
             class="w-full rounded-xl border border-slate-200 p-3 text-xs focus:border-[#355245] focus:outline-none"
           ></textarea>
         </div>
@@ -279,6 +309,17 @@
         </BaseButton>
       </template>
     </BaseModal>
+
+    <!-- Confirm Resolve Dialog -->
+    <ConfirmDialog
+      :show="showResolveConfirm"
+      title="Selesaikan Kasus / Konseling"
+      :message="resolveConfirmMessage"
+      confirm-text="Ya, Tandai Selesai"
+      variant="primary"
+      @confirm="handleConfirmResolve"
+      @cancel="cancelResolve"
+    />
   </div>
 </template>
 
@@ -289,8 +330,9 @@ import { useToast } from '@/composables/useToast'
 import BaseButton from '@/components/ui/BaseButton.vue'
 import BaseBadge from '@/components/ui/BaseBadge.vue'
 import BaseModal from '@/components/ui/BaseModal.vue'
+import ConfirmDialog from '@/components/ui/ConfirmDialog.vue'
 import EmptyState from '@/components/ui/EmptyState.vue'
-import { RefreshCw, User, ArrowRight, FileText, CheckCircle2, Search } from 'lucide-vue-next'
+import { RefreshCw, User, ArrowRight, FileText, CheckCircle, Search, AlertOctagon } from 'lucide-vue-next'
 
 const reportStore = useReportStore()
 const toast = useToast()
@@ -299,6 +341,9 @@ const showNoteModal = ref(false)
 const selectedReport = ref(null)
 const noteInput = ref('')
 
+const showResolveConfirm = ref(false)
+const reportToResolve = ref(null)
+
 const searchQuery = ref('')
 const selectedCategory = ref('ALL')
 
@@ -306,7 +351,8 @@ const categoryFilters = [
   { label: 'Semua Kategori', value: 'ALL' },
   { label: 'Perundungan', value: 'BULLYING' },
   { label: 'Akademik', value: 'ACADEMIC' },
-  { label: 'Konseling Pribadi', value: 'PERSONAL' }
+  { label: 'Konseling Pribadi', value: 'PERSONAL' },
+  { label: 'Klarifikasi & Lainnya', value: 'OTHERS' }
 ]
 
 const formatCategory = (cat) => {
@@ -314,6 +360,7 @@ const formatCategory = (cat) => {
     case 'BULLYING': return 'Perundungan'
     case 'ACADEMIC': return 'Akademik'
     case 'PERSONAL': return 'Konseling Pribadi'
+    case 'OTHERS': return 'Klarifikasi & Lainnya'
     default: return cat
   }
 }
@@ -348,10 +395,39 @@ onMounted(() => {
 const moveStatus = async (id, status) => {
   try {
     await reportStore.updateReportStatus(id, status)
-    toast.success(`Status aduan diperbarui ke ${status}!`)
+    const statusLabels = {
+      OPEN: 'Aduan Masuk',
+      IN_PROGRESS: 'Sedang Ditangani',
+      RESOLVED: 'Selesai Ditangani'
+    }
+    toast.success(`Status aduan diperbarui ke "${statusLabels[status] || status}".`)
   } catch (err) {
     toast.error('Gagal memperbarui status aduan.')
   }
+}
+
+const resolveConfirmMessage = computed(() => {
+  if (!reportToResolve.value) return ''
+  if (reportToResolve.value.request_id || reportToResolve.value.category === 'OTHERS') {
+    return `Apakah penanganan siswa (${reportToResolve.value.student?.name || 'Siswa'}) sudah selesai? Status izin siswa akan diperbarui menjadi Selesai.`
+  }
+  return `Apakah Anda yakin ingin menandai aduan "${reportToResolve.value.title}" telah selesai ditangani oleh BK?`
+})
+
+const requestResolve = (rep) => {
+  reportToResolve.value = rep
+  showResolveConfirm.value = true
+}
+
+const cancelResolve = () => {
+  showResolveConfirm.value = false
+  reportToResolve.value = null
+}
+
+const handleConfirmResolve = async () => {
+  if (!reportToResolve.value) return
+  await moveStatus(reportToResolve.value.report_id, 'RESOLVED')
+  cancelResolve()
 }
 
 const openNoteModal = (rep) => {
@@ -367,10 +443,10 @@ const saveNote = async () => {
   }
   try {
     await reportStore.addInvestigationNote(selectedReport.value.report_id, noteInput.value)
-    toast.success('Catatan investigasi berhasil ditambahkan!')
+    toast.success('Catatan konseling berhasil disimpan!')
     showNoteModal.value = false
   } catch (err) {
-    toast.error('Gagal menambahkan catatan.')
+    toast.error('Gagal menyimpan catatan.')
   }
 }
 </script>

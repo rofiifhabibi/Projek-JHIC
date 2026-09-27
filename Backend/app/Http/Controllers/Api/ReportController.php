@@ -15,6 +15,7 @@ class ReportController extends Controller
             'category' => ['required', 'in:BULLYING,ACADEMIC,PERSONAL,OTHERS'],
             'title' => ['nullable', 'string', 'max:255'],
             'description' => ['required', 'string'],
+            'request_id' => ['nullable', 'exists:requests,request_id'],
         ]);
 
         $student = $request->user();
@@ -32,6 +33,7 @@ class ReportController extends Controller
 
         $report = Report::create([
             'student_id' => $student->user_id,
+            'request_id' => $request->request_id,
             'category' => $request->category,
             'title' => $title,
             'description' => $request->description,
@@ -41,14 +43,15 @@ class ReportController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Laporan Care Report berhasil dikirim secara aman ke BK.',
-            'data' => $report,
+            'data' => $report->load('permit'),
         ], 201);
     }
 
     // Siswa melihat seluruh laporan miliknya di menu My Tracking
     public function myReports(Request $request)
     {
-        $reports = Report::where('student_id', $request->user()->user_id)
+        $reports = Report::with('permit:request_id,type,status,reason,duration_minutes,alpha_at')
+            ->where('student_id', $request->user()->user_id)
             ->latest()
             ->get();
 

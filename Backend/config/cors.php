@@ -16,13 +16,17 @@ return [
 
     'allowed_methods' => ['*'],
 
-    // Alamat Vite / Vue.js lokal Anda
+    // Alamat Vite / Vue.js lokal & perangkat HP di jaringan Wi-Fi
     'allowed_origins' => [
         'http://localhost:5173',
         'http://127.0.0.1:5173',
+        'http://192.168.100.31:5173',
     ],
 
-    'allowed_origins_patterns' => [],
+    'allowed_origins_patterns' => [
+        '#^http://.*:5173$#',
+        '#^https?://.*#',
+    ],
 
     'allowed_headers' => ['*'],
 

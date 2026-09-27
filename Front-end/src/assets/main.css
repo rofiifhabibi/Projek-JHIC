@@ -19,6 +19,10 @@
   --color-status-rejected: #BE123C;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   background-color: var(--color-canvas);
   color: #111827;
@@ -45,4 +49,25 @@ body {
 /* Focus Ring Utility */
 .focus-ring {
   @apply focus:outline-none focus:ring-2 focus:ring-[#355245] focus:ring-offset-2;
+}
+
+/* Page Fade & Slide Micro-Interactions (180ms) */
+.page-fade-enter-active,
+.page-fade-leave-active {
+  transition: opacity 0.18s cubic-bezier(0.16, 1, 0.3, 1), transform 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.page-fade-enter-from {
+  opacity: 0;
+  transform: translateY(5px);
+}
+
+.page-fade-leave-to {
+  opacity: 0;
+  transform: translateY(-4px);
+}
+
+/* Hilangkan highlight biru kaku saat tap di browser HP Android/iOS */
+* {
+  -webkit-tap-highlight-color: transparent;
 }

@@ -26,7 +26,7 @@
         >
           <div
             v-if="show"
-            class="w-full bg-white rounded-2xl shadow-2xl border border-slate-100 overflow-hidden flex flex-col max-h-[90vh]"
+            class="w-full bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden flex flex-col max-h-[90vh]"
             :class="maxWidthClass"
             role="dialog"
             aria-modal="true"
@@ -40,7 +40,7 @@
               </h3>
               <button
                 @click="close"
-                class="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition focus:outline-none"
+                class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-300"
                 aria-label="Tutup dialog"
               >
                 <X class="w-5 h-5" />

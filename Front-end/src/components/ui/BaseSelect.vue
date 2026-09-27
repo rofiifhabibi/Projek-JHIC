@@ -27,7 +27,9 @@
         </option>
       </select>
 
-      <ChevronDown class="absolute right-3.5 w-4 h-4 text-slate-400 pointer-events-none" />
+      <div class="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-slate-400">
+        <ChevronDown class="w-4 h-4" />
+      </div>
     </div>
 
     <p v-if="error" class="text-xs text-rose-600 font-medium mt-0.5">{{ error }}</p>

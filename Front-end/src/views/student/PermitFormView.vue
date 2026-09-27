@@ -2,30 +2,65 @@
   <div class="space-y-6">
     <div class="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 border border-slate-200 shadow-sm space-y-5 sm:space-y-6">
       <div class="border-b border-slate-100 pb-4">
-        <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Form Pengajuan Surat Izin</h2>
-        <p class="text-xs text-slate-500 mt-0.5">Isi rincian permohonan izin untuk dikonfirmasi oleh guru pengampu kelas.</p>
+        <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Pengajuan Surat Izin</h2>
+        <p class="text-xs text-slate-500 mt-0.5">Isi data permohonan izin untuk disetujui oleh guru yang mengajar di kelas.</p>
       </div>
 
-      <form @submit.prevent="handleSubmit" class="space-y-5 sm:space-y-6">
-        <!-- Step 1: Jenis Perizinan -->
+      <!-- Active Permit Notice Banner -->
+      <div
+        v-if="hasActivePermit"
+        class="p-4 sm:p-5 bg-amber-50 border border-amber-200 rounded-2xl space-y-3"
+      >
+        <div class="flex items-center gap-2 font-bold text-amber-900 text-xs">
+          <AlertCircle class="w-4 h-4 text-amber-600 shrink-0" />
+          <span>Kamu Masih Memiliki Izin Aktif (#{{ permitStore.activePermit?.request_id }})</span>
+        </div>
+        <p class="text-xs text-amber-700 leading-relaxed">
+          Kamu saat ini memiliki permohonan izin (Status: <strong class="uppercase font-bold text-amber-950">{{ permitStore.activePermit?.status }}</strong>) yang sedang berjalan. Kamu bisa melihat surat izin aktif, atau membatalkannya untuk mereset dan menguji formulir baru.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-2 pt-1">
+          <router-link to="/student/permit/pass" class="flex-1">
+            <BaseButton variant="primary" size="sm" block>
+              Lihat Izin Aktif
+            </BaseButton>
+          </router-link>
+          <BaseButton
+            variant="danger"
+            size="sm"
+            class="flex-1"
+            :loading="isCancelling"
+            @click="handleCancelActiveForTesting"
+          >
+            Batalkan Izin Sebelumnya (Reset Testing)
+          </BaseButton>
+          <router-link to="/student/dashboard" class="flex-1">
+            <BaseButton variant="outline" size="sm" block>
+              Kembali ke Beranda
+            </BaseButton>
+          </router-link>
+        </div>
+      </div>
+
+      <form v-else @submit.prevent="handleSubmit" class="space-y-5 sm:space-y-6">
+        <!-- Step 1: Jenis Izin -->
         <div class="space-y-3">
           <label class="text-xs font-semibold uppercase tracking-wider text-slate-700">
-            1. Pilih Jenis Perizinan <span class="text-rose-500">*</span>
+            1. Pilih Jenis Izin <span class="text-rose-500">*</span>
           </label>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <RadioCard
               v-model="form.type"
               value="TEMP"
               name="permit-type"
-              title="Keluar Sementara (TEMP)"
-              description="Ke UKS, Toilet, Tata Usaha, atau keperluan singkat lainnya."
+              title="Keluar Kelas Sementara"
+              description="Ke UKS, Toilet, Ruang TU, atau keperluan singkat lainnya."
             />
             <RadioCard
               v-model="form.type"
               value="EXIT_SCHOOL"
               name="permit-type"
               title="Izin Pulang Sekolah"
-              description="Meninggalkan lingkungan sekolah karena sakit/keperluan mendesak."
+              description="Meninggalkan lingkungan sekolah karena sakit atau keperluan mendesak."
             />
           </div>
         </div>
@@ -34,7 +69,7 @@
         <div v-if="form.type === 'TEMP'" class="space-y-3">
           <div class="flex items-center justify-between">
             <label class="text-xs font-semibold uppercase tracking-wider text-slate-700">
-              2. Estimasi Durasi Izin <span class="text-rose-500">*</span>
+              2. Tentukan Lama Izin <span class="text-rose-500">*</span>
             </label>
             <span class="text-xs font-bold text-[#355245] bg-[#E8EFEA] px-2.5 py-0.5 rounded-full">
               {{ form.duration_minutes || 0 }} Menit
@@ -48,7 +83,7 @@
               :key="dur"
               type="button"
               @click="setDuration(dur)"
-              class="py-2.5 px-1 sm:px-2 rounded-xl border text-[11px] sm:text-xs font-bold transition text-center"
+              class="py-2.5 px-1 sm:px-2 rounded-xl border text-xs font-bold transition text-center"
               :class="form.duration_minutes === dur ? 'border-[#355245] bg-[#E8EFEA] text-[#355245] shadow-xs' : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'"
             >
               {{ dur }} Menit
@@ -58,8 +93,8 @@
           <!-- Input Durasi Kustom & Stepper -->
           <div class="bg-slate-50 border border-slate-200 rounded-2xl p-3.5 sm:p-4 space-y-3">
             <div class="flex items-center justify-between text-xs">
-              <span class="font-medium text-slate-700">Atur Waktu Bebas:</span>
-              <span class="text-[11px] text-slate-400">Rentang: 5 - 180 menit</span>
+              <span class="font-medium text-slate-700">Tentukan Durasi Sendiri:</span>
+              <span class="text-xs text-slate-500">Rentang: 5 - 180 menit</span>
             </div>
 
             <div class="flex items-center gap-1.5 sm:gap-3">
@@ -86,7 +121,7 @@
                   placeholder="30"
                   class="w-full text-center font-bold text-slate-900 bg-white border border-slate-200 rounded-xl py-2 px-2 text-sm focus:border-[#355245] focus:ring-2 focus:ring-[#355245] focus:outline-none transition pr-12"
                 />
-                <span class="absolute right-2.5 top-1/2 -translate-y-1/2 text-[11px] font-medium text-slate-400 pointer-events-none">
+                <span class="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs font-medium text-slate-500 pointer-events-none">
                   Menit
                 </span>
               </div>
@@ -120,40 +155,109 @@
         <!-- Step 3: Alasan Izin (Reason) -->
         <div class="space-y-1.5">
           <label for="permit-reason" class="text-xs font-semibold uppercase tracking-wider text-slate-700">
-            3. Alasan Izin Spesifik <span class="text-rose-500">*</span>
+            3. Alasan Izin <span class="text-rose-500">*</span>
           </label>
           <textarea
             id="permit-reason"
             v-model="form.reason"
             rows="3"
             required
-            placeholder="Jelaskan secara detail keperluan izin Anda (misal: Mengambil berkas di TU)..."
+            placeholder="Tuliskan keperluan izin kamu (misal: Mengambil buku di loker / ke ruang UKS)..."
             class="w-full rounded-xl border border-slate-200 bg-white p-3.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#355245] focus:ring-2 focus:ring-[#355245] focus:outline-none transition"
           ></textarea>
         </div>
 
-        <!-- Step 4: Pilih Guru Pengampu -->
-        <BaseSelect
-          v-model="form.teacher_id"
-          label="4. Pilih Guru Pengampu Saat Ini"
-          placeholder="-- Pilih Guru yang mengajar di kelas --"
-          :options="teachersList"
-          value-key="user_id"
-          label-key="name"
-          required
-        />
+        <!-- Step 4: Pilih Guru yang Mengajar (Otomatis Jadwal / Manual Fallback) -->
+        <div class="space-y-3">
+          <div class="flex items-center justify-between">
+            <label class="text-xs font-semibold uppercase tracking-wider text-slate-700">
+              4. Guru Pengampu Jam Pelajaran <span class="text-rose-500">*</span>
+            </label>
+            <button
+              type="button"
+              @click="isManualSelect = !isManualSelect"
+              class="text-xs font-bold text-[#355245] hover:underline flex items-center gap-1"
+            >
+              <span>{{ isManualSelect ? 'Gunakan Otomatis' : 'Ganti Guru Manual' }}</span>
+            </button>
+          </div>
 
-        <!-- Action Button -->
-        <div class="pt-2">
-          <BaseButton
-            type="submit"
-            variant="primary"
-            size="lg"
-            block
-            :loading="permitStore.loading"
+          <!-- Card Otomatis Terdeteksi Sesuai Jadwal (Dummy/Live) -->
+          <div
+            v-if="!isManualSelect"
+            class="p-4 rounded-2xl bg-[#E8EFEA]/80 border border-[#355245]/25 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs"
           >
-            Kirim Pengajuan Izin
-          </BaseButton>
+            <div class="flex items-center gap-3">
+              <div class="w-11 h-11 rounded-xl bg-[#355245] text-white flex items-center justify-center shrink-0 shadow-xs">
+                <UserCheck class="w-5 h-5 text-emerald-300" />
+              </div>
+              <div>
+                <div class="flex items-center gap-2 flex-wrap">
+                  <h4 class="font-extrabold text-sm sm:text-base text-slate-900 leading-tight">
+                    {{ detectedTeacher.name }}
+                  </h4>
+                  <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-extrabold uppercase border border-emerald-200">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    Jadwal Aktif
+                  </span>
+                </div>
+                <p class="text-xs text-slate-600 mt-0.5">
+                  <span class="font-semibold text-[#355245]">{{ detectedTeacher.subject }}</span>
+                  <span class="text-slate-400"> • </span>
+                  <span>{{ detectedTeacher.room || 'Lab Komputer RPL 1' }} (Jam Pelajaran Sekarang)</span>
+                </p>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              @click="isManualSelect = true"
+              class="text-xs font-bold px-3 py-1.5 rounded-xl border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 transition shrink-0 active:scale-95 shadow-xs"
+            >
+              Ganti Guru
+            </button>
+          </div>
+
+          <!-- Dropdown Pemilihan Guru Manual (Dummy List) -->
+          <div v-else class="space-y-2 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+            <BaseSelect
+              v-model="form.teacher_id"
+              label="Pilih Guru Pengganti / Guru Piket"
+              placeholder="-- Pilih Guru yang Mengajar --"
+              :options="allTeachers"
+              value-key="user_id"
+              label-key="display_name"
+              required
+            />
+            <p class="text-xs text-slate-500">
+              Gunakan opsi ini jika guru mata pelajaran utama berhalangan hadir dan digantikan oleh guru piket.
+            </p>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="pt-2 flex flex-col sm:flex-row gap-3">
+          <router-link to="/student/dashboard" class="flex-1 order-2 sm:order-1">
+            <BaseButton
+              type="button"
+              variant="outline"
+              size="lg"
+              block
+            >
+              Batal & Kembali
+            </BaseButton>
+          </router-link>
+          <div class="flex-1 order-1 sm:order-2">
+            <BaseButton
+              type="submit"
+              variant="primary"
+              size="lg"
+              block
+              :loading="permitStore.loading"
+            >
+              Ajukan Izin
+            </BaseButton>
+          </div>
         </div>
       </form>
     </div>
@@ -161,26 +265,67 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { usePermitStore } from '@/stores/permit'
 import { useToast } from '@/composables/useToast'
 import RadioCard from '@/components/ui/RadioCard.vue'
 import BaseSelect from '@/components/ui/BaseSelect.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
+import { AlertCircle, UserCheck } from 'lucide-vue-next'
 
 const router = useRouter()
 const permitStore = usePermitStore()
 const toast = useToast()
 
+const isManualSelect = ref(false)
+const isCancelling = ref(false)
+
+const hasActivePermit = computed(() => {
+  return permitStore.activePermit && ['PENDING', 'APPROVED', 'ACTIVE', 'OVERDUE'].includes(permitStore.activePermit.status)
+})
+
+const detectedTeacher = computed(() => {
+  if (permitStore.currentSchedule?.teacher_id) {
+    return {
+      user_id: permitStore.currentSchedule.teacher_id,
+      name: permitStore.currentSchedule.teacher_name,
+      subject: permitStore.currentSchedule.subject || 'Pemrograman Web (PWPB)',
+      room: permitStore.currentSchedule.room || 'Lab Komputer RPL 1'
+    }
+  }
+  return {
+    user_id: 6,
+    name: 'Ahmad Dahlan, S.Pd.',
+    subject: 'Pemrograman Web (PWPB)',
+    room: 'Lab Komputer RPL 1'
+  }
+})
+
+const allTeachers = computed(() => {
+  const list = permitStore.teachersList?.length > 0 ? permitStore.teachersList : [
+    { user_id: 6, name: 'Ahmad Dahlan, S.Pd.', subject: 'Pemrograman Web (PWPB)' },
+    { user_id: 8, name: 'Bambang Pamungkas, S.Kom', subject: 'Pemrograman Berorientasi Objek (PBO)' },
+    { user_id: 7, name: 'Ratna Dewi, M.Pd.', subject: 'Fisika Terapan Kejuruan' }
+  ]
+  return list.map(t => ({
+    ...t,
+    display_name: `${t.name} (${t.subject || 'Guru Pengajar'})${t.user_id === detectedTeacher.value.user_id ? ' — [Jadwal Aktif]' : ''}`
+  }))
+})
+
 const form = ref({
   type: 'TEMP',
   duration_minutes: 30,
   reason: '',
-  teacher_id: ''
+  teacher_id: 6
 })
 
-const teachersList = computed(() => permitStore.teachersList)
+watch(detectedTeacher, (val) => {
+  if (val?.user_id && (!form.value.teacher_id || form.value.teacher_id === 6)) {
+    form.value.teacher_id = val.user_id
+  }
+}, { immediate: true })
 
 const setDuration = (dur) => {
   form.value.duration_minutes = dur
@@ -193,16 +338,34 @@ const adjustDuration = (delta) => {
 }
 
 onMounted(async () => {
-  await permitStore.fetchTeachers()
+  await Promise.allSettled([
+    permitStore.fetchTeachers(),
+    permitStore.fetchActivePermit()
+  ])
+  if (detectedTeacher.value?.user_id) {
+    form.value.teacher_id = detectedTeacher.value.user_id
+  }
 })
+
+const handleCancelActiveForTesting = async () => {
+  if (!permitStore.activePermit?.request_id) return
+  isCancelling.value = true
+  try {
+    await permitStore.cancelPermit(permitStore.activePermit.request_id)
+    toast.success('Izin sebelumnya berhasil dibatalkan. Formulir siap diuji!')
+  } catch (err) {
+    toast.error(err.response?.data?.message || 'Gagal membatalkan izin.')
+  } finally {
+    isCancelling.value = false
+  }
+}
 
 const handleSubmit = async () => {
   if (!form.value.teacher_id) {
-    toast.warning('Pilih guru pengampu terlebih dahulu!')
-    return
+    form.value.teacher_id = detectedTeacher.value?.user_id || 6
   }
   if (!form.value.reason.trim()) {
-    toast.warning('Alasan izin wajib diisi secara rinci!')
+    toast.warning('Alasan izin tidak boleh kosong!')
     return
   }
   if (form.value.type === 'TEMP') {

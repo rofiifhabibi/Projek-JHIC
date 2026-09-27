@@ -40,7 +40,7 @@ const routes = [
   // 3. RUTE PORTAL SATPAM
   {
     path: '/satpam',
-    component: () => import('@/layouts/BlankLayout.vue'),
+    component: () => import('@/layouts/SatpamLayout.vue'),
     meta: { requiresAuth: true, roles: ['satpam'] },
     children: [
       { path: 'scanner', name: 'satpam-scanner', component: () => import('@/views/satpam/WebScannerView.vue') }

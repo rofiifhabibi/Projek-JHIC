@@ -6,11 +6,11 @@
       class="text-xs font-semibold uppercase tracking-wider text-slate-700 select-none flex items-center justify-between"
     >
       <span>{{ label }} <span v-if="required" class="text-rose-500">*</span></span>
-      <span v-if="hint" class="text-[11px] font-normal lowercase text-slate-400 normal-case">{{ hint }}</span>
+      <span v-if="hint" class="text-xs font-normal text-slate-500 normal-case">{{ hint }}</span>
     </label>
 
     <div class="relative flex items-center">
-      <div v-if="$slots['icon-left']" class="absolute left-3.5 text-slate-400 pointer-events-none">
+      <div v-if="$slots['icon-left']" class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
         <slot name="icon-left" />
       </div>
 
@@ -30,7 +30,7 @@
         ]"
       />
 
-      <div v-if="$slots['icon-right']" class="absolute right-3.5 text-slate-400">
+      <div v-if="$slots['icon-right']" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400">
         <slot name="icon-right" />
       </div>
     </div>

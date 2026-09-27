@@ -1,32 +1,34 @@
 <template>
   <Teleport to="body">
-    <div class="fixed top-4 right-4 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none px-4 sm:px-0">
+    <div
+      class="fixed top-4 inset-x-0 z-50 flex flex-col items-center gap-2.5 px-4 pointer-events-none sm:top-5 sm:right-6 sm:left-auto sm:px-0 sm:items-end"
+    >
       <TransitionGroup
         enter-active-class="transform transition duration-300 ease-out"
-        enter-from-class="translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-2"
-        enter-to-class="translate-y-0 opacity-100 sm:translate-x-0"
+        enter-from-class="-translate-y-2 opacity-0 scale-95 sm:translate-y-0 sm:translate-x-3"
+        enter-to-class="translate-y-0 opacity-100 scale-100 sm:translate-x-0"
         leave-active-class="transition duration-200 ease-in"
-        leave-from-class="opacity-100"
+        leave-from-class="opacity-100 scale-100"
         leave-to-class="opacity-0 scale-95"
       >
         <div
           v-for="toast in toasts"
           :key="toast.id"
-          class="pointer-events-auto flex items-start gap-3 p-4 rounded-xl shadow-lg border backdrop-blur-md transition-all"
+          class="pointer-events-auto flex items-start gap-3 p-3.5 sm:p-4 rounded-2xl shadow-xl border backdrop-blur-md transition-all w-full max-w-sm"
           :class="getToastClass(toast.type)"
         >
           <!-- Icon -->
           <component :is="getToastIcon(toast.type)" class="w-5 h-5 shrink-0 mt-0.5" />
 
           <!-- Message -->
-          <div class="flex-1 text-sm font-medium leading-relaxed">
+          <div class="flex-1 text-xs sm:text-sm font-semibold leading-relaxed">
             {{ toast.message }}
           </div>
 
           <!-- Close button -->
           <button
             @click="removeToast(toast.id)"
-            class="shrink-0 p-1 rounded-lg opacity-70 hover:opacity-100 transition"
+            class="shrink-0 p-1 rounded-lg opacity-70 hover:opacity-100 hover:bg-black/5 transition"
             aria-label="Tutup notifikasi"
           >
             <X class="w-4 h-4" />
@@ -39,7 +41,7 @@
 
 <script setup>
 import { useToast } from '@/composables/useToast'
-import { CheckCircle2, AlertCircle, AlertTriangle, Info, X } from 'lucide-vue-next'
+import { CheckCircle, AlertCircle, AlertTriangle, Info, X } from 'lucide-vue-next'
 
 const { toasts, removeToast } = useToast()
 
@@ -59,7 +61,7 @@ const getToastClass = (type) => {
 const getToastIcon = (type) => {
   switch (type) {
     case 'success':
-      return CheckCircle2
+      return CheckCircle
     case 'error':
       return AlertCircle
     case 'warning':

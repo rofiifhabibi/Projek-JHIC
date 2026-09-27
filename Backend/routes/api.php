@@ -21,6 +21,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/teachers', [PermitController::class, 'getTeachers']);
         Route::post('/permits', [PermitController::class, 'store']);
         Route::get('/permits/active', [PermitController::class, 'myActivePermit']);
+        Route::delete('/permits/{id}', [PermitController::class, 'cancel']);
         Route::post('/reports', [ReportController::class, 'store']);
         Route::get('/reports/my', [ReportController::class, 'myReports']);
     });

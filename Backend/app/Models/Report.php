@@ -14,6 +14,7 @@ class Report extends Model
 
     protected $fillable = [
         'student_id',
+        'request_id',
         'category',    // 'BULLYING', 'FACILITY', 'ACADEMIC', 'PERSONAL', 'OTHERS'
         'title',
         'description',
@@ -26,5 +27,13 @@ class Report extends Model
     public function student()
     {
         return $this->belongsTo(User::class, 'student_id', 'user_id');
+    }
+
+    /**
+     * Relasi ke perizinan yang diklarifikasi (jika ada)
+     */
+    public function permit()
+    {
+        return $this->belongsTo(Request::class, 'request_id', 'request_id');
     }
 }

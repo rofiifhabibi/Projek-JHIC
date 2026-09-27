@@ -30,7 +30,10 @@ class BkController extends Controller
     // Papan Kanban Care Report
     public function getKanbanReports()
     {
-        $reports = Report::with('student:user_id,name,username,class_name,email')
+        $reports = Report::with([
+            'student:user_id,name,username,class_name,email',
+            'permit:request_id,type,status,reason,duration_minutes,alpha_at'
+        ])
             ->latest()
             ->get();
 
@@ -54,10 +57,31 @@ class BkController extends Controller
         $report = Report::findOrFail($id);
         $report->update(['status' => $request->status]);
 
+        // Integrasi Otomatis BK & Presensi:
+        // Jika Guru BK menyatakan aduan/klarifikasi TUNTAS (RESOLVED):
+        if ($request->status === 'RESOLVED') {
+            if ($report->request_id) {
+                // Kasus A: Laporan terkait dengan perizinan tertentu -> pulihkan HANYA permit tersebut!
+                PermitRequest::where('request_id', $report->request_id)
+                    ->where('status', 'ALPHA')
+                    ->update(['status' => 'COMPLETED']);
+            } elseif ($report->student_id && ($report->category === 'OTHERS' || str_contains(strtolower($report->title), 'klarifikasi'))) {
+                // Kasus B: Klarifikasi tanpa request_id eksplisit -> pulihkan HANYA permit ALPHA teranyar
+                $latestAlpha = PermitRequest::where('student_id', $report->student_id)
+                    ->where('status', 'ALPHA')
+                    ->latest()
+                    ->first();
+
+                if ($latestAlpha) {
+                    $latestAlpha->update(['status' => 'COMPLETED']);
+                }
+            }
+        }
+
         return response()->json([
             'status' => 'success',
             'message' => 'Status laporan berhasil diperbarui.',
-            'data' => $report,
+            'data' => $report->load('permit'),
         ]);
     }
 

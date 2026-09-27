@@ -21,6 +21,8 @@ const badgeStyle = computed(() => {
     case 'ACTIVE':
     case 'IN_PROGRESS':
       return 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+    case 'APPROVED':
+      return 'bg-sky-50 text-sky-700 border border-sky-200'
     case 'PENDING':
     case 'OPEN':
       return 'bg-amber-50 text-amber-700 border border-amber-200'
@@ -29,6 +31,7 @@ const badgeStyle = computed(() => {
     case 'COMPLETED':
     case 'RESOLVED':
     case 'CLOSED':
+    case 'CANCELLED':
       return 'bg-slate-100 text-slate-700 border border-slate-200'
     case 'ALPHA':
     case 'REJECTED':
@@ -43,6 +46,8 @@ const dotStyle = computed(() => {
     case 'ACTIVE':
     case 'IN_PROGRESS':
       return 'bg-emerald-500'
+    case 'APPROVED':
+      return 'bg-sky-500'
     case 'PENDING':
     case 'OPEN':
       return 'bg-amber-500'
@@ -51,6 +56,7 @@ const dotStyle = computed(() => {
     case 'COMPLETED':
     case 'RESOLVED':
     case 'CLOSED':
+    case 'CANCELLED':
       return 'bg-slate-400'
     case 'ALPHA':
     case 'REJECTED':
@@ -64,12 +70,14 @@ const labelText = computed(() => {
   if (props.label) return props.label
   switch (props.status?.toUpperCase()) {
     case 'ACTIVE': return 'Aktif'
+    case 'APPROVED': return 'Disetujui'
     case 'PENDING': return 'Menunggu'
     case 'OVERDUE': return 'Terlambat'
     case 'COMPLETED': return 'Selesai'
     case 'ALPHA': return 'Alpha'
     case 'CLOSED': return 'Ditutup'
     case 'REJECTED': return 'Ditolak'
+    case 'CANCELLED': return 'Dibatalkan'
     case 'OPEN': return 'Baru'
     case 'IN_PROGRESS': return 'Diproses'
     case 'RESOLVED': return 'Tuntas'

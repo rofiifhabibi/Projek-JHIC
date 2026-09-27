@@ -2,12 +2,12 @@
   <div class="space-y-6">
     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
       <div>
-        <h2 class="text-2xl font-black text-slate-900 tracking-tight">Antrean Persetujuan Surat Izin</h2>
-        <p class="text-xs text-slate-500 mt-0.5">Daftar pengajuan perizinan siswa di kelas yang membutuhkan verifikasi Anda.</p>
+        <h2 class="text-2xl font-black text-slate-900 tracking-tight">Persetujuan Izin Siswa</h2>
+        <p class="text-xs text-slate-500 mt-0.5">Daftar permohonan izin siswa yang menunggu persetujuan Bapak/Ibu guru.</p>
       </div>
       <BaseButton variant="outline" size="sm" @click="loadRequests">
         <template #icon-left><RefreshCw class="w-3.5 h-3.5" /></template>
-        Refresh Antrean
+        Segarkan
       </BaseButton>
     </div>
 
@@ -33,10 +33,10 @@
 
         <div class="bg-slate-50 p-3.5 sm:p-4 rounded-2xl border border-slate-100 text-xs space-y-2">
           <p class="text-slate-700 font-medium">
-            <strong>Tipe:</strong> {{ req.type === 'TEMP' ? 'Keluar Sementara (TEMP)' : 'Izin Pulang Sekolah' }}
+            <strong>Jenis Izin:</strong> {{ req.type === 'TEMP' ? 'Keluar Kelas Sementara' : 'Izin Pulang Sekolah' }}
           </p>
           <p class="text-slate-700 font-medium">
-            <strong>Durasi Izin:</strong> {{ req.duration_minutes || 30 }} Menit
+            <strong>Batas Waktu:</strong> {{ req.duration_minutes || 30 }} Menit
           </p>
           <p class="text-slate-600">
             <strong>Alasan:</strong> {{ req.reason || 'Tidak ada alasan khusus.' }}
@@ -51,8 +51,8 @@
             block
             @click="confirmApprove(req)"
           >
-            <template #icon-left><CheckCircle2 class="w-4 h-4" /></template>
-            Setujui (QR)
+            <template #icon-left><CheckCircle class="w-4 h-4" /></template>
+            Setujui Izin
           </BaseButton>
 
           <BaseButton
@@ -61,6 +61,7 @@
             block
             @click="confirmReject(req)"
           >
+            <template #icon-left><XCircle class="w-4 h-4" /></template>
             Tolak Izin
           </BaseButton>
         </div>
@@ -70,17 +71,17 @@
     <!-- Empty State -->
     <EmptyState
       v-else
-      title="Tidak Ada Antrean Izin"
-      description="Saat ini belum ada pengajuan perizinan siswa yang menunggu persetujuan Anda."
+      title="Tidak Ada Pengajuan Izin"
+      description="Saat ini belum ada pengajuan izin siswa yang menunggu persetujuan."
     />
 
     <!-- Approve Confirm Dialog -->
     <ConfirmDialog
       :show="showApproveConfirm"
       title="Setujui Permohonan Izin"
-      :message="`Apakah Anda yakin ingin menyetujui izin dari ${selectedReq?.student?.name} (${selectedReq?.duration_minutes ? selectedReq.duration_minutes + ' menit' : 'Izin Pulang'})? Tiket QR Pass digital akan langsung diterbitkan.`"
+      :message="`Apakah Anda yakin ingin menyetujui izin dari ${selectedReq?.student?.name} (${selectedReq?.duration_minutes ? selectedReq.duration_minutes + ' menit' : 'Izin Pulang'})? Kode QR izin akan langsung dibuat untuk siswa.`"
       variant="warning"
-      confirm-text="Ya, Setujui & Terbitkan QR"
+      confirm-text="Ya, Setujui Izin"
       @confirm="executeApprove"
       @cancel="showApproveConfirm = false"
     />
@@ -91,7 +92,7 @@
       title="Tolak Permohonan Izin"
       :message="`Apakah Anda yakin ingin menolak permohonan izin dari ${selectedReq?.student?.name}?`"
       variant="danger"
-      confirm-text="Ya, Tolak Permohonan"
+      confirm-text="Ya, Tolak Izin"
       @confirm="executeReject"
       @cancel="showConfirm = false"
     />
@@ -106,7 +107,7 @@ import BaseButton from '@/components/ui/BaseButton.vue'
 import BaseBadge from '@/components/ui/BaseBadge.vue'
 import EmptyState from '@/components/ui/EmptyState.vue'
 import ConfirmDialog from '@/components/ui/ConfirmDialog.vue'
-import { CheckCircle2, RefreshCw } from 'lucide-vue-next'
+import { CheckCircle, XCircle, RefreshCw } from 'lucide-vue-next'
 
 const permitStore = usePermitStore()
 const toast = useToast()
@@ -132,7 +133,7 @@ const executeApprove = async () => {
   if (!selectedReq.value) return
   try {
     await permitStore.approvePermit(selectedReq.value.request_id)
-    toast.success('Surat izin disetujui & QR Code diterbitkan!')
+    toast.success('Izin siswa berhasil disetujui!')
     showApproveConfirm.value = false
   } catch (err) {
     toast.error(err.response?.data?.message || 'Gagal menyetujui izin.')

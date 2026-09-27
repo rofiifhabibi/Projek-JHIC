@@ -3,121 +3,166 @@
     <div class="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 border border-slate-200 shadow-sm space-y-5 sm:space-y-6">
       <div class="border-b border-slate-100 pb-4">
         <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-teal-50 text-teal-700 border border-teal-200/60 text-xs font-bold uppercase tracking-wider mb-2">
-          <ShieldAlert class="w-3.5 h-3.5" /> Care BK — Layanan Konseling Tertutup
+          <ShieldAlert class="w-3.5 h-3.5" /> Layanan Bimbingan & Konseling (BK)
         </div>
-        <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Formulir Pengaduan & Konseling Siswa</h2>
-        <p class="text-xs text-slate-500 mt-0.5">Sampaikan kendala perundungan, akademik, atau konseling pribadi secara aman ke Guru BK.</p>
+        <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Pengaduan & Konseling Siswa</h2>
+        <p class="text-xs text-slate-500 mt-0.5">Sampaikan kendala belajar, perundungan, atau keperluan konseling secara aman ke Guru BK.</p>
+      </div>
+
+      <!-- Banner Klarifikasi Terkait Izin Tertentu -->
+      <div v-if="form.request_id" class="p-3.5 bg-amber-50 border border-amber-200 rounded-2xl flex items-start gap-2.5 text-xs text-amber-900">
+        <AlertOctagon class="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+        <div class="leading-relaxed">
+          <strong class="font-bold text-amber-950">Klarifikasi Terhubung dengan Izin #{{ form.request_id }}</strong>
+          <p class="text-xs text-amber-700 mt-0.5">
+            Laporan ini terhubung dengan izin kamu. Jika Guru BK menerima klarifikasi ini, status Alpha akan diperbarui menjadi Selesai.
+          </p>
+        </div>
       </div>
 
       <form @submit.prevent="handleSubmit" class="space-y-5 sm:space-y-6">
-        <!-- Kategori Aduan (3 Kategori) -->
+        <!-- Kategori Aduan (4 Kategori) -->
         <div class="space-y-3">
           <label class="text-xs font-semibold uppercase tracking-wider text-slate-700">
-            1. Kategori Kasus / Aduan <span class="text-rose-500">*</span>
+            1. Pilih Jenis Bantuan / Laporan <span class="text-rose-500">*</span>
           </label>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             <RadioCard
               v-model="form.category"
               value="BULLYING"
               name="report-cat"
               title="Perundungan (Bullying)"
-              description="Intimidasi, pemerasan, atau kekerasan verbal/fisik."
+              description="Pemalakan, intimidasi, ejekan, atau kekerasan fisik."
             />
             <RadioCard
               v-model="form.category"
               value="ACADEMIC"
               name="report-cat"
-              title="Kendala Pembelajaran"
-              description="Kesulitan belajar, tugas, atau konseling nilai."
+              title="Masalah Belajar"
+              description="Kesulitan memahami pelajaran, tugas menumpuk, atau remedial."
             />
             <RadioCard
               v-model="form.category"
               value="PERSONAL"
               name="report-cat"
               title="Konseling Pribadi"
-              description="Kesehatan mental, keluh kesah, atau masalah keluarga."
+              description="Keluh kesah pribadi, rasa cemas, atau masalah di rumah."
+            />
+            <RadioCard
+              v-model="form.category"
+              value="OTHERS"
+              name="report-cat"
+              title="Klarifikasi & Lainnya"
+              description="Penjelasan izin Alpha atau kendala khusus lainnya."
             />
           </div>
         </div>
 
-        <!-- Judul & Kronologi -->
+        <!-- Judul & Deskripsi Cerita -->
         <BaseInput
           id="report-title"
-          label="2. Judul Aduan Singkat"
-          placeholder="Misal: Tindakan intimidasi di area kantin belakang..."
+          label="2. Judul Laporan Singkat"
+          placeholder="Misal: Ada yang memalak di area kantin belakang..."
           v-model="form.title"
           required
         />
 
         <div class="space-y-1.5">
           <label class="text-xs font-semibold uppercase tracking-wider text-slate-700">
-            3. Rincian Kronologi Kejadian <span class="text-rose-500">*</span>
+            3. Ceritakan Masalah / Kejadiannya <span class="text-rose-500">*</span>
           </label>
           <textarea
             v-model="form.description"
             rows="4"
             required
-            placeholder="Ceritakan waktu, tempat, dan rincian kejadian secara lengkap..."
+            placeholder="Ceritakan waktu, tempat, atau apa yang kamu alami secara jelas..."
             class="w-full rounded-xl border border-slate-200 bg-white p-3.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#355245] focus:ring-2 focus:ring-[#355245] focus:outline-none transition"
           ></textarea>
         </div>
 
-        <!-- Jaminan Kerahasiaan & Privasi Terisolasi -->
+        <!-- Jaminan Kerahasiaan -->
         <div class="p-4 rounded-2xl bg-[#E8EFEA] border border-[#355245]/20 flex items-start gap-3.5">
           <div class="w-9 h-9 rounded-xl bg-[#355245] text-white flex items-center justify-center shrink-0 mt-0.5">
             <ShieldCheck class="w-5 h-5" />
           </div>
           <div class="space-y-1 text-xs">
-            <div class="font-bold text-[#355245] text-sm">Privasi Terisolasi & Kerahasiaan Terjamin</div>
-            <p class="text-slate-600 leading-relaxed text-[11px]">
-              Data identitas siswa (Nama, NIS, dan Kelas) hanya dapat diakses secara tertutup oleh Guru BK untuk pendampingan konseling dan penanganan kasus. Data ini terisolasi sepenuhnya dan <strong>tidak dapat dilihat oleh siswa lain</strong>.
+            <div class="font-bold text-[#355245] text-sm">Kerahasiaan Terjamin</div>
+            <p class="text-slate-600 leading-relaxed text-xs">
+              Identitas dan isi ceritamu hanya bisa dibaca oleh Guru BK untuk pendampingan konseling. Laporan ini bersifat rahasia dan <strong>tidak dapat dilihat oleh siswa lain</strong>.
             </p>
           </div>
         </div>
 
-        <BaseButton
-          type="submit"
-          variant="primary"
-          size="lg"
-          block
-          :loading="reportStore.loading"
-        >
-          Kirim Laporan BK
-        </BaseButton>
+        <div class="flex flex-col sm:flex-row gap-3 pt-2">
+          <router-link to="/student/dashboard" class="flex-1 order-2 sm:order-1">
+            <BaseButton
+              type="button"
+              variant="outline"
+              size="lg"
+              block
+            >
+              Batal & Kembali
+            </BaseButton>
+          </router-link>
+          <div class="flex-1 order-1 sm:order-2">
+            <BaseButton
+              type="submit"
+              variant="primary"
+              size="lg"
+              block
+              :loading="reportStore.loading"
+            >
+              Kirim Laporan BK
+            </BaseButton>
+          </div>
+        </div>
       </form>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, onMounted } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import { useReportStore } from '@/stores/report'
 import { useToast } from '@/composables/useToast'
 import RadioCard from '@/components/ui/RadioCard.vue'
 import BaseInput from '@/components/ui/BaseInput.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
-import { ShieldAlert, ShieldCheck } from 'lucide-vue-next'
+import { ShieldAlert, ShieldCheck, AlertOctagon } from 'lucide-vue-next'
 
 const router = useRouter()
+const route = useRoute()
 const reportStore = useReportStore()
 const toast = useToast()
 
 const form = ref({
   category: 'BULLYING',
   title: '',
-  description: ''
+  description: '',
+  request_id: null
+})
+
+onMounted(() => {
+  if (route.query.type === 'alpha') {
+    form.value.category = 'OTHERS'
+    form.value.title = 'Klarifikasi Status Alpha Izin'
+    form.value.description = 'Yth. Bapak/Ibu Guru BK,\n\nSaya ingin menyampaikan penjelasan mengenai status izin saya yang ditandai Alpha hari ini karena:\n'
+  }
+  if (route.query.request_id || route.query.permit_id) {
+    form.value.request_id = Number(route.query.request_id || route.query.permit_id)
+  }
 })
 
 const handleSubmit = async () => {
   if (!form.value.title.trim() || !form.value.description.trim()) {
-    toast.warning('Judul dan kronologi aduan wajib diisi!')
+    toast.warning('Judul dan isi cerita laporan wajib diisi!')
     return
   }
 
   try {
     await reportStore.submitReport(form.value)
-    toast.success('Laporan pengaduan berhasil dikirim ke Guru BK!')
+    toast.success('Laporan berhasil dikirim ke Guru BK!')
     router.push('/student/tracking')
   } catch (err) {
     toast.error(err.response?.data?.message || 'Gagal mengirim laporan.')

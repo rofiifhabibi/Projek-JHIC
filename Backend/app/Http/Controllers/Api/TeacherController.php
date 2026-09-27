@@ -50,10 +50,10 @@ class TeacherController extends Controller
         $studentIds = User::whereIn('class_name', $activeClasses->toArray())
             ->pluck('user_id');
 
-        // Siswa yang berizin aktif, terlambat, atau sudah izin pulang
+        // Siswa yang berizin aktif, disetujui, terlambat, alpha, atau sudah izin pulang
         $permits = PermitRequest::with(['student:user_id,name,username,class_name,email'])
             ->whereIn('student_id', $studentIds)
-            ->whereIn('status', ['PENDING', 'ACTIVE', 'OVERDUE', 'COMPLETED', 'CLOSED'])
+            ->whereIn('status', ['PENDING', 'APPROVED', 'ACTIVE', 'OVERDUE', 'COMPLETED', 'CLOSED', 'ALPHA'])
             ->latest()
             ->get();
 

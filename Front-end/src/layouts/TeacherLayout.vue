@@ -1,19 +1,15 @@
 <template>
   <div class="min-h-screen bg-[#F4F7F4] text-slate-800 font-sans">
-    <ToastNotification />
-
     <!-- Top Navbar Header -->
     <header class="bg-[#355245] text-white shadow-lg sticky top-0 z-30 border-b border-white/10">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16">
           <div class="flex items-center gap-3 sm:gap-6 min-w-0">
             <div class="flex items-center gap-2.5 sm:gap-3 shrink-0">
-              <div class="w-9 h-9 sm:w-10 sm:h-10 bg-white/15 rounded-xl flex items-center justify-center font-extrabold text-white text-sm sm:text-base border border-white/20 shrink-0">
-                GP
-              </div>
+              <AppLogo variant="teacher" size="md" theme="white-trans" class="shrink-0" />
               <div class="min-w-0">
-                <h1 class="font-extrabold text-sm sm:text-base tracking-tight leading-none text-white truncate">Workstation Guru</h1>
-                <p class="text-[9px] sm:text-[10px] text-[#E8EFEA]/80 font-medium tracking-wide mt-0.5 uppercase truncate">SMKN 2 Depok Sleman</p>
+                <h1 class="font-extrabold text-sm sm:text-base tracking-tight leading-none text-white truncate">Portal Guru</h1>
+                <p class="text-xs text-[#E8EFEA]/80 font-medium tracking-wide mt-0.5 uppercase truncate">SMKN 2 Depok Sleman</p>
               </div>
             </div>
 
@@ -24,12 +20,11 @@
                 class="px-3 lg:px-4 py-2 rounded-lg text-xs font-bold transition-all text-[#E8EFEA]/90 hover:text-white flex items-center gap-2"
                 active-class="!bg-white !text-[#355245] shadow-sm font-extrabold"
               >
-                <span>Monitoring Kelas</span>
+                <span>Monitoring Siswa</span>
                 <span
                   v-if="overdueCount > 0"
-                  class="bg-rose-500 text-white text-[10px] font-black px-2 py-0.5 rounded-full animate-pulse flex items-center gap-1 shadow-sm"
+                  class="bg-rose-500 text-white text-xs font-bold px-2 py-0.5 rounded-full flex items-center gap-1 shadow-sm"
                 >
-                  <span class="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span>
                   {{ overdueCount }} Terlambat
                 </span>
               </router-link>
@@ -38,10 +33,10 @@
                 class="px-3 lg:px-4 py-2 rounded-lg text-xs font-bold transition-all text-[#E8EFEA]/90 hover:text-white flex items-center gap-2"
                 active-class="!bg-white !text-[#355245] shadow-sm font-extrabold"
               >
-                <span>Antrean Persetujuan</span>
+                <span>Persetujuan Izin</span>
                 <span
                   v-if="pendingCount > 0"
-                  class="bg-amber-500 text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow-sm"
+                  class="bg-amber-500 text-white text-xs font-bold px-2 py-0.5 rounded-full shadow-sm"
                 >
                   {{ pendingCount }}
                 </span>
@@ -53,7 +48,7 @@
           <div class="flex items-center gap-2.5 sm:gap-4 shrink-0">
             <div class="hidden lg:block text-right">
               <p class="text-xs font-bold text-white leading-none truncate max-w-[150px]">{{ authStore.userName }}</p>
-              <p class="text-[10px] text-[#E8EFEA]/80 mt-1">Guru Pengampu Kelas</p>
+              <p class="text-xs text-[#E8EFEA]/80 mt-1">Guru Pengajar</p>
             </div>
             <button
               @click="showLogoutConfirm = true"
@@ -73,10 +68,10 @@
           class="flex-1 max-w-[200px] text-xs font-bold py-2 px-3 rounded-xl flex items-center justify-center gap-1.5 transition-all text-[#E8EFEA]/90"
           active-class="!bg-white !text-[#355245] shadow-sm font-extrabold"
         >
-          <span>Monitoring Kelas</span>
+          <span>Monitoring Siswa</span>
           <span
             v-if="overdueCount > 0"
-            class="bg-rose-500 text-white text-[10px] font-black px-1.5 py-0.5 rounded-full animate-pulse"
+            class="bg-rose-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full"
           >
             {{ overdueCount }}
           </span>
@@ -86,10 +81,10 @@
           class="flex-1 max-w-[200px] text-xs font-bold py-2 px-3 rounded-xl flex items-center justify-center gap-1.5 transition-all text-[#E8EFEA]/90"
           active-class="!bg-white !text-[#355245] shadow-sm font-extrabold"
         >
-          <span>Antrean Izin</span>
+          <span>Persetujuan Izin</span>
           <span
             v-if="pendingCount > 0"
-            class="bg-amber-500 text-white text-[10px] font-black px-1.5 py-0.5 rounded-full"
+            class="bg-amber-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full"
           >
             {{ pendingCount }}
           </span>
@@ -99,14 +94,18 @@
 
     <!-- Main Content -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-8 space-y-6">
-      <router-view />
+      <router-view v-slot="{ Component }">
+        <transition name="page-fade" mode="out-in">
+          <component :is="Component" />
+        </transition>
+      </router-view>
     </main>
 
     <!-- Logout Confirm -->
     <ConfirmDialog
       :show="showLogoutConfirm"
-      title="Keluar Sesi Workstation"
-      message="Apakah Anda yakin ingin keluar dari workstation guru?"
+      title="Konfirmasi Keluar"
+      message="Apakah Anda yakin ingin keluar dari akun guru?"
       confirm-text="Ya, Keluar"
       variant="danger"
       @confirm="handleLogout"
@@ -119,8 +118,8 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { usePermitStore } from '@/stores/permit'
-import ToastNotification from '@/components/ui/ToastNotification.vue'
 import ConfirmDialog from '@/components/ui/ConfirmDialog.vue'
+import AppLogo from '@/components/ui/AppLogo.vue'
 import { LogOut } from 'lucide-vue-next'
 
 const authStore = useAuthStore()
@@ -143,13 +142,37 @@ const syncData = async () => {
   ])
 }
 
+const startPolling = () => {
+  stopPolling()
+  const jitter = Math.floor(Math.random() * 3000)
+  pollTimer = setInterval(syncData, 15000 + jitter)
+}
+
+const stopPolling = () => {
+  if (pollTimer) {
+    clearInterval(pollTimer)
+    pollTimer = null
+  }
+}
+
+const handleVisibilityChange = async () => {
+  if (document.hidden) {
+    stopPolling()
+  } else {
+    await syncData()
+    startPolling()
+  }
+}
+
 onMounted(() => {
   syncData()
-  pollTimer = setInterval(syncData, 4000)
+  startPolling()
+  document.addEventListener('visibilitychange', handleVisibilityChange)
 })
 
 onUnmounted(() => {
-  if (pollTimer) clearInterval(pollTimer)
+  stopPolling()
+  document.removeEventListener('visibilitychange', handleVisibilityChange)
 })
 
 const handleLogout = () => {
