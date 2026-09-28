@@ -1,74 +1,58 @@
 <template>
+  <!-- Full Horizontal Lockup (Icon + Text) -->
+  <div v-if="variant === 'full'" class="inline-flex items-center select-none shrink-0">
+    <img
+      :src="isWhiteVariant ? '/logos/studentcare-logo-white.png' : '/logos/studentcare-logo.png'"
+      alt="Student Care — SMKN 2 Depok Sleman"
+      :class="fullLogoHeightClass"
+      class="object-contain"
+    />
+  </div>
+
+  <!-- Icon Badge / Monogram -->
   <div
-    class="inline-flex items-center justify-center shrink-0 transition-all select-none"
+    v-else
+    class="inline-flex items-center justify-center shrink-0 transition-all select-none overflow-hidden"
     :class="containerClasses"
   >
-    <!-- Default / StudentCare Logo: School Shield Crest with Open Book -->
-    <svg
+    <!-- Default / StudentCare Logo: Official SC Monogram Emblem -->
+    <img
       v-if="variant === 'default' || variant === 'sc'"
+      :src="isWhiteIcon ? '/logos/studentcare-icon-white.png' : '/logos/studentcare-icon.png'"
+      alt="StudentCare Logo"
       :class="iconSizeClass"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="1.8"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      aria-label="Logo StudentCare"
-    >
-      <path d="M12 2L4 5V11C4 16.5 7.4 21.6 12 23C16.6 21.6 20 16.5 20 11V5L12 2Z" fill="currentColor" fill-opacity="0.15" />
-      <path d="M12 8.5V16" />
-      <path d="M12 16C10 14.5 7.5 14.5 5.5 15.5V9.5C7.5 8.5 10 8.5 12 10" />
-      <path d="M12 16C14 14.5 16.5 14.5 18.5 15.5V9.5C16.5 8.5 14 8.5 12 10" />
-    </svg>
+      class="object-contain"
+    />
 
     <!-- Guru / Teacher Variant -->
-    <svg
-      v-else-if="variant === 'teacher' || variant === 'gp'"
-      :class="iconSizeClass"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="1.8"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      aria-label="Logo Portal Guru"
-    >
-      <path d="M22 10L12 5L2 10L12 15L22 10Z" fill="currentColor" fill-opacity="0.15" />
-      <path d="M6 12V17C6 18.5 8.7 20 12 20C15.3 20 18 18.5 18 17V12" />
-      <path d="M22 10V16" />
-    </svg>
+    <div v-else-if="variant === 'teacher' || variant === 'gp'" class="relative flex items-center justify-center">
+      <img
+        :src="isWhiteIcon ? '/logos/studentcare-icon-white.png' : '/logos/studentcare-icon.png'"
+        alt="Portal Guru"
+        :class="iconSizeClass"
+        class="object-contain"
+      />
+    </div>
 
     <!-- BK / Counseling Variant -->
-    <svg
-      v-else-if="variant === 'bk'"
-      :class="iconSizeClass"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="1.8"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      aria-label="Logo Portal BK"
-    >
-      <path d="M12 2L4 5V11C4 16.5 7.4 21.6 12 23C16.6 21.6 20 16.5 20 11V5L12 2Z" fill="currentColor" fill-opacity="0.15" />
-      <path d="M12 15.5L8.5 12C7.5 11 7.5 9.5 8.5 8.5C9.5 7.5 11 7.5 12 8.5C13 7.5 14.5 7.5 15.5 8.5C16.5 9.5 16.5 11 15.5 12L12 15.5Z" fill="currentColor" fill-opacity="0.25" />
-    </svg>
+    <div v-else-if="variant === 'bk'" class="relative flex items-center justify-center">
+      <img
+        :src="isWhiteIcon ? '/logos/studentcare-icon-white.png' : '/logos/studentcare-icon.png'"
+        alt="Portal BK"
+        :class="iconSizeClass"
+        class="object-contain"
+      />
+    </div>
 
     <!-- Satpam / Security Variant -->
-    <svg
-      v-else-if="variant === 'satpam' || variant === 'sp'"
-      :class="iconSizeClass"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="1.8"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      aria-label="Logo Pos Satpam"
-    >
-      <path d="M12 2L3 6V12C3 17.5 6.8 22.3 12 23.5C17.2 22.3 21 17.5 21 12V6L12 2Z" fill="currentColor" fill-opacity="0.15" />
-      <path d="M9 12L11 14L15 10" stroke-width="2" />
-    </svg>
+    <div v-else-if="variant === 'satpam' || variant === 'sp'" class="relative flex items-center justify-center">
+      <img
+        :src="isWhiteIcon ? '/logos/studentcare-icon-white.png' : '/logos/studentcare-icon.png'"
+        alt="Pos Satpam"
+        :class="iconSizeClass"
+        class="object-contain"
+      />
+    </div>
   </div>
 </template>
 
@@ -78,7 +62,7 @@ import { computed } from 'vue'
 const props = defineProps({
   variant: {
     type: String,
-    default: 'default', // 'default' | 'sc' | 'teacher' | 'bk' | 'satpam'
+    default: 'default', // 'default' | 'sc' | 'full' | 'teacher' | 'bk' | 'satpam'
   },
   size: {
     type: String,
@@ -86,33 +70,54 @@ const props = defineProps({
   },
   theme: {
     type: String,
-    default: 'primary', // 'primary' | 'white-trans' | 'dark' | 'emerald'
+    default: 'white-tile', // 'white-tile' | 'white-trans' | 'primary' | 'dark' | 'emerald' | 'plain'
+  }
+})
+
+const isWhiteVariant = computed(() => {
+  return props.theme === 'white-trans' || props.theme === 'white'
+})
+
+const isWhiteIcon = computed(() => {
+  return props.theme === 'white-trans' || props.theme === 'white'
+})
+
+const fullLogoHeightClass = computed(() => {
+  switch (props.size) {
+    case 'sm': return 'h-6 sm:h-7'
+    case 'lg': return 'h-10 sm:h-12'
+    case 'xl': return 'h-12 sm:h-14'
+    case 'md':
+    default: return 'h-7 sm:h-8'
   }
 })
 
 const containerClasses = computed(() => {
   const sizes = {
-    sm: 'w-8 h-8 rounded-lg',
-    md: 'w-10 h-10 rounded-xl',
-    lg: 'w-12 h-12 rounded-2xl',
-    xl: 'w-14 h-14 rounded-2xl'
+    sm: 'w-8 h-8 rounded-lg p-1',
+    md: 'w-10 h-10 rounded-xl p-1.5',
+    lg: 'w-12 h-12 rounded-2xl p-2',
+    xl: 'w-16 h-16 rounded-2xl p-2.5'
   }
   const themes = {
+    'white-tile': 'bg-white shadow-xs border border-slate-100',
+    'white-trans': 'bg-white/15 border border-white/20 shadow-xs backdrop-blur-xs',
+    white: 'bg-transparent',
     primary: 'bg-[#355245] text-white shadow-xs border border-white/10',
-    'white-trans': 'bg-white/15 text-white border border-white/20 shadow-xs',
-    dark: 'bg-slate-900 border border-slate-800 text-emerald-400 shadow-xs',
-    emerald: 'bg-[#1c2e26]/80 text-emerald-300 border border-emerald-500/30 shadow-xs'
+    dark: 'bg-slate-900 border border-slate-800 shadow-xs',
+    emerald: 'bg-[#1c2e26]/90 border border-emerald-500/30 shadow-xs',
+    plain: 'bg-transparent p-0'
   }
-  return `${sizes[props.size] || sizes.md} ${themes[props.theme] || themes.primary}`
+  return `${sizes[props.size] || sizes.md} ${themes[props.theme] || themes['white-tile']}`
 })
 
 const iconSizeClass = computed(() => {
   switch (props.size) {
-    case 'sm': return 'w-4 h-4'
-    case 'lg': return 'w-7 h-7'
-    case 'xl': return 'w-8 h-8'
+    case 'sm': return 'w-5 h-5'
+    case 'lg': return 'w-8 h-8'
+    case 'xl': return 'w-10 h-10'
     case 'md':
-    default: return 'w-5 h-5'
+    default: return 'w-6 h-6'
   }
 })
 </script>

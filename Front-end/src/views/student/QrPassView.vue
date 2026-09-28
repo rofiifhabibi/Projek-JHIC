@@ -4,11 +4,19 @@
     <div v-if="activePermit" class="bg-white rounded-2xl sm:rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
       <!-- Header -->
       <div class="bg-gradient-to-r from-[#355245] to-[#273e34] text-white p-4 sm:p-6 relative">
-        <div class="flex items-center justify-between">
-          <span class="text-xs font-semibold tracking-wider text-emerald-200 uppercase">SURAT IZIN KELUAR RESMI</span>
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center gap-2.5">
+            <div class="w-7 h-7 rounded-lg bg-white p-1 flex items-center justify-center shadow-xs shrink-0">
+              <img src="/logos/studentcare-icon.png" alt="SC" class="w-5 h-5 object-contain" />
+            </div>
+            <div>
+              <span class="text-[11px] font-bold tracking-wider text-emerald-200 uppercase block leading-none">SURAT IZIN KELUAR RESMI</span>
+              <span class="text-[10px] text-[#E8EFEA]/80 font-medium">SMKN 2 Depok Sleman</span>
+            </div>
+          </div>
           <BaseBadge :status="isTimeExpired ? 'OVERDUE' : activePermit.status" />
         </div>
-        <h2 class="text-lg sm:text-xl font-bold mt-2">
+        <h2 class="text-lg sm:text-xl font-bold">
           {{ activePermit.type === 'TEMP' ? 'Izin Keluar Sementara' : 'Izin Pulang Sekolah' }}
         </h2>
         <p class="text-xs text-[#E8EFEA]/80 mt-0.5">

@@ -10,13 +10,10 @@
             Kembali ke Beranda
           </router-link>
 
-          <div class="pt-6">
-            <AppLogo size="xl" theme="emerald" class="mb-4" />
-            <h1 class="text-3xl lg:text-4xl font-black tracking-tight leading-tight">
-              StudentCare
-            </h1>
-            <p class="text-xs font-semibold text-emerald-300 uppercase tracking-widest mt-1">
-              SMKN 2 Depok Sleman
+          <div class="pt-6 space-y-2">
+            <img src="/logos/studentcare-logo-white.png" alt="StudentCare SMKN 2 Depok Sleman" class="h-12 lg:h-14 object-contain" />
+            <p class="text-xs font-semibold text-emerald-300 uppercase tracking-widest">
+              Sistem Perizinan & Konseling Digital
             </p>
           </div>
         </div>
@@ -44,6 +41,10 @@
       <!-- Right Column: Login Form -->
       <div class="lg:col-span-7 p-8 lg:p-12 flex flex-col justify-center bg-white space-y-6">
         <div>
+          <!-- Mobile Branding Logo -->
+          <div class="lg:hidden mb-4">
+            <img src="/logos/studentcare-logo.png" alt="StudentCare" class="h-9 object-contain" />
+          </div>
           <h2 class="text-2xl font-black text-slate-900 tracking-tight">Masuk ke Akun Anda</h2>
           <p class="text-xs text-slate-600 font-medium mt-1">Masukkan NIS, NIP, atau username beserta kata sandi Anda.</p>
         </div>

@@ -3,13 +3,9 @@
     <!-- Top Navbar -->
     <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-slate-200/80">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        <div class="flex items-center gap-3">
-          <AppLogo size="md" />
-          <div>
-            <h1 class="font-extrabold text-slate-900 text-base leading-tight tracking-tight">StudentCare</h1>
-            <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">SMK N 2 Depok Sleman</p>
-          </div>
-        </div>
+        <router-link to="/" class="flex items-center gap-3">
+          <img src="/logos/studentcare-logo.png" alt="Student Care SMKN 2 Depok Sleman" class="h-8 sm:h-9 object-contain" />
+        </router-link>
 
         <nav class="hidden md:flex items-center gap-8 text-xs font-bold uppercase tracking-wider text-slate-600">
           <a href="#fitur" class="hover:text-[#355245] transition">Fitur Utama</a>
@@ -70,33 +66,25 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <div class="bg-[#F4F7F4] p-6 rounded-2xl border border-slate-200/80 space-y-3 hover:shadow-md transition">
-            <div class="w-12 h-12 rounded-xl bg-[#355245] text-white flex items-center justify-center">
-              <QrCode class="w-6 h-6" />
-            </div>
+            <QrCode class="w-7 h-7 text-[#355245]" :stroke-width="1.8" />
             <h4 class="font-bold text-slate-900 text-base">Izin Keluar & Pulang Digital</h4>
             <p class="text-xs text-slate-600 leading-relaxed">Pengajuan izin langsung dari ponsel siswa, disetujui guru pengajar saat jam pelajaran, dan diverifikasi di gerbang sekolah.</p>
           </div>
 
           <div class="bg-[#F4F7F4] p-6 rounded-2xl border border-slate-200/80 space-y-3 hover:shadow-md transition">
-            <div class="w-12 h-12 rounded-xl bg-emerald-700 text-white flex items-center justify-center">
-              <ShieldCheck class="w-6 h-6" />
-            </div>
+            <ShieldCheck class="w-7 h-7 text-[#355245]" :stroke-width="1.8" />
             <h4 class="font-bold text-slate-900 text-base">Pemeriksaan di Pos Satpam</h4>
             <p class="text-xs text-slate-600 leading-relaxed">Petugas keamanan memindai kode QR siswa saat keluar dan mencatat waktu kembali siswa ke lingkungan sekolah.</p>
           </div>
 
           <div class="bg-[#F4F7F4] p-6 rounded-2xl border border-slate-200/80 space-y-3 hover:shadow-md transition">
-            <div class="w-12 h-12 rounded-xl bg-slate-800 text-white flex items-center justify-center">
-              <Users class="w-6 h-6" />
-            </div>
+            <Users class="w-7 h-7 text-[#355245]" :stroke-width="1.8" />
             <h4 class="font-bold text-slate-900 text-base">Pemantauan Kelas & Presensi</h4>
             <p class="text-xs text-slate-600 leading-relaxed">Guru dapat melihat siswa yang sedang izin, batas waktu tersisa, dan memastikan ketertiban selama jam belajar.</p>
           </div>
 
           <div class="bg-[#F4F7F4] p-6 rounded-2xl border border-slate-200/80 space-y-3 hover:shadow-md transition">
-            <div class="w-12 h-12 rounded-xl bg-teal-700 text-white flex items-center justify-center">
-              <HeartHandshake class="w-6 h-6" />
-            </div>
+            <HeartHandshake class="w-7 h-7 text-[#355245]" :stroke-width="1.8" />
             <h4 class="font-bold text-slate-900 text-base">Layanan Konseling & BK</h4>
             <p class="text-xs text-slate-600 leading-relaxed">Ruang aman bagi siswa untuk bercerita atau meminta bantuan konseling yang ditangani secara tertutup oleh Guru BK.</p>
           </div>
@@ -114,25 +102,37 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <div class="bg-white p-6 rounded-2xl border border-slate-200 space-y-3 shadow-xs">
-            <span class="px-2.5 py-1 rounded-full bg-[#E8EFEA] text-[#355245] text-xs font-bold uppercase">Siswa</span>
+            <div class="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#355245]">
+              <span class="w-1.5 h-1.5 rounded-full bg-[#355245]"></span>
+              <span>Siswa</span>
+            </div>
             <h4 class="font-bold text-slate-900 text-base">Portal Siswa</h4>
             <p class="text-xs text-slate-600 leading-relaxed">Pengajuan izin keluar/pulang, tampilan surat izin digital, riwayat perizinan, dan layanan bimbingan konseling.</p>
           </div>
 
           <div class="bg-white p-6 rounded-2xl border border-slate-200 space-y-3 shadow-xs">
-            <span class="px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-bold uppercase">Guru</span>
+            <div class="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-amber-700">
+              <span class="w-1.5 h-1.5 rounded-full bg-amber-600"></span>
+              <span>Guru</span>
+            </div>
             <h4 class="font-bold text-slate-900 text-base">Portal Guru</h4>
             <p class="text-xs text-slate-600 leading-relaxed">Persetujuan izin siswa yang diajar, penetapan durasi izin, dan pemantauan siswa yang sedang berada di luar kelas.</p>
           </div>
 
           <div class="bg-white p-6 rounded-2xl border border-slate-200 space-y-3 shadow-xs">
-            <span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-bold uppercase">Satpam</span>
+            <div class="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-600">
+              <span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
+              <span>Satpam</span>
+            </div>
             <h4 class="font-bold text-slate-900 text-base">Pos Satpam</h4>
             <p class="text-xs text-slate-600 leading-relaxed">Pemeriksaan surat izin siswa di gerbang utama sekolah menggunakan kamera pemindai atau input kode manual.</p>
           </div>
 
           <div class="bg-white p-6 rounded-2xl border border-slate-200 space-y-3 shadow-xs">
-            <span class="px-2.5 py-1 rounded-full bg-teal-50 text-teal-800 border border-teal-200/60 text-xs font-bold uppercase">Guru BK</span>
+            <div class="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-teal-700">
+              <span class="w-1.5 h-1.5 rounded-full bg-teal-600"></span>
+              <span>Guru BK</span>
+            </div>
             <h4 class="font-bold text-slate-900 text-base">Portal BK</h4>
             <p class="text-xs text-slate-600 leading-relaxed">Papan penanganan konseling siswa, pencatatan hasil tindak lanjut, serta pemantauan keterlambatan izin seluruh sekolah.</p>
           </div>
@@ -141,19 +141,19 @@
     </section>
 
     <!-- Partners & Supporters Section -->
-    <section class="py-8 sm:py-10 bg-white border-y border-slate-200/80">
-      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
-        <span class="text-xs font-bold text-slate-500 uppercase tracking-[0.2em]">
+    <section class="py-14 sm:py-16 bg-white border-y border-slate-200/80">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <p class="text-xs font-bold text-slate-500 uppercase tracking-[0.2em] mb-8 sm:mb-10">
           Kontribusi & Dukungan Program
-        </span>
-        <div class="flex flex-wrap items-center justify-center gap-6 sm:gap-8 lg:gap-12">
+        </p>
+        <div class="flex flex-wrap items-center justify-center gap-8 sm:gap-10 lg:gap-14 my-2">
           <img src="/logos/jhic.png" alt="JHIC - Jagoan Hosting Innovation Competition 2026" class="h-12 sm:h-14 object-contain" />
           <img src="/logos/jagoan-hosting.png" alt="Jagoan Hosting" class="h-8 sm:h-9 object-contain" />
           <img src="/logos/komdigi.png" alt="Komdigi - Kementerian Komunikasi dan Digital" class="h-12 sm:h-14 object-contain" />
           <img src="/logos/garuda-spark.png" alt="Garuda Spark Innovation Hub" class="h-9 sm:h-10 object-contain" />
           <img src="/logos/ngalup.png" alt="Ngalup.co" class="h-7 sm:h-8 object-contain" />
         </div>
-        <p class="text-xs text-slate-600 font-medium">
+        <p class="text-xs text-slate-500 font-medium mt-8 sm:mt-10">
           Jagoan Hosting Innovation Competition 2026
         </p>
       </div>
@@ -162,10 +162,14 @@
     <!-- Footer -->
     <footer class="mt-auto bg-slate-900 text-slate-400 py-10 border-t border-slate-800 text-xs">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
-          <div>
-            <p class="font-bold text-white text-sm">SMK N 2 Depok Sleman</p>
-            <p class="mt-1 text-slate-500 max-w-sm sm:max-w-none mx-auto sm:mx-0">Jl. Mrican, Caturtunggal, Depok, Sleman, D.I. Yogyakarta 55281</p>
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
+          <div class="flex flex-col sm:flex-row items-center gap-4">
+            <img src="/logos/studentcare-logo-white.png" alt="StudentCare" class="h-9 object-contain" />
+            <div class="hidden sm:block w-px h-8 bg-slate-700"></div>
+            <div>
+              <p class="font-bold text-white text-sm">SMK N 2 Depok Sleman</p>
+              <p class="mt-0.5 text-slate-400 max-w-sm sm:max-w-none mx-auto sm:mx-0">Jl. Mrican, Caturtunggal, Depok, Sleman, D.I. Yogyakarta 55281</p>
+            </div>
           </div>
           <div class="text-center sm:text-right text-slate-500">
             <p>&copy; 2026 StudentCare — Projek JHIC. All rights reserved.</p>
@@ -174,11 +178,11 @@
 
         <!-- Footer Partner Logos -->
         <div class="border-t border-slate-700/50 mt-6 pt-6 flex flex-wrap items-center justify-center gap-6 sm:gap-8">
-          <img src="/logos/jhic.png" alt="JHIC" class="h-5 sm:h-6 object-contain brightness-0 invert opacity-40 hover:opacity-70 transition" />
-          <img src="/logos/jagoan-hosting.png" alt="Jagoan Hosting" class="h-4 sm:h-5 object-contain brightness-0 invert opacity-40 hover:opacity-70 transition" />
-          <img src="/logos/komdigi.png" alt="Komdigi" class="h-5 sm:h-6 object-contain brightness-0 invert opacity-40 hover:opacity-70 transition" />
-          <img src="/logos/garuda-spark.png" alt="Garuda Spark" class="h-4 sm:h-5 object-contain brightness-0 invert opacity-40 hover:opacity-70 transition" />
-          <img src="/logos/ngalup.png" alt="Ngalup" class="h-3.5 sm:h-4 object-contain brightness-0 invert opacity-40 hover:opacity-70 transition" />
+          <img src="/logos/jhic-white.png" alt="JHIC" class="h-5 sm:h-6 object-contain opacity-50 hover:opacity-90 transition" />
+          <img src="/logos/jagoan-hosting-white.png" alt="Jagoan Hosting" class="h-4 sm:h-5 object-contain opacity-50 hover:opacity-90 transition" />
+          <img src="/logos/komdigi-white.png" alt="Komdigi" class="h-5 sm:h-6 object-contain opacity-50 hover:opacity-90 transition" />
+          <img src="/logos/garuda-spark-white.png" alt="Garuda Spark" class="h-4 sm:h-5 object-contain opacity-50 hover:opacity-90 transition" />
+          <img src="/logos/ngalup-white.png" alt="Ngalup" class="h-3.5 sm:h-4 object-contain opacity-50 hover:opacity-90 transition" />
         </div>
       </div>
     </footer>
