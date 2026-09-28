@@ -1,27 +1,27 @@
 <template>
-  <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm flex items-center justify-between hover:border-slate-300 transition group">
-    <div>
-      <p class="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">
+  <div class="flex items-center justify-between gap-4 rounded-xl border border-border bg-card px-4 py-4">
+    <div class="min-w-0">
+      <p class="text-caption font-medium text-muted">
         {{ label }}
       </p>
-      <div class="flex items-baseline gap-2">
-        <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+      <div class="mt-1 flex items-baseline gap-1.5">
+        <h3 class="text-h1 font-bold tracking-tight text-heading">
           {{ value }}
         </h3>
-        <span v-if="unit" class="text-xs font-medium text-slate-400">{{ unit }}</span>
+        <span v-if="unit" class="text-caption font-medium text-muted">{{ unit }}</span>
       </div>
-      <p v-if="description" class="text-xs text-slate-500 mt-1">
+      <p v-if="description" class="mt-1 text-caption text-muted">
         {{ description }}
       </p>
     </div>
 
     <div
       v-if="$slots.icon || icon"
-      class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 transition-transform group-hover:scale-105"
+      class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg"
       :class="iconBgClass"
     >
       <slot name="icon">
-        <component :is="icon" class="w-6 h-6" :class="iconColorClass" />
+        <component :is="icon" class="h-5 w-5" :class="iconColorClass" />
       </slot>
     </div>
   </div>
@@ -39,25 +39,27 @@ const props = defineProps({
   color: { type: String, default: 'primary' } // primary, success, warning, danger, info, slate
 })
 
+/* Brand teal is reserved for primary; status colours come from the
+   semantic status tokens so they never read as brand. */
 const iconBgClass = computed(() => {
   switch (props.color) {
-    case 'success': return 'bg-emerald-50 text-emerald-600'
-    case 'warning': return 'bg-amber-50 text-amber-600'
-    case 'danger': return 'bg-rose-50 text-rose-600'
-    case 'info': return 'bg-sky-50 text-sky-600'
-    case 'slate': return 'bg-slate-100 text-slate-600'
-    default: return 'bg-[#E8EFEA] text-[#355245]'
+    case 'success': return 'bg-status-active-bg text-status-active-fg'
+    case 'warning': return 'bg-status-pending-bg text-status-pending-fg'
+    case 'danger': return 'bg-status-overdue-bg text-status-overdue-fg'
+    case 'info': return 'bg-status-info-bg text-status-info-fg'
+    case 'slate': return 'bg-subtle text-muted'
+    default: return 'bg-primary-soft text-primary'
   }
 })
 
 const iconColorClass = computed(() => {
   switch (props.color) {
-    case 'success': return 'text-emerald-600'
-    case 'warning': return 'text-amber-600'
-    case 'danger': return 'text-rose-600'
-    case 'info': return 'text-sky-600'
-    case 'slate': return 'text-slate-600'
-    default: return 'text-[#355245]'
+    case 'success': return 'text-status-active-fg'
+    case 'warning': return 'text-status-pending-fg'
+    case 'danger': return 'text-status-overdue-fg'
+    case 'info': return 'text-status-info-fg'
+    case 'slate': return 'text-muted'
+    default: return 'text-primary'
   }
 })
 </script>

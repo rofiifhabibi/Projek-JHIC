@@ -2,10 +2,10 @@
   <button
     :type="type"
     :disabled="disabled || loading"
-    class="inline-flex items-center justify-center font-medium rounded-xl transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#355245] focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed select-none active:scale-[0.98]"
+    class="inline-flex items-center justify-center rounded-lg font-semibold whitespace-nowrap transition-colors duration-150 select-none focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-canvas disabled:opacity-45 disabled:cursor-not-allowed disabled:pointer-events-none"
     :class="[variantClasses, sizeClasses, block ? 'w-full' : '']"
   >
-    <Loader2 v-if="loading" class="w-4 h-4 mr-2 animate-spin shrink-0" />
+    <Loader2 v-if="loading" class="w-4 h-4 shrink-0 animate-spin" :class="block || size !== 'sm' ? 'mr-2' : 'mr-1.5'" />
     <slot name="icon-left" />
     <slot />
     <slot name="icon-right" />
@@ -18,7 +18,7 @@ import { Loader2 } from 'lucide-vue-next'
 
 const props = defineProps({
   type: { type: String, default: 'button' },
-  variant: { type: String, default: 'primary' }, // primary, secondary, danger, outline, ghost
+  variant: { type: String, default: 'primary' }, // primary, dark, secondary, danger, outline, ghost
   size: { type: String, default: 'md' }, // sm, md, lg
   disabled: { type: Boolean, default: false },
   loading: { type: Boolean, default: false },
@@ -28,28 +28,30 @@ const props = defineProps({
 const variantClasses = computed(() => {
   switch (props.variant) {
     case 'primary':
-      return 'bg-[#355245] hover:bg-[#273e34] text-white shadow-sm shadow-[#355245]/20'
+      return 'bg-primary text-white hover:bg-primary-hover'
+    case 'dark':
+      return 'bg-primary-deep text-white hover:bg-primary-deep-hover'
     case 'secondary':
-      return 'bg-[#E8EFEA] hover:bg-[#d8e3db] text-[#273e34]'
+      return 'bg-primary-soft text-primary-deep border border-primary-border hover:bg-primary-soft-strong'
     case 'danger':
-      return 'bg-rose-600 hover:bg-rose-700 text-white shadow-sm shadow-rose-600/20'
+      return 'bg-danger text-white hover:bg-danger-hover'
     case 'outline':
-      return 'border border-slate-300 hover:bg-slate-50 text-slate-700'
+      return 'bg-card text-body border border-border hover:bg-subtle hover:border-border-strong'
     case 'ghost':
-      return 'hover:bg-slate-100 text-slate-700'
+      return 'bg-transparent text-muted hover:bg-subtle hover:text-body'
     default:
-      return 'bg-[#355245] text-white'
+      return 'bg-primary text-white hover:bg-primary-hover'
   }
 })
 
 const sizeClasses = computed(() => {
   switch (props.size) {
     case 'sm':
-      return 'px-3 py-1.5 text-xs gap-1.5'
+      return 'h-10 px-3.5 text-caption gap-1.5'
     case 'lg':
-      return 'px-6 py-3.5 text-base gap-2.5'
+      return 'h-12 px-6 text-body-lg gap-2.5'
     default:
-      return 'px-4 py-2.5 text-sm gap-2'
+      return 'h-11 px-4 text-body gap-2'
   }
 })
 </script>

@@ -1,20 +1,22 @@
 <template>
-  <div class="flex flex-col items-center justify-center text-center p-8 sm:p-12 bg-white/60 backdrop-blur-sm rounded-2xl border border-dashed border-slate-200">
-    <div class="w-14 h-14 rounded-2xl bg-slate-100 flex items-center justify-center text-slate-400 mb-4">
+  <div class="flex flex-col items-center justify-center px-4 py-8 text-center">
+    <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-subtle text-muted">
       <slot name="icon">
-        <FolderOpen class="w-7 h-7" />
+        <FolderOpen class="h-5 w-5" />
       </slot>
     </div>
 
-    <h4 class="text-base font-bold text-slate-900 mb-1">
+    <h4 class="text-body font-semibold text-heading">
       {{ title }}
     </h4>
 
-    <p class="text-xs sm:text-sm text-slate-500 max-w-sm mb-6 leading-relaxed">
+    <p v-if="description" class="mt-1 max-w-sm text-caption leading-relaxed text-muted">
       {{ description }}
     </p>
 
-    <slot name="action" />
+    <div v-if="$slots.action" class="mt-4">
+      <slot name="action" />
+    </div>
   </div>
 </template>
 

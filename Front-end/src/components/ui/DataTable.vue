@@ -1,52 +1,54 @@
 <template>
-  <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+  <div class="overflow-hidden rounded-xl border border-border bg-card shadow-subtle">
     <!-- Search Header -->
-    <div v-if="searchable" class="p-4 border-b border-slate-100 flex flex-col sm:flex-row gap-3 items-center justify-between">
-      <div class="relative w-full sm:w-72">
-        <Search class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+    <div v-if="searchable" class="flex flex-col items-stretch gap-3 border-b border-border px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+      <div class="relative w-full sm:max-w-xs">
+        <Search class="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
         <input
           v-model="searchQuery"
           type="text"
           :placeholder="searchPlaceholder"
-          class="w-full pl-9 pr-4 py-2 text-xs font-medium rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#355245] transition"
+          aria-label="Cari data tabel"
+          class="h-10 w-full rounded-lg border border-border bg-card pl-9 pr-3 text-body text-heading transition-colors placeholder:text-muted/70 hover:border-border-strong focus:border-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/25"
         />
       </div>
 
-      <div class="text-xs text-slate-500 font-medium self-end sm:self-center">
-        Menampilkan <span class="font-bold text-slate-800">{{ filteredData.length }}</span> data
+      <div class="self-end text-caption text-muted sm:self-center">
+        Menampilkan <span class="font-semibold text-heading">{{ filteredData.length }}</span> data
       </div>
     </div>
 
     <!-- Table -->
     <div class="overflow-x-auto">
-      <table class="w-full min-w-[640px] text-left text-xs sm:text-sm">
-        <thead class="bg-slate-50 border-b border-slate-100 text-slate-500 font-semibold uppercase tracking-wider text-[11px]">
+      <table class="w-full min-w-[640px] text-left">
+        <thead class="border-b border-border bg-canvas">
           <tr>
             <th
               v-for="col in columns"
               :key="col.key"
-              class="px-4 py-3.5"
+              scope="col"
+              class="px-4 py-3 text-caption font-semibold text-muted"
               :class="col.class"
             >
               {{ col.label }}
             </th>
           </tr>
         </thead>
-        <tbody class="divide-y divide-slate-100">
+        <tbody class="divide-y divide-border">
           <tr v-if="filteredData.length === 0">
-            <td :colspan="columns.length" class="px-4 py-8 text-center text-slate-400">
+            <td :colspan="columns.length" class="px-4 py-10 text-center text-body text-muted">
               Tidak ada data yang cocok dengan kriteria pencarian.
             </td>
           </tr>
           <tr
             v-for="(row, idx) in paginatedData"
             :key="row.id || idx"
-            class="hover:bg-slate-50/80 transition"
+            class="transition-colors hover:bg-canvas"
           >
             <td
               v-for="col in columns"
               :key="col.key"
-              class="px-4 py-3.5 text-slate-700 font-medium"
+              class="px-4 py-3 align-middle text-body text-body"
               :class="col.class"
             >
               <slot :name="`cell-${col.key}`" :row="row" :value="row[col.key]">
@@ -59,24 +61,26 @@
     </div>
 
     <!-- Pagination -->
-    <div v-if="totalPages > 1" class="p-4 border-t border-slate-100 flex items-center justify-between">
-      <span class="text-xs text-slate-500">
+    <div v-if="totalPages > 1" class="flex items-center justify-between gap-3 border-t border-border px-4 py-3">
+      <span class="text-caption text-muted">
         Halaman {{ currentPage }} dari {{ totalPages }}
       </span>
       <div class="flex items-center gap-1.5">
         <button
           @click="currentPage--"
           :disabled="currentPage === 1"
-          class="p-1.5 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed"
+          aria-label="Halaman sebelumnya"
+          class="flex h-9 w-9 items-center justify-center rounded-md border border-border bg-card text-body transition-colors hover:bg-subtle focus:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-40"
         >
-          <ChevronLeft class="w-4 h-4" />
+          <ChevronLeft class="h-4 w-4" />
         </button>
         <button
           @click="currentPage++"
           :disabled="currentPage === totalPages"
-          class="p-1.5 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed"
+          aria-label="Halaman berikutnya"
+          class="flex h-9 w-9 items-center justify-center rounded-md border border-border bg-card text-body transition-colors hover:bg-subtle focus:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-40"
         >
-          <ChevronRight class="w-4 h-4" />
+          <ChevronRight class="h-4 w-4" />
         </button>
       </div>
     </div>
@@ -98,6 +102,7 @@ const props = defineProps({
 const searchQuery = ref('')
 const currentPage = ref(1)
 
+/* NOTE: filtering behaviour intentionally unchanged in this stage. */
 const filteredData = computed(() => {
   if (!searchQuery.value) return props.data
   const q = searchQuery.value.toLowerCase()

@@ -1,16 +1,16 @@
 <template>
-  <div class="flex flex-col gap-1.5 w-full">
+  <div class="flex w-full flex-col gap-1.5">
     <label
       v-if="label"
       :for="inputId"
-      class="text-xs font-semibold uppercase tracking-wider text-slate-700 select-none flex items-center justify-between"
+      class="flex select-none items-center justify-between gap-2 text-caption font-semibold text-heading"
     >
-      <span>{{ label }} <span v-if="required" class="text-rose-500">*</span></span>
-      <span v-if="hint" class="text-[11px] font-normal lowercase text-slate-400 normal-case">{{ hint }}</span>
+      <span>{{ label }} <span v-if="required" class="text-danger">*</span></span>
+      <span v-if="hint" class="text-caption font-normal text-muted">{{ hint }}</span>
     </label>
 
     <div class="relative flex items-center">
-      <div v-if="$slots['icon-left']" class="absolute left-3.5 text-slate-400 pointer-events-none">
+      <div v-if="$slots['icon-left']" class="pointer-events-none absolute left-3.5 text-muted">
         <slot name="icon-left" />
       </div>
 
@@ -21,21 +21,24 @@
         :placeholder="placeholder"
         :disabled="disabled"
         :readonly="readonly"
+        :aria-invalid="error ? 'true' : undefined"
         @input="$emit('update:modelValue', $event.target.value)"
-        class="w-full rounded-xl border bg-white px-3.5 py-2.5 text-sm font-medium text-slate-900 placeholder:text-slate-400 transition-all focus:outline-none focus:ring-2 focus:ring-[#355245] disabled:bg-slate-50 disabled:text-slate-400 disabled:cursor-not-allowed"
+        class="h-11 w-full rounded-lg border bg-card px-3.5 text-body text-heading transition-colors placeholder:text-muted/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/25 disabled:cursor-not-allowed disabled:bg-subtle disabled:text-muted"
         :class="[
-          error ? 'border-rose-300 focus:border-rose-500 focus:ring-rose-500/20' : 'border-slate-200 focus:border-[#355245]',
+          error
+            ? 'border-danger-border focus:border-danger focus-visible:ring-danger/20'
+            : 'border-border hover:border-border-strong focus:border-primary',
           $slots['icon-left'] ? 'pl-10' : '',
           $slots['icon-right'] ? 'pr-10' : ''
         ]"
       />
 
-      <div v-if="$slots['icon-right']" class="absolute right-3.5 text-slate-400">
+      <div v-if="$slots['icon-right']" class="absolute right-3 text-muted">
         <slot name="icon-right" />
       </div>
     </div>
 
-    <p v-if="error" class="text-xs text-rose-600 font-medium flex items-center gap-1 mt-0.5">
+    <p v-if="error" class="mt-0.5 text-caption font-medium text-danger">
       {{ error }}
     </p>
   </div>

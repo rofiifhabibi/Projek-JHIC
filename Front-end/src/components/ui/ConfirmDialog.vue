@@ -1,11 +1,11 @@
 <template>
   <BaseModal :show="show" :title="title" max-width="sm" @close="$emit('cancel')">
     <template #icon>
-      <AlertTriangle v-if="variant === 'danger'" class="w-5 h-5 text-rose-600" />
-      <HelpCircle v-else class="w-5 h-5 text-[#355245]" />
+      <AlertTriangle v-if="variant === 'danger'" class="h-5 w-5 text-danger" />
+      <HelpCircle v-else class="h-5 w-5 text-primary" />
     </template>
 
-    <p class="text-sm text-slate-600 leading-relaxed">
+    <p class="text-body leading-relaxed text-body">
       {{ message }}
     </p>
 

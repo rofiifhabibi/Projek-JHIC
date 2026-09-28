@@ -1,9 +1,9 @@
 <template>
   <span
-    class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold tracking-wide uppercase select-none transition-all"
+    class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-caption font-semibold whitespace-nowrap select-none"
     :class="badgeStyle"
   >
-    <span class="w-1.5 h-1.5 rounded-full" :class="dotStyle" />
+    <span class="h-1.5 w-1.5 shrink-0 rounded-full" :class="dotStyle" />
     <span>{{ labelText }}</span>
   </span>
 </template>
@@ -16,25 +16,26 @@ const props = defineProps({
   label: { type: String, default: '' },
 })
 
+/* Status is a reserved semantic channel — never brand teal. */
 const badgeStyle = computed(() => {
   switch (props.status?.toUpperCase()) {
     case 'ACTIVE':
     case 'IN_PROGRESS':
-      return 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+      return 'bg-status-active-bg text-status-active-fg border border-status-active-border'
     case 'PENDING':
     case 'OPEN':
-      return 'bg-amber-50 text-amber-700 border border-amber-200'
+      return 'bg-status-pending-bg text-status-pending-fg border border-status-pending-border'
     case 'OVERDUE':
-      return 'bg-rose-100 text-rose-800 border border-rose-300 font-extrabold animate-pulse'
+      return 'bg-status-overdue-bg text-status-overdue-fg border border-status-overdue-border font-bold'
     case 'COMPLETED':
     case 'RESOLVED':
     case 'CLOSED':
-      return 'bg-slate-100 text-slate-700 border border-slate-200'
+      return 'bg-status-neutral-bg text-status-neutral-fg border border-status-neutral-border'
     case 'ALPHA':
     case 'REJECTED':
-      return 'bg-rose-50 text-rose-700 border border-rose-200'
+      return 'bg-status-danger-bg text-status-danger-fg border border-status-danger-border'
     default:
-      return 'bg-slate-100 text-slate-600 border border-slate-200'
+      return 'bg-subtle text-muted border border-border'
   }
 })
 
@@ -42,21 +43,17 @@ const dotStyle = computed(() => {
   switch (props.status?.toUpperCase()) {
     case 'ACTIVE':
     case 'IN_PROGRESS':
-      return 'bg-emerald-500'
+      return 'bg-status-active-fg'
     case 'PENDING':
     case 'OPEN':
-      return 'bg-amber-500'
+      return 'bg-status-pending-fg'
     case 'OVERDUE':
-      return 'bg-rose-600'
-    case 'COMPLETED':
-    case 'RESOLVED':
-    case 'CLOSED':
-      return 'bg-slate-400'
+      return 'bg-status-overdue-fg'
     case 'ALPHA':
     case 'REJECTED':
-      return 'bg-rose-500'
+      return 'bg-status-danger-fg'
     default:
-      return 'bg-slate-400'
+      return 'bg-border-strong'
   }
 })
 
