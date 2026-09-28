@@ -12,19 +12,17 @@ class ReportController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'category' => ['required', 'in:BULLYING,FACILITY,ACADEMIC,PERSONAL,OTHERS'],
+            'category' => ['required', 'in:BULLYING,ACADEMIC,PERSONAL,OTHERS'],
             'title' => ['nullable', 'string', 'max:255'],
             'description' => ['required', 'string'],
-            'is_anonymous' => ['nullable', 'boolean'],
         ]);
 
-        $studentId = $request->boolean('is_anonymous') ? null : $request->user()->user_id;
+        $student = $request->user();
 
         $title = $request->input('title');
         if (!$title) {
             $categoryNames = [
                 'BULLYING' => 'Laporan Perundungan / Bullying',
-                'FACILITY' => 'Laporan Kerusakan Fasilitas',
                 'ACADEMIC' => 'Konseling Pembelajaran / Akademik',
                 'PERSONAL' => 'Konseling Personal / Pribadi',
                 'OTHERS' => 'Laporan / Aduan Umum'
@@ -33,7 +31,7 @@ class ReportController extends Controller
         }
 
         $report = Report::create([
-            'student_id' => $studentId,
+            'student_id' => $student->user_id,
             'category' => $request->category,
             'title' => $title,
             'description' => $request->description,
@@ -47,7 +45,7 @@ class ReportController extends Controller
         ], 201);
     }
 
-    // Siswa melihat laporan non-anonim miliknya di menu My Tracking
+    // Siswa melihat seluruh laporan miliknya di menu My Tracking
     public function myReports(Request $request)
     {
         $reports = Report::where('student_id', $request->user()->user_id)

@@ -108,7 +108,7 @@ class DatabaseSeeder extends Seeder
 
         Report::create([
             'student_id' => $student2->user_id,
-            'category' => 'FACILITY',
+            'category' => 'ACADEMIC',
             'title' => 'Kerusakan Proyektor & Kipas Angin Ruang Lab RPL 1',
             'description' => 'LCD Proyektor di Lab RPL 1 sering mati mendadak setiap 15 menit dan kabel VGA longgar sehingga menghambat kegiatan praktikum.',
             'status' => 'IN_PROGRESS',

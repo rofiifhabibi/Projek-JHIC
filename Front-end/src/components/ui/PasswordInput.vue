@@ -16,11 +16,11 @@
       <button
         type="button"
         @click="showPassword = !showPassword"
-        class="text-slate-400 hover:text-slate-600 focus:outline-none transition"
+        class="-mr-1.5 rounded-md p-2 text-muted transition-colors hover:text-body focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
         :aria-label="showPassword ? 'Sembunyikan kata sandi' : 'Tampilkan kata sandi'"
       >
-        <EyeOff v-if="showPassword" class="w-4 h-4" />
-        <Eye v-else class="w-4 h-4" />
+        <EyeOff v-if="showPassword" class="h-4 w-4" />
+        <Eye v-else class="h-4 w-4" />
       </button>
     </template>
   </BaseInput>

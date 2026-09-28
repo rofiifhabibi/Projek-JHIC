@@ -1,11 +1,11 @@
 <template>
-  <div class="flex flex-col gap-1.5 w-full">
+  <div class="flex w-full flex-col gap-1.5">
     <label
       v-if="label"
       :for="selectId"
-      class="text-xs font-semibold uppercase tracking-wider text-slate-700 select-none"
+      class="select-none text-caption font-semibold text-heading"
     >
-      {{ label }} <span v-if="required" class="text-rose-500">*</span>
+      {{ label }} <span v-if="required" class="text-danger">*</span>
     </label>
 
     <div class="relative flex items-center">
@@ -13,9 +13,12 @@
         :id="selectId"
         :value="modelValue"
         :disabled="disabled"
+        :aria-invalid="error ? 'true' : undefined"
         @change="$emit('update:modelValue', $event.target.value)"
-        class="w-full appearance-none rounded-xl border bg-white px-3.5 py-2.5 pr-10 text-sm font-medium text-slate-900 transition-all focus:outline-none focus:ring-2 focus:ring-[#355245] disabled:bg-slate-50 disabled:text-slate-400 disabled:cursor-not-allowed"
-        :class="error ? 'border-rose-300 focus:border-rose-500' : 'border-slate-200 focus:border-[#355245]'"
+        class="h-11 w-full appearance-none rounded-lg border bg-card py-0 pl-3.5 pr-10 text-body text-heading transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/25 disabled:cursor-not-allowed disabled:bg-subtle disabled:text-muted"
+        :class="error
+          ? 'border-danger-border focus:border-danger focus-visible:ring-danger/20'
+          : 'border-border hover:border-border-strong focus:border-primary'"
       >
         <option v-if="placeholder" value="" disabled selected>{{ placeholder }}</option>
         <option
@@ -27,10 +30,10 @@
         </option>
       </select>
 
-      <ChevronDown class="absolute right-3.5 w-4 h-4 text-slate-400 pointer-events-none" />
+      <ChevronDown class="pointer-events-none absolute right-3.5 h-4 w-4 text-muted" />
     </div>
 
-    <p v-if="error" class="text-xs text-rose-600 font-medium mt-0.5">{{ error }}</p>
+    <p v-if="error" class="mt-0.5 text-caption font-medium text-danger">{{ error }}</p>
   </div>
 </template>
 

@@ -1,35 +1,35 @@
 <template>
   <Teleport to="body">
-    <div class="fixed top-4 right-4 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none px-4 sm:px-0">
+    <div class="pointer-events-none fixed right-4 top-4 z-50 flex w-full max-w-sm flex-col gap-2 px-4 sm:px-0">
       <TransitionGroup
-        enter-active-class="transform transition duration-300 ease-out"
+        enter-active-class="transform transition duration-200 ease-out"
         enter-from-class="translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-2"
         enter-to-class="translate-y-0 opacity-100 sm:translate-x-0"
-        leave-active-class="transition duration-200 ease-in"
+        leave-active-class="transition duration-150 ease-in"
         leave-from-class="opacity-100"
-        leave-to-class="opacity-0 scale-95"
+        leave-to-class="opacity-0"
       >
         <div
           v-for="toast in toasts"
           :key="toast.id"
-          class="pointer-events-auto flex items-start gap-3 p-4 rounded-xl shadow-lg border backdrop-blur-md transition-all"
+          class="pointer-events-auto flex items-start gap-3 rounded-lg border p-4 shadow-overlay"
           :class="getToastClass(toast.type)"
         >
           <!-- Icon -->
-          <component :is="getToastIcon(toast.type)" class="w-5 h-5 shrink-0 mt-0.5" />
+          <component :is="getToastIcon(toast.type)" class="mt-0.5 h-5 w-5 shrink-0" />
 
           <!-- Message -->
-          <div class="flex-1 text-sm font-medium leading-relaxed">
+          <div class="flex-1 text-body font-medium leading-relaxed">
             {{ toast.message }}
           </div>
 
           <!-- Close button -->
           <button
             @click="removeToast(toast.id)"
-            class="shrink-0 p-1 rounded-lg opacity-70 hover:opacity-100 transition"
+            class="-mr-1 -mt-1 shrink-0 rounded-md p-2 opacity-70 transition hover:bg-black/5 hover:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-current"
             aria-label="Tutup notifikasi"
           >
-            <X class="w-4 h-4" />
+            <X class="h-4 w-4" />
           </button>
         </div>
       </TransitionGroup>
@@ -43,16 +43,17 @@ import { CheckCircle2, AlertCircle, AlertTriangle, Info, X } from 'lucide-vue-ne
 
 const { toasts, removeToast } = useToast()
 
+/* Semantic status tokens — teal is never used to signal a status. */
 const getToastClass = (type) => {
   switch (type) {
     case 'success':
-      return 'bg-emerald-50/95 border-emerald-200 text-emerald-900'
+      return 'bg-status-active-bg border-status-active-border text-status-active-fg'
     case 'error':
-      return 'bg-rose-50/95 border-rose-200 text-rose-900'
+      return 'bg-status-overdue-bg border-status-overdue-border text-status-overdue-fg'
     case 'warning':
-      return 'bg-amber-50/95 border-amber-200 text-amber-900'
+      return 'bg-status-pending-bg border-status-pending-border text-status-pending-fg'
     default:
-      return 'bg-slate-900/95 border-slate-700 text-white'
+      return 'bg-heading text-white border-heading'
   }
 }
 

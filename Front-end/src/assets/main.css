@@ -2,47 +2,149 @@
 @source "../**/*.vue";
 @source "../**/*.js";
 
+/* ==========================================================
+   APPPERMIT STUDENT CARE — DESIGN SYSTEM FOUNDATION
+   Brand: Primary #0F766E · Deep #134E4A
+   Neutral surfaces + reserved semantic status palette.
+   Brand teal is NEVER used to express a status.
+   ========================================================== */
+
 @theme {
-  --color-primary: #355245;
-  --color-primary-hover: #273e34;
-  --color-primary-light: #486e5d;
-  --color-secondary: #7B9684;
-  --color-surface-soft: #E8EFEA;
-  --color-canvas: #F4F7F4;
-  --color-card: #FFFFFF;
-  --color-border: #E2E8E3;
-  --color-status-active: #15803D;
-  --color-status-overdue: #C2410C;
-  --color-status-pending: #B45309;
-  --color-status-closed: #475569;
-  --color-status-alpha: #991B1B;
-  --color-status-rejected: #BE123C;
+  /* ---------- Brand ---------- */
+  --color-primary: #0f766e;
+  --color-primary-hover: #115e59;
+  --color-primary-deep: #134e4a;
+  --color-primary-deep-hover: #0f3f3c;
+  --color-primary-soft: #f0fdfa;
+  --color-primary-soft-strong: #ccfbf1;
+  --color-primary-border: #99f6e4;
+
+  /* ---------- Neutral surface & text ---------- */
+  --color-canvas: #f8fafc;
+  --color-card: #ffffff;
+  --color-subtle: #f1f5f9;
+  --color-border: #e2e8f0;
+  --color-border-strong: #cbd5e1;
+  --color-heading: #0f172a;
+  --color-body: #334155;
+  --color-muted: #64748b;
+  --color-secondary: #64748b;
+
+  /* Legacy alias kept so nothing that referenced it breaks */
+  --color-surface-soft: #f0fdfa;
+
+  /* ---------- Semantic status (reserved, never brand) ----------
+     pending/open  -> amber
+     active        -> green
+     overdue       -> rose
+     closed/resolved -> slate
+     alpha/rejected   -> rose (destructive)
+  */
+  --color-status-pending-fg: #b45309;
+  --color-status-pending-bg: #fffbeb;
+  --color-status-pending-border: #fde68a;
+
+  --color-status-active-fg: #15803d;
+  --color-status-active-bg: #f0fdf4;
+  --color-status-active-border: #bbf7d0;
+
+  --color-status-overdue-fg: #9f1239;
+  --color-status-overdue-bg: #ffe4e6;
+  --color-status-overdue-border: #fecdd3;
+
+  --color-status-neutral-fg: #475569;
+  --color-status-neutral-bg: #f8fafc;
+  --color-status-neutral-border: #e2e8f0;
+
+  --color-status-danger-fg: #be123c;
+  --color-status-danger-bg: #fff1f2;
+  --color-status-danger-border: #fecdd3;
+
+  /* Informational (non-status) accent */
+  --color-status-info-fg: #0369a1;
+  --color-status-info-bg: #f0f9ff;
+  --color-status-info-border: #bae6fd;
+
+  /* Destructive action (delete / alpha / reject) */
+  --color-danger: #e11d48;
+  --color-danger-hover: #be123c;
+  --color-danger-soft: #fff1f2;
+  --color-danger-border: #fecdd3;
+
+  /* ---------- Radius: 3 working levels ----------
+     md = 8px · lg = 10px · xl = 12px  (2xl/3xl/full left intact) */
+  --radius-md: 0.5rem;
+  --radius-lg: 0.625rem;
+  --radius-xl: 0.75rem;
+
+  /* ---------- Shadow: 2 UI levels + 1 overlay level ---------- */
+  --shadow-subtle: 0 1px 2px 0 rgb(15 23 42 / 0.04);
+  --shadow-raised: 0 1px 3px 0 rgb(15 23 42 / 0.07), 0 1px 2px -1px rgb(15 23 42 / 0.05);
+  --shadow-overlay: 0 12px 32px -8px rgb(15 23 42 / 0.18), 0 4px 12px -4px rgb(15 23 42 / 0.1);
+
+  /* ---------- Typography ---------- */
+  --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+
+  --text-micro: 0.6875rem; /* 11px — absolute minimum for status text */
+  --text-micro--line-height: 1rem;
+  --text-caption: 0.75rem; /* 12px */
+  --text-caption--line-height: 1.125rem;
+  --text-body: 0.875rem; /* 14px */
+  --text-body--line-height: 1.375rem;
+  --text-body-lg: 1rem; /* 16px */
+  --text-body-lg--line-height: 1.5rem;
+  --text-h3: 1.125rem; /* 18px */
+  --text-h3--line-height: 1.5rem;
+  --text-h2: 1.375rem; /* 22px */
+  --text-h2--line-height: 1.75rem;
+  --text-h1: 2rem; /* 32px */
+  --text-h1--line-height: 2.25rem;
+  --text-hero: 2.5rem; /* 40px */
+  --text-hero--line-height: 2.75rem;
 }
 
 body {
   background-color: var(--color-canvas);
-  color: #111827;
-  font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+  color: var(--color-body);
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Custom Scrollbar */
+/* Custom Scrollbar — quiet, neutral */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: var(--color-border-strong);
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: var(--color-muted);
 }
 
 /* Focus Ring Utility */
 .focus-ring {
-  @apply focus:outline-none focus:ring-2 focus:ring-[#355245] focus:ring-offset-2;
+  @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-white;
+}
+
+/* ==========================================================
+   MOTION POLICY
+   Motion is reserved for genuinely live state. Users who ask
+   for reduced motion get near-zero animation globally.
+   ========================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

@@ -14,6 +14,9 @@ class TeacherController extends Controller
     // Pantau siswa berizin di rombel yang sedang diampu hari ini
     public function monitoringKelas(Request $request)
     {
+        // 1. Sinkronkan secara real-time status OVERDUE
+        PermitRequest::syncOverdueStatuses();
+
         $teacher = $request->user();
 
         $dayMap = [
@@ -48,7 +51,7 @@ class TeacherController extends Controller
             ->pluck('user_id');
 
         // Siswa yang berizin aktif, terlambat, atau sudah izin pulang
-        $permits = PermitRequest::with(['student:user_id,name,username,class_name'])
+        $permits = PermitRequest::with(['student:user_id,name,username,class_name,email'])
             ->whereIn('student_id', $studentIds)
             ->whereIn('status', ['PENDING', 'ACTIVE', 'OVERDUE', 'COMPLETED', 'CLOSED'])
             ->latest()
@@ -67,7 +70,9 @@ class TeacherController extends Controller
     // Rekapitulasi riwayat perizinan guru pengampu
     public function recapitulasi(Request $request)
     {
-        $recap = PermitRequest::with(['student:user_id,name,username,class_name'])
+        PermitRequest::syncOverdueStatuses();
+
+        $recap = PermitRequest::with(['student:user_id,name,username,class_name,email'])
             ->where('initial_teacher_id', $request->user()->user_id)
             ->latest()
             ->paginate(15);

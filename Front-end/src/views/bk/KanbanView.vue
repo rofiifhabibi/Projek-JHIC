@@ -4,7 +4,7 @@
     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
       <div>
         <h2 class="text-2xl font-black text-slate-900 tracking-tight">Papan Kerja Kanban BK</h2>
-        <p class="text-xs text-slate-500 mt-0.5">Penanganan aduan konseling siswa dan pengawasan mobilitas terpusat.</p>
+        <p class="text-xs text-slate-500 mt-0.5">Penanganan aduan konseling siswa terpusat dengan data profil siswa lengkap.</p>
       </div>
       <BaseButton variant="outline" size="sm" @click="loadKanban">
         <template #icon-left><RefreshCw class="w-3.5 h-3.5" /></template>
@@ -15,8 +15,8 @@
     <!-- Kanban Board Columns -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       <!-- COLUMN 1: OPEN -->
-      <div class="bg-slate-100/70 p-4 rounded-3xl border border-slate-200/80 space-y-4">
-        <div class="flex items-center justify-between px-2">
+      <div class="bg-slate-100/70 p-4 rounded-3xl border border-slate-200/80 space-y-4 flex flex-col">
+        <div class="flex items-center justify-between px-2 shrink-0">
           <div class="flex items-center gap-2">
             <span class="w-3 h-3 rounded-full bg-amber-500"></span>
             <h3 class="font-bold text-sm text-slate-900 uppercase tracking-wider">Aduan Baru (OPEN)</h3>
@@ -26,28 +26,45 @@
           </span>
         </div>
 
-        <div class="space-y-3">
+        <div class="space-y-3 overflow-y-auto max-h-[calc(100vh-270px)] pr-1">
           <div
             v-for="rep in reportStore.kanban.OPEN"
             :key="rep.report_id"
             class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3 hover:border-amber-400 transition"
           >
             <div class="flex items-start justify-between gap-2">
-              <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-800 uppercase border border-amber-200">
-                {{ rep.category }}
+              <span class="px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-amber-50 text-amber-800 uppercase border border-amber-200">
+                {{ formatCategory(rep.category) }}
               </span>
-              <span v-if="!rep.student" class="text-[10px] font-bold text-purple-700 bg-purple-50 px-2 py-0.5 rounded border border-purple-200">
-                🔒 Anonim
+              <span class="text-[10px] font-mono text-slate-400">
+                #REP-{{ rep.report_id }}
               </span>
             </div>
 
             <h4 class="font-bold text-sm text-slate-900 leading-snug">{{ rep.title }}</h4>
             <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed">{{ rep.description }}</p>
 
-            <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
-              <span class="text-slate-400 text-[11px]">{{ rep.student ? rep.student.name : 'Siswa Rahasia' }}</span>
+            <!-- Data Lengkap Siswa -->
+            <div class="bg-slate-50 p-3 rounded-xl border border-slate-200/80 text-xs space-y-1">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-slate-900 flex items-center gap-1.5">
+                  <User class="w-3.5 h-3.5 text-[#355245]" />
+                  {{ rep.student?.name || 'Siswa' }}
+                </span>
+                <span class="text-[10px] font-bold text-[#355245] bg-[#E8EFEA] px-2 py-0.5 rounded">
+                  {{ rep.student?.class_name || '-' }}
+                </span>
+              </div>
+              <div class="flex items-center justify-between text-[11px] text-slate-500 pt-1 border-t border-slate-200/60">
+                <span>NIS: <strong class="font-mono text-slate-700">{{ rep.student?.username || '-' }}</strong></span>
+                <span v-if="rep.student?.email" class="text-slate-400 text-[10px] truncate max-w-[150px]">{{ rep.student?.email }}</span>
+              </div>
+            </div>
+
+            <div class="pt-2 border-t border-slate-100 flex items-center justify-end text-xs">
               <BaseButton variant="secondary" size="sm" @click="moveStatus(rep.report_id, 'IN_PROGRESS')">
-                Mulai Investigasi →
+                <span>Mulai Investigasi</span>
+                <template #icon-right><ArrowRight class="w-3.5 h-3.5" /></template>
               </BaseButton>
             </div>
           </div>
@@ -61,8 +78,8 @@
       </div>
 
       <!-- COLUMN 2: IN_PROGRESS -->
-      <div class="bg-slate-100/70 p-4 rounded-3xl border border-slate-200/80 space-y-4">
-        <div class="flex items-center justify-between px-2">
+      <div class="bg-slate-100/70 p-4 rounded-3xl border border-slate-200/80 space-y-4 flex flex-col">
+        <div class="flex items-center justify-between px-2 shrink-0">
           <div class="flex items-center gap-2">
             <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
             <h3 class="font-bold text-sm text-slate-900 uppercase tracking-wider">Diproses (IN PROGRESS)</h3>
@@ -72,30 +89,49 @@
           </span>
         </div>
 
-        <div class="space-y-3">
+        <div class="space-y-3 overflow-y-auto max-h-[calc(100vh-270px)] pr-1">
           <div
             v-for="rep in reportStore.kanban.IN_PROGRESS"
             :key="rep.report_id"
             class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3 hover:border-emerald-400 transition"
           >
             <div class="flex items-start justify-between gap-2">
-              <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-800 uppercase border border-emerald-200">
-                {{ rep.category }}
+              <span class="px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-emerald-50 text-emerald-800 uppercase border border-emerald-200">
+                {{ formatCategory(rep.category) }}
               </span>
-              <span v-if="!rep.student" class="text-[10px] font-bold text-purple-700 bg-purple-50 px-2 py-0.5 rounded">
-                🔒 Anonim
+              <span class="text-[10px] font-mono text-slate-400">
+                #REP-{{ rep.report_id }}
               </span>
             </div>
 
             <h4 class="font-bold text-sm text-slate-900 leading-snug">{{ rep.title }}</h4>
             <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed">{{ rep.description }}</p>
 
+            <!-- Data Lengkap Siswa -->
+            <div class="bg-slate-50 p-3 rounded-xl border border-slate-200/80 text-xs space-y-1">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-slate-900 flex items-center gap-1.5">
+                  <User class="w-3.5 h-3.5 text-[#355245]" />
+                  {{ rep.student?.name || 'Siswa' }}
+                </span>
+                <span class="text-[10px] font-bold text-[#355245] bg-[#E8EFEA] px-2 py-0.5 rounded">
+                  {{ rep.student?.class_name || '-' }}
+                </span>
+              </div>
+              <div class="flex items-center justify-between text-[11px] text-slate-500 pt-1 border-t border-slate-200/60">
+                <span>NIS: <strong class="font-mono text-slate-700">{{ rep.student?.username || '-' }}</strong></span>
+                <span v-if="rep.student?.email" class="text-slate-400 text-[10px] truncate max-w-[150px]">{{ rep.student?.email }}</span>
+              </div>
+            </div>
+
             <div class="pt-2 border-t border-slate-100 flex flex-col gap-2">
               <BaseButton variant="outline" size="sm" block @click="openNoteModal(rep)">
-                + Catatan Investigasi
+                <template #icon-left><FileText class="w-3.5 h-3.5" /></template>
+                Catatan Investigasi
               </BaseButton>
               <BaseButton variant="primary" size="sm" block @click="moveStatus(rep.report_id, 'RESOLVED')">
-                Tandai Tuntas (RESOLVED) ✓
+                <template #icon-left><CheckCircle2 class="w-3.5 h-3.5" /></template>
+                Tandai Tuntas (RESOLVED)
               </BaseButton>
             </div>
           </div>
@@ -109,8 +145,8 @@
       </div>
 
       <!-- COLUMN 3: RESOLVED -->
-      <div class="bg-slate-100/70 p-4 rounded-3xl border border-slate-200/80 space-y-4">
-        <div class="flex items-center justify-between px-2">
+      <div class="bg-slate-100/70 p-4 rounded-3xl border border-slate-200/80 space-y-4 flex flex-col">
+        <div class="flex items-center justify-between px-2 shrink-0">
           <div class="flex items-center gap-2">
             <span class="w-3 h-3 rounded-full bg-slate-500"></span>
             <h3 class="font-bold text-sm text-slate-900 uppercase tracking-wider">Selesai (RESOLVED)</h3>
@@ -120,21 +156,38 @@
           </span>
         </div>
 
-        <div class="space-y-3">
+        <div class="space-y-3 overflow-y-auto max-h-[calc(100vh-270px)] pr-1">
           <div
             v-for="rep in reportStore.kanban.RESOLVED"
             :key="rep.report_id"
             class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3 opacity-90"
           >
             <div class="flex items-start justify-between gap-2">
-              <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-700 uppercase">
-                {{ rep.category }}
+              <span class="px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-slate-100 text-slate-700 uppercase">
+                {{ formatCategory(rep.category) }}
               </span>
               <BaseBadge status="RESOLVED" />
             </div>
 
             <h4 class="font-bold text-sm text-slate-900 line-through decoration-slate-400">{{ rep.title }}</h4>
             <p class="text-xs text-slate-500 line-clamp-2 leading-relaxed">{{ rep.description }}</p>
+
+            <!-- Data Lengkap Siswa -->
+            <div class="bg-slate-50 p-3 rounded-xl border border-slate-200/80 text-xs space-y-1">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-slate-900 flex items-center gap-1.5">
+                  <User class="w-3.5 h-3.5 text-[#355245]" />
+                  {{ rep.student?.name || 'Siswa' }}
+                </span>
+                <span class="text-[10px] font-bold text-[#355245] bg-[#E8EFEA] px-2 py-0.5 rounded">
+                  {{ rep.student?.class_name || '-' }}
+                </span>
+              </div>
+              <div class="flex items-center justify-between text-[11px] text-slate-500 pt-1 border-t border-slate-200/60">
+                <span>NIS: <strong class="font-mono text-slate-700">{{ rep.student?.username || '-' }}</strong></span>
+                <span v-if="rep.student?.email" class="text-slate-400 text-[10px] truncate max-w-[150px]">{{ rep.student?.email }}</span>
+              </div>
+            </div>
 
             <div class="pt-2 border-t border-slate-100 flex justify-end">
               <BaseButton variant="ghost" size="sm" @click="moveStatus(rep.report_id, 'IN_PROGRESS')">
@@ -160,9 +213,28 @@
       @close="showNoteModal = false"
     >
       <div class="space-y-4">
-        <p class="text-xs text-slate-500">
-          Kasus: <strong class="text-slate-900">{{ selectedReport?.title }}</strong>
-        </p>
+        <!-- Rincian Identitas Siswa Lengkap -->
+        <div v-if="selectedReport?.student" class="p-3.5 bg-slate-50 rounded-2xl border border-slate-200 text-xs space-y-1.5">
+          <div class="font-bold text-slate-900 flex items-center justify-between">
+            <span class="flex items-center gap-1.5 text-sm">
+              <User class="w-4 h-4 text-[#355245]" />
+              {{ selectedReport.student.name }}
+            </span>
+            <span class="text-[#355245] font-bold bg-[#E8EFEA] px-2 py-0.5 rounded">
+              {{ selectedReport.student.class_name }}
+            </span>
+          </div>
+          <div class="text-[11px] text-slate-500 flex items-center justify-between pt-1 border-t border-slate-200/60">
+            <span>NIS: <strong class="font-mono text-slate-800">{{ selectedReport.student.username }}</strong></span>
+            <span>{{ selectedReport.student.email }}</span>
+          </div>
+        </div>
+
+        <div class="bg-amber-50 p-3 rounded-xl border border-amber-200 text-xs">
+          <p class="text-amber-800">
+            Kasus: <strong class="text-amber-950">{{ selectedReport?.title }}</strong>
+          </p>
+        </div>
 
         <div class="space-y-1.5">
           <label class="text-xs font-semibold uppercase tracking-wider text-slate-700">Catatan Tindak Lanjut</label>
@@ -193,7 +265,7 @@ import BaseButton from '@/components/ui/BaseButton.vue'
 import BaseBadge from '@/components/ui/BaseBadge.vue'
 import BaseModal from '@/components/ui/BaseModal.vue'
 import EmptyState from '@/components/ui/EmptyState.vue'
-import { RefreshCw } from 'lucide-vue-next'
+import { RefreshCw, User, ArrowRight, FileText, CheckCircle2 } from 'lucide-vue-next'
 
 const reportStore = useReportStore()
 const toast = useToast()
@@ -201,6 +273,15 @@ const toast = useToast()
 const showNoteModal = ref(false)
 const selectedReport = ref(null)
 const noteInput = ref('')
+
+const formatCategory = (cat) => {
+  switch (cat) {
+    case 'BULLYING': return 'Perundungan'
+    case 'ACADEMIC': return 'Akademik'
+    case 'PERSONAL': return 'Konseling Pribadi'
+    default: return cat
+  }
+}
 
 const loadKanban = async () => {
   await reportStore.fetchKanban()

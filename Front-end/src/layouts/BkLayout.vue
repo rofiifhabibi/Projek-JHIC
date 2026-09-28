@@ -11,7 +11,7 @@
           </div>
           <div>
             <h1 class="text-sm font-extrabold text-white tracking-tight leading-tight">Console BK</h1>
-            <p class="text-[10px] text-emerald-400 font-semibold uppercase tracking-wider mt-0.5">Bimbingan Konseling</p>
+            <p class="text-[10px] text-teal-400 font-semibold uppercase tracking-wider mt-0.5">Bimbingan Konseling</p>
           </div>
         </div>
 
@@ -19,20 +19,37 @@
           <div class="px-3 py-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Menu Konseling</div>
           <router-link
             to="/bk/kanban"
-            class="flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold transition-all text-slate-300 hover:text-white hover:bg-slate-800"
+            class="flex items-center justify-between px-4 py-3 rounded-xl text-xs font-bold transition-all text-slate-300 hover:text-white hover:bg-slate-800"
             active-class="bg-[#355245] text-white shadow-md"
           >
-            <Kanban class="w-4 h-4" />
-            <span>Papan Kanban BK</span>
+            <div class="flex items-center gap-3">
+              <Kanban class="w-4 h-4" />
+              <span>Papan Kanban BK</span>
+            </div>
+            <span
+              v-if="openCasesCount > 0"
+              class="bg-amber-500 text-white text-[10px] font-black px-2 py-0.5 rounded-full"
+            >
+              {{ openCasesCount }}
+            </span>
           </router-link>
 
           <router-link
             to="/bk/global-monitor"
-            class="flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold transition-all text-slate-300 hover:text-white hover:bg-slate-800"
+            class="flex items-center justify-between px-4 py-3 rounded-xl text-xs font-bold transition-all text-slate-300 hover:text-white hover:bg-slate-800"
             active-class="bg-[#355245] text-white shadow-md"
           >
-            <Globe class="w-4 h-4" />
-            <span>Monitor Mobilitas</span>
+            <div class="flex items-center gap-3">
+              <Globe class="w-4 h-4" />
+              <span>Monitor Mobilitas</span>
+            </div>
+            <span
+              v-if="overdueCount > 0"
+              class="bg-rose-500 text-white text-[10px] font-black px-2 py-0.5 rounded-full animate-pulse flex items-center gap-1 shadow-sm"
+            >
+              <span class="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span>
+              {{ overdueCount }} Terlambat
+            </span>
           </router-link>
         </nav>
       </div>
@@ -40,7 +57,7 @@
       <div class="p-4 border-t border-slate-800 bg-slate-950/40 space-y-3">
         <div class="px-2">
           <p class="text-xs font-bold text-white truncate">{{ authStore.userName }}</p>
-          <p class="text-[10px] text-emerald-400 font-semibold">Petugas Konseling BK</p>
+          <p class="text-[10px] text-teal-400 font-semibold">Petugas Konseling BK</p>
         </div>
         <button
           @click="showLogoutConfirm = true"
@@ -69,22 +86,49 @@
         <div class="bg-slate-800 px-4 py-2 flex justify-around border-t border-slate-700/80">
           <router-link
             to="/bk/kanban"
-            class="text-xs font-bold py-1.5 px-3 rounded-lg text-slate-300"
+            class="text-xs font-bold py-1.5 px-3 rounded-lg text-slate-300 flex items-center gap-1.5"
             active-class="bg-[#355245] text-white"
           >
-            Kanban BK
+            <span>Kanban BK</span>
+            <span
+              v-if="openCasesCount > 0"
+              class="bg-amber-500 text-white text-[10px] font-black px-1.5 py-0.5 rounded-full"
+            >
+              {{ openCasesCount }}
+            </span>
           </router-link>
           <router-link
             to="/bk/global-monitor"
-            class="text-xs font-bold py-1.5 px-3 rounded-lg text-slate-300"
+            class="text-xs font-bold py-1.5 px-3 rounded-lg text-slate-300 flex items-center gap-1.5"
             active-class="bg-[#355245] text-white"
           >
-            Mobilitas Global
+            <span>Mobilitas Global</span>
+            <span
+              v-if="overdueCount > 0"
+              class="bg-rose-500 text-white text-[10px] font-black px-1.5 py-0.5 rounded-full animate-pulse"
+            >
+              {{ overdueCount }}
+            </span>
           </router-link>
         </div>
       </header>
 
-      <div class="p-4 sm:p-6 lg:p-8 flex-1">
+      <!-- Desktop Top Header Bar -->
+      <div class="hidden md:flex h-16 bg-white border-b border-slate-200 px-6 lg:px-8 items-center justify-between sticky top-0 z-20 shadow-xs">
+        <div class="flex items-center gap-2 text-xs font-semibold text-slate-500">
+          <span class="text-slate-400">Pusat Konseling Siswa & Monitor Mobilitas</span>
+          <span>•</span>
+          <span class="text-[#355245] font-bold">SMKN 2 Depok Sleman</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
+            Workstation BK Aktif
+          </span>
+        </div>
+      </div>
+
+      <div class="p-4 sm:p-6 lg:p-8 flex-1 max-w-[1600px] w-full mx-auto">
         <router-view />
       </div>
     </main>
@@ -103,14 +147,42 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useAuthStore } from '@/stores/auth'
+import { useReportStore } from '@/stores/report'
 import ToastNotification from '@/components/ui/ToastNotification.vue'
 import ConfirmDialog from '@/components/ui/ConfirmDialog.vue'
 import { Kanban, Globe, LogOut } from 'lucide-vue-next'
 
 const authStore = useAuthStore()
+const reportStore = useReportStore()
 const showLogoutConfirm = ref(false)
+let pollTimer = null
+
+const overdueCount = computed(() => {
+  return reportStore.globalMobility?.filter(p => p.status === 'OVERDUE').length || 0
+})
+
+const openCasesCount = computed(() => {
+  return reportStore.kanban?.OPEN?.length || 0
+})
+
+const syncData = async () => {
+  await Promise.allSettled([
+    reportStore.fetchGlobalMobility(),
+    reportStore.fetchKanban(),
+    reportStore.fetchBkMetrics()
+  ])
+}
+
+onMounted(() => {
+  syncData()
+  pollTimer = setInterval(syncData, 4000)
+})
+
+onUnmounted(() => {
+  if (pollTimer) clearInterval(pollTimer)
+})
 
 const handleLogout = () => {
   showLogoutConfirm.value = false

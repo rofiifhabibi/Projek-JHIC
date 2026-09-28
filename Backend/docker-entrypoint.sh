@@ -7,11 +7,11 @@ if [ ! -f .env ]; then
     
     # Otomatis sesuaikan isi .env lokal dengan konfigurasi database docker
     sed -i 's/DB_CONNECTION=.*/DB_CONNECTION=mysql/g' .env
-    sed -i 's/DB_HOST=.*/DB_HOST=db/g' .env
-    sed -i 's/DB_PORT=.*/DB_PORT=3306/g' .env
-    sed -i 's/DB_DATABASE=.*/DB_DATABASE=laravel/g' .env
-    sed -i 's/DB_USERNAME=.*/DB_USERNAME=laravel_user/g' .env
-    sed -i 's/DB_PASSWORD=.*/DB_PASSWORD=laravel_password/g' .env
+    sed -i .s/.*DB_HOST=.*
+    sed -i .s/.*DB_PORT=.*
+    sed -i .s/.*DB_DATABASE=.*
+    sed -i .s/.*DB_USERNAME=.*
+    sed -i .s/.*DB_PASSWORD=.*
 fi
 
 # 2. Jalankan composer install jika autoload.php belum ada

@@ -1,59 +1,59 @@
 <template>
   <Teleport to="body">
     <Transition
-      enter-active-class="transition duration-200 ease-out"
+      enter-active-class="transition duration-150 ease-out"
       enter-from-class="opacity-0"
       enter-to-class="opacity-100"
-      leave-active-class="transition duration-150 ease-in"
+      leave-active-class="transition duration-100 ease-in"
       leave-from-class="opacity-100"
       leave-to-class="opacity-0"
     >
       <div
         v-if="show"
-        class="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6"
+        class="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-heading/45 p-4 sm:p-6"
         @click.self="handleBackdropClick"
         @keydown.escape="handleEscape"
         tabindex="-1"
         ref="modalRef"
       >
         <Transition
-          enter-active-class="transition duration-200 ease-out"
-          enter-from-class="opacity-0 scale-95 translate-y-2"
-          enter-to-class="opacity-100 scale-100 translate-y-0"
-          leave-active-class="transition duration-150 ease-in"
-          leave-from-class="opacity-100 scale-100 translate-y-0"
-          leave-to-class="opacity-0 scale-95 translate-y-2"
+          enter-active-class="transition duration-150 ease-out"
+          enter-from-class="opacity-0 translate-y-2"
+          enter-to-class="opacity-100 translate-y-0"
+          leave-active-class="transition duration-100 ease-in"
+          leave-from-class="opacity-100 translate-y-0"
+          leave-to-class="opacity-0 translate-y-2"
         >
           <div
             v-if="show"
-            class="w-full bg-white rounded-2xl shadow-2xl border border-slate-100 overflow-hidden flex flex-col max-h-[90vh]"
+            class="flex w-full max-h-[90vh] flex-col overflow-hidden rounded-xl border border-border bg-card shadow-overlay"
             :class="maxWidthClass"
             role="dialog"
             aria-modal="true"
             :aria-labelledby="titleId"
           >
             <!-- Header -->
-            <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between shrink-0">
-              <h3 :id="titleId" class="text-lg font-bold text-slate-900 flex items-center gap-2">
+            <div class="flex shrink-0 items-center justify-between gap-3 border-b border-border px-5 py-4">
+              <h3 :id="titleId" class="flex items-center gap-2 text-h3 font-bold text-heading">
                 <slot name="icon" />
                 {{ title }}
               </h3>
               <button
                 @click="close"
-                class="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition focus:outline-none"
+                class="flex h-9 w-9 shrink-0 items-center justify-center rounded-md text-muted transition-colors hover:bg-subtle hover:text-body focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                 aria-label="Tutup dialog"
               >
-                <X class="w-5 h-5" />
+                <X class="h-5 w-5" />
               </button>
             </div>
 
             <!-- Body -->
-            <div class="px-6 py-5 overflow-y-auto flex-1">
+            <div class="flex-1 overflow-y-auto px-5 py-5">
               <slot />
             </div>
 
             <!-- Footer -->
-            <div v-if="$slots.footer" class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-end gap-3 shrink-0">
+            <div v-if="$slots.footer" class="flex shrink-0 items-center justify-end gap-2.5 border-t border-border bg-canvas px-5 py-4">
               <slot name="footer" />
             </div>
           </div>

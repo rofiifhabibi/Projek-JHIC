@@ -1,58 +1,64 @@
 <template>
-  <div class="min-h-screen bg-[#F4F7F4] text-slate-800 font-sans selection:bg-[#355245] selection:text-white flex flex-col">
-    <!-- Top Navbar -->
-    <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-slate-200/80">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-xl bg-[#355245] flex items-center justify-center text-white shadow-md shadow-[#355245]/20 font-extrabold text-lg">
+  <div class="flex min-h-screen flex-col bg-canvas font-sans text-body selection:bg-primary-soft-strong selection:text-primary-deep">
+    <!-- Header -->
+    <header class="sticky top-0 z-40 border-b border-border bg-card">
+      <div class="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6 sm:py-4">
+        <div class="flex min-w-0 items-center gap-3">
+          <span
+            class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary-deep text-caption font-bold tracking-tight text-white"
+            aria-hidden="true"
+          >
             SC
-          </div>
-          <div>
-            <h1 class="font-extrabold text-slate-900 text-base leading-tight tracking-tight">StudentCare</h1>
-            <p class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">SMKN 2 Depok Sleman</p>
-          </div>
+          </span>
+          <span class="min-w-0 leading-tight">
+            <span class="block truncate text-body font-bold tracking-tight text-heading">Student Care</span>
+            <span class="block truncate text-micro text-muted">SMKN 2 Depok Sleman</span>
+          </span>
         </div>
 
-        <nav class="hidden md:flex items-center gap-8 text-xs font-bold uppercase tracking-wider text-slate-600">
-          <a href="#fitur" class="hover:text-[#355245] transition">Fitur Utama</a>
-          <a href="#alur" class="hover:text-[#355245] transition">Alur Kerja</a>
-          <a href="#peran" class="hover:text-[#355245] transition">Portal Peran</a>
+        <nav class="hidden items-center gap-7 md:flex" aria-label="Navigasi utama">
+          <a
+            v-for="link in navLinks"
+            :key="link.href"
+            :href="link.href"
+            class="rounded text-body text-muted transition-colors duration-150 hover:text-heading focus-ring"
+          >
+            {{ link.label }}
+          </a>
         </nav>
 
-        <div class="flex items-center gap-3">
-          <router-link to="/login">
-            <BaseButton variant="primary" size="sm">
-              <template #icon-left><LogIn class="w-4 h-4" /></template>
-              Masuk Portal
-            </BaseButton>
-          </router-link>
-        </div>
+        <router-link to="/login" tabindex="-1" class="shrink-0 rounded-lg">
+          <BaseButton variant="primary" size="sm">
+            <template #icon-left><LogIn class="h-4 w-4" aria-hidden="true" /></template>
+            Masuk Portal
+          </BaseButton>
+        </router-link>
       </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="relative overflow-hidden py-16 lg:py-24 bg-gradient-to-b from-white via-white to-[#F4F7F4]">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
-            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#E8EFEA] text-[#273e34] text-xs font-semibold uppercase tracking-wider">
-              <Sparkles class="w-4 h-4 text-[#355245]" />
-              Sistem Digitalisasi Sekolah Terpadu
-            </div>
-
-            <h2 class="text-3xl sm:text-5xl font-black text-slate-900 leading-[1.15] tracking-tight">
-              Manajemen Perizinan Siswa & Layanan BK Berstandar Modern
-            </h2>
-
-            <p class="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto lg:mx-0">
-              Integrasi cerdas 4 entitas sekolah: <strong class="text-slate-900">Siswa, Guru Pengampu, Petugas Gerbang, dan Guru BK</strong>. Memastikan ketertiban, keamanan mobilitas, dan perlindungan siswa secara real-time.
+    <main class="flex-1">
+      <!-- Hero -->
+      <section class="border-b border-border bg-card">
+        <div class="mx-auto w-full max-w-6xl px-4 py-14 sm:px-6 sm:py-20 lg:py-24">
+          <div class="max-w-2xl">
+            <p class="text-caption font-semibold uppercase tracking-[0.18em] text-primary">
+              Appermit Student Care
+            </p>
+            <h1
+              class="mt-4 text-h1 font-extrabold leading-[1.18] tracking-tight text-heading text-balance sm:text-hero"
+            >
+              Perizinan siswa dan pendampingan BK dalam satu sistem
+            </h1>
+            <p class="mt-5 max-w-xl text-body-lg leading-relaxed text-body">
+              Integrasi empat entitas sekolah — siswa, guru pengampu, petugas gerbang, dan guru BK — untuk
+              memastikan ketertiban, keamanan mobilitas, dan perlindungan siswa secara real-time.
             </p>
 
-            <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
-              <router-link to="/login" class="w-full sm:w-auto">
+            <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <router-link to="/login" tabindex="-1" class="w-full sm:w-auto">
                 <BaseButton variant="primary" size="lg" block>
                   Buka Portal Login
-                  <template #icon-right><ArrowRight class="w-4 h-4" /></template>
+                  <template #icon-right><ArrowRight class="h-4 w-4" aria-hidden="true" /></template>
                 </BaseButton>
               </router-link>
               <a href="#fitur" class="w-full sm:w-auto">
@@ -62,145 +68,132 @@
               </a>
             </div>
           </div>
+        </div>
+      </section>
 
-          <!-- Hero Mockup Card -->
-          <div class="lg:col-span-5 relative">
-            <div class="relative bg-white rounded-3xl shadow-2xl border border-slate-200/80 p-6 space-y-4 backdrop-blur-md">
-              <div class="flex items-center justify-between border-b border-slate-100 pb-4">
-                <div class="flex items-center gap-3">
-                  <div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">
-                    BS
-                  </div>
-                  <div>
-                    <h4 class="font-bold text-sm text-slate-900">Budi Santoso</h4>
-                    <p class="text-xs text-slate-500">XII RPL 1 • NIS 2026001</p>
-                  </div>
-                </div>
-                <BaseBadge status="ACTIVE" label="Izin Aktif" />
+      <!-- Fitur Utama -->
+      <section id="fitur" class="scroll-mt-20 border-b border-border sm:scroll-mt-24">
+        <div class="mx-auto w-full max-w-6xl px-4 py-14 sm:px-6 sm:py-20">
+          <div class="max-w-2xl">
+            <p class="text-caption font-semibold uppercase tracking-[0.18em] text-primary">Fitur Utama</p>
+            <h2 class="mt-3 text-h2 font-bold tracking-tight text-heading text-balance sm:text-h1">
+              Solusi digitalisasi terintegrasi
+            </h2>
+            <p class="mt-3 text-body leading-relaxed text-muted">
+              Menggantikan surat izin fisik kertas yang rentan hilang dengan sistem QR Pass dinamis
+              ber-timer presisi.
+            </p>
+          </div>
+
+          <div class="mt-10 grid gap-x-10 sm:grid-cols-2">
+            <article
+              v-for="item in features"
+              :key="item.title"
+              class="border-t border-border py-5"
+            >
+              <div class="flex items-center gap-2.5">
+                <component :is="item.icon" class="h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
+                <h3 class="text-body font-semibold text-heading">{{ item.title }}</h3>
               </div>
-
-              <!-- Ticket Preview -->
-              <div class="bg-slate-900 text-white p-5 rounded-2xl space-y-3">
-                <div class="flex justify-between items-center text-xs text-slate-400">
-                  <span>IZIN KELUAR SEMENTARA (TEMP)</span>
-                  <span class="font-mono text-emerald-400">QR-PASS DIGITAL</span>
-                </div>
-                <div class="text-xs font-medium text-slate-300">
-                  "Izin mengambil berkas sertifikat di ruang Tata Usaha"
-                </div>
-                <div class="flex items-center justify-between pt-2 border-t border-slate-800 text-xs">
-                  <span class="text-slate-400">Batas Kembali:</span>
-                  <span class="font-bold text-amber-400 font-mono">24 Menit 12 Detik</span>
-                </div>
-              </div>
-
-              <div class="grid grid-cols-2 gap-3 pt-2">
-                <div class="bg-[#E8EFEA] p-3 rounded-xl text-center">
-                  <p class="text-[11px] font-semibold text-slate-600 uppercase">Guru Pengampu</p>
-                  <p class="text-xs font-bold text-[#273e34] mt-0.5">Ahmad Dahlan, S.Pd.</p>
-                </div>
-                <div class="bg-slate-100 p-3 rounded-xl text-center">
-                  <p class="text-[11px] font-semibold text-slate-600 uppercase">Pos Gerbang</p>
-                  <p class="text-xs font-bold text-slate-800 mt-0.5">Verified Satpam</p>
-                </div>
-              </div>
-            </div>
+              <p class="mt-2 text-body leading-relaxed text-muted">{{ item.description }}</p>
+            </article>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- Features Section -->
-    <section id="fitur" class="py-20 bg-white border-y border-slate-200/80">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-        <div class="text-center max-w-2xl mx-auto space-y-3">
-          <span class="text-xs font-bold text-[#355245] uppercase tracking-widest">Keunggulan Sistem</span>
-          <h3 class="text-3xl font-extrabold text-slate-900 tracking-tight">Solusi Digitalisasi Terintegrasi</h3>
-          <p class="text-sm text-slate-600">Menggantikan surat izin fisik Kertas yang rentan hilang dengan sistem QR Pass dinamis ber-timer presisi.</p>
+      <!-- Alur Kerja -->
+      <section id="alur" class="scroll-mt-20 border-b border-border bg-card sm:scroll-mt-24">
+        <div class="mx-auto w-full max-w-6xl px-4 py-14 sm:px-6 sm:py-20">
+          <div class="max-w-2xl">
+            <p class="text-caption font-semibold uppercase tracking-[0.18em] text-primary">Alur Kerja</p>
+            <h2 class="mt-3 text-h2 font-bold tracking-tight text-heading text-balance sm:text-h1">
+              Dari pengajuan sampai verifikasi gerbang
+            </h2>
+            <p class="mt-3 text-body leading-relaxed text-muted">
+              Setiap antrean punya penanggung jawab yang jelas, sehingga tidak ada izin yang menggantung
+              tanpa status.
+            </p>
+          </div>
+
+          <ol class="mt-10 grid gap-x-10 sm:grid-cols-2 lg:grid-cols-4">
+            <li v-for="(step, index) in steps" :key="step.title" class="border-t border-border py-5">
+              <p class="font-mono text-body font-semibold text-primary">
+                {{ String(index + 1).padStart(2, '0') }}
+              </p>
+              <h3 class="mt-2 text-body font-semibold text-heading">{{ step.title }}</h3>
+              <p class="mt-1.5 text-body leading-relaxed text-muted">{{ step.description }}</p>
+            </li>
+          </ol>
         </div>
+      </section>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div class="bg-[#F4F7F4] p-6 rounded-2xl border border-slate-200/80 space-y-3 hover:shadow-md transition">
-            <div class="w-12 h-12 rounded-xl bg-[#355245] text-white flex items-center justify-center">
-              <QrCode class="w-6 h-6" />
-            </div>
-            <h4 class="font-bold text-slate-900 text-base">E-Permit & QR Pass</h4>
-            <p class="text-xs text-slate-600 leading-relaxed">Pengajuan izin online dari HP siswa dengan persetujuan guru & verifikasi QR code di gerbang satpam.</p>
+      <!-- Portal Peran -->
+      <section id="peran" class="scroll-mt-20 border-b border-border sm:scroll-mt-24">
+        <div class="mx-auto w-full max-w-6xl px-4 py-14 sm:px-6 sm:py-20">
+          <div class="max-w-2xl">
+            <p class="text-caption font-semibold uppercase tracking-[0.18em] text-primary">
+              Hak Akses Pengguna
+            </p>
+            <h2 class="mt-3 text-h2 font-bold tracking-tight text-heading text-balance sm:text-h1">
+              Empat portal, satu basis data
+            </h2>
           </div>
 
-          <div class="bg-[#F4F7F4] p-6 rounded-2xl border border-slate-200/80 space-y-3 hover:shadow-md transition">
-            <div class="w-12 h-12 rounded-xl bg-emerald-700 text-white flex items-center justify-center">
-              <ShieldCheck class="w-6 h-6" />
+          <dl class="mt-10 grid gap-x-10 sm:grid-cols-2">
+            <div v-for="role in roles" :key="role.name" class="border-t border-border py-5">
+              <dt class="text-body font-semibold text-heading">{{ role.name }}</dt>
+              <dd class="mt-1.5 text-body leading-relaxed text-muted">{{ role.description }}</dd>
             </div>
-            <h4 class="font-bold text-slate-900 text-base">Gate Security Scanner</h4>
-            <p class="text-xs text-slate-600 leading-relaxed">Validasi pemindaian kamera fisik di pos satpam gerbang utama untuk mendeteksi siswa yang keluar/pulang.</p>
-          </div>
-
-          <div class="bg-[#F4F7F4] p-6 rounded-2xl border border-slate-200/80 space-y-3 hover:shadow-md transition">
-            <div class="w-12 h-12 rounded-xl bg-slate-800 text-white flex items-center justify-center">
-              <Users class="w-6 h-6" />
-            </div>
-            <h4 class="font-bold text-slate-900 text-base">Monitoring Kelas Real-time</h4>
-            <p class="text-xs text-slate-600 leading-relaxed">Guru pengampu memantau status presensi & mobilitas siswa di kelas binaan dengan kalkulasi otomatis.</p>
-          </div>
-
-          <div class="bg-[#F4F7F4] p-6 rounded-2xl border border-slate-200/80 space-y-3 hover:shadow-md transition">
-            <div class="w-12 h-12 rounded-xl bg-amber-700 text-white flex items-center justify-center">
-              <HeartHandshake class="w-6 h-6" />
-            </div>
-            <h4 class="font-bold text-slate-900 text-base">Care Report & Kanban BK</h4>
-            <p class="text-xs text-slate-600 leading-relaxed">Portal aduan konseling rahasia (opsional anonim) yang dikelola Guru BK via papan Kanban interaktif.</p>
-          </div>
+          </dl>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- Role Portals Section -->
-    <section id="peran" class="py-20 bg-[#F4F7F4]">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-        <div class="text-center max-w-2xl mx-auto space-y-3">
-          <span class="text-xs font-bold text-[#355245] uppercase tracking-widest">Hak Akses Pengguna</span>
-          <h3 class="text-3xl font-extrabold text-slate-900 tracking-tight">4 Role Terintegrasi</h3>
+      <!-- Dukungan & Penyelenggaraan -->
+      <section class="border-b border-border bg-card">
+        <div class="mx-auto w-full max-w-6xl px-4 py-14 sm:px-6 sm:py-16">
+          <div class="max-w-2xl">
+            <p class="text-caption font-semibold uppercase tracking-[0.18em] text-primary">
+              Dukungan & Penyelenggaraan
+            </p>
+            <h2 class="mt-3 text-h2 font-bold tracking-tight text-heading">Didukung & Diselenggarakan Oleh</h2>
+          </div>
+
+          <ul class="mt-10 grid grid-cols-2 gap-x-6 gap-y-9 sm:grid-cols-3 lg:grid-cols-5">
+            <li
+              v-for="supporter in supporters"
+              :key="supporter.name"
+              class="flex flex-col items-center gap-3 text-center"
+            >
+              <img
+                :src="supporter.src"
+                :alt="supporter.name"
+                :width="supporter.width"
+                :height="supporter.height"
+                class="h-10 max-w-full object-contain sm:h-12"
+                loading="lazy"
+                decoding="async"
+              />
+              <span class="text-caption text-muted">{{ supporter.name }}</span>
+            </li>
+          </ul>
         </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div class="bg-white p-6 rounded-2xl border border-slate-200 space-y-3 shadow-sm">
-            <span class="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 text-[11px] font-bold uppercase">Siswa</span>
-            <h4 class="font-bold text-slate-900 text-base">Portal Siswa</h4>
-            <p class="text-xs text-slate-600 leading-relaxed">Mobile-first app untuk pengajuan izin, tiket QR Pass, tracking status, dan pengaduan konseling BK.</p>
-          </div>
-
-          <div class="bg-white p-6 rounded-2xl border border-slate-200 space-y-3 shadow-sm">
-            <span class="px-2.5 py-1 rounded-full bg-blue-100 text-blue-800 text-[11px] font-bold uppercase">Guru</span>
-            <h4 class="font-bold text-slate-900 text-base">Workstation Guru</h4>
-            <p class="text-xs text-slate-600 leading-relaxed">Antrean persetujuan izin siswa, penetapan durasi, dan dashboard pemantauan presensi rombel.</p>
-          </div>
-
-          <div class="bg-white p-6 rounded-2xl border border-slate-200 space-y-3 shadow-sm">
-            <span class="px-2.5 py-1 rounded-full bg-slate-200 text-slate-800 text-[11px] font-bold uppercase">Satpam</span>
-            <h4 class="font-bold text-slate-900 text-base">Gate Web Scanner</h4>
-            <p class="text-xs text-slate-600 leading-relaxed">Portal scanner kamera gerbang untuk validasi token QR siswa saat keluar atau izin pulang.</p>
-          </div>
-
-          <div class="bg-white p-6 rounded-2xl border border-slate-200 space-y-3 shadow-sm">
-            <span class="px-2.5 py-1 rounded-full bg-purple-100 text-purple-800 text-[11px] font-bold uppercase">Guru BK</span>
-            <h4 class="font-bold text-slate-900 text-base">Console BK & Mobility</h4>
-            <p class="text-xs text-slate-600 leading-relaxed">Papan kerja Kanban aduan konseling, rekam investigasi, dan pengawasan mobilitas global siswa.</p>
-          </div>
-        </div>
-      </div>
-    </section>
+      </section>
+    </main>
 
     <!-- Footer -->
-    <footer class="mt-auto bg-slate-900 text-slate-400 py-10 border-t border-slate-800 text-xs">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div>
-          <p class="font-bold text-white text-sm">SMKN 2 Depok Sleman (STEMBAYO)</p>
-          <p class="mt-1 text-slate-500">Jl. Mrican, Caturtunggal, Depok, Sleman, D.I. Yogyakarta 55281</p>
+    <footer class="mt-auto bg-primary-deep text-white">
+      <div
+        class="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 py-10 sm:px-6 md:flex-row md:items-start md:justify-between"
+      >
+        <div class="max-w-md">
+          <p class="text-body font-bold text-white">SMKN 2 Depok Sleman (STEMBAYO)</p>
+          <p class="mt-1.5 text-caption text-white/70">
+            Jl. Mrican, Caturtunggal, Depok, Sleman, D.I. Yogyakarta 55281
+          </p>
         </div>
-        <div class="text-center sm:text-right text-slate-500">
-          <p>&copy; 2026 StudentCare — Projek JHIC. All rights reserved.</p>
-        </div>
+        <p class="text-caption text-white/70 md:text-right">
+          &copy; 2026 Appermit Student Care — Projek JHIC. All rights reserved.
+        </p>
       </div>
     </footer>
   </div>
@@ -208,6 +201,94 @@
 
 <script setup>
 import BaseButton from '@/components/ui/BaseButton.vue'
-import BaseBadge from '@/components/ui/BaseBadge.vue'
-import { Sparkles, ArrowRight, QrCode, ShieldCheck, Users, HeartHandshake, LogIn } from 'lucide-vue-next'
+import { ArrowRight, QrCode, ShieldCheck, Users, HeartHandshake, LogIn } from 'lucide-vue-next'
+
+const brandUrl = (file) => `/brand/${encodeURI(file)}`
+
+const navLinks = [
+  { label: 'Fitur Utama', href: '#fitur' },
+  { label: 'Alur Kerja', href: '#alur' },
+  { label: 'Portal Peran', href: '#peran' }
+]
+
+const features = [
+  {
+    title: 'E-Permit & QR Pass',
+    description:
+      'Pengajuan izin daring dari ponsel siswa, disetujui guru pengampu, lalu diverifikasi lewat QR Pass ber-timer di gerbang.',
+    icon: QrCode
+  },
+  {
+    title: 'Gate Security Scanner',
+    description:
+      'Validasi pemindaian di pos satpam untuk mendeteksi siswa yang keluar, pulang, dan masa berlaku izin.',
+    icon: ShieldCheck
+  },
+  {
+    title: 'Monitoring Kelas Real-time',
+    description:
+      'Guru pengampu memantau status presensi dan mobilitas siswa di kelas binaannya dengan perhitungan otomatis.',
+    icon: Users
+  },
+  {
+    title: 'Care Report & Kanban BK',
+    description:
+      'Portal aduan konseling yang dikelola Guru BK melalui papan Kanban beserta catatan tindak lanjut.',
+    icon: HeartHandshake
+  }
+]
+
+const steps = [
+  {
+    title: 'Siswa mengajukan izin',
+    description:
+      'Izin keluar sementara atau pulang sekolah diisi dari ponsel lengkap dengan durasi, alasan, dan guru pengampu.'
+  },
+  {
+    title: 'Guru pengampu memproses',
+    description:
+      'Permintaan masuk antrean persetujuan guru, yang menyetujui dan menetapkan durasi atau menolak dengan catatan.'
+  },
+  {
+    title: 'Petugas gerbang memverifikasi',
+    description:
+      'Siswa memindai QR Pass di pos satpam, sehingga catatan keluar dan pulang terpunktai otomatis.'
+  },
+  {
+    title: 'Guru BK menangani laporan',
+    description:
+      'Care report masuk papan Kanban BK untuk ditindaklanjuti, sementara mobilitas siswa dipantau secara global.'
+  }
+]
+
+const roles = [
+  {
+    name: 'Portal Siswa',
+    description:
+      'Mobile-first untuk pengajuan izin, tiket QR Pass, tracking status, dan pengaduan konseling ke Guru BK.'
+  },
+  {
+    name: 'Workstation Guru',
+    description:
+      'Antrean persetujuan izin siswa, penetapan durasi, dan dashboard pemantauan presensi rombel.'
+  },
+  {
+    name: 'Gate Web Scanner',
+    description:
+      'Portal pemindai kamera gerbang untuk validasi token QR siswa saat keluar maupun izin pulang.'
+  },
+  {
+    name: 'Console BK & Mobility',
+    description:
+      'Papan kerja Kanban aduan konseling, catatan tindak lanjut, dan pengawasan mobilitas global siswa.'
+  }
+]
+
+const supporters = [
+  { name: 'JHIC 2.0', src: brandUrl('1. LOGO JHIC 2.0.png'), width: 3802, height: 2310 },
+  { name: 'Jagoan Hosting', src: brandUrl('2. Logo Jagoan Hosting.png'), width: 6020, height: 1891 },
+  { name: 'KOMDIGI', src: brandUrl('3. KOMDIGI.png'), width: 994, height: 720 },
+  { name: 'Garuda Spark', src: brandUrl('4. Garuda Spark Full Color.png'), width: 3447, height: 1881 },
+  { name: 'Ngalup', src: brandUrl('5. LOGO NGALUP.png'), width: 1983, height: 314 }
+]
 </script>
