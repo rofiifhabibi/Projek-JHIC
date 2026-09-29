@@ -209,7 +209,7 @@
             <button
               type="button"
               @click="isManualSelect = true"
-              class="text-xs font-bold px-3 py-1.5 rounded-xl border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 transition shrink-0 active:scale-95 shadow-xs"
+              class="text-xs font-bold px-3 py-1.5 rounded-xl border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 transition shrink-0 active:scale-95 shadow-xs cursor-pointer touch-manipulation"
             >
               Ganti Guru
             </button>

@@ -167,7 +167,7 @@
                   <button
                     type="button"
                     @click="copyCode(activePermit.qr_token)"
-                    class="p-1.5 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-200 transition shrink-0 active:scale-95"
+                    class="p-1.5 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-200 transition shrink-0 active:scale-95 cursor-pointer touch-manipulation"
                     title="Salin Kode Izin"
                     aria-label="Salin Kode Izin"
                   >
@@ -217,7 +217,7 @@
               <button
                 type="button"
                 @click="showCancelConfirm = true"
-                class="text-xs text-rose-600 hover:text-rose-800 font-semibold underline"
+                class="text-xs text-rose-600 hover:text-rose-800 font-semibold underline cursor-pointer touch-manipulation"
               >
                 Batal keluar? Batalkan izin ini
               </button>
@@ -252,7 +252,7 @@
             <button
               type="button"
               @click="refreshPass"
-              class="inline-flex items-center gap-1.5 text-xs text-slate-600 hover:text-slate-900 transition font-medium py-1.5 px-3.5 rounded-full hover:bg-slate-100 border border-slate-200"
+              class="inline-flex items-center gap-1.5 text-xs text-slate-600 hover:text-slate-900 transition font-medium py-1.5 px-3.5 rounded-full hover:bg-slate-100 border border-slate-200 cursor-pointer touch-manipulation active:scale-95"
             >
               <RefreshCw class="w-3.5 h-3.5" :class="{ 'animate-spin': isRefreshing }" />
               Perbarui Status

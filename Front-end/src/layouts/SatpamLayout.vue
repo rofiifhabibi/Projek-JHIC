@@ -15,7 +15,7 @@
                 Online
               </span>
             </div>
-            <p class="text-xs text-slate-300 font-medium truncate mt-0.5">Pemeriksaan Gerbang • SMK N 2 Depok</p>
+            <p class="text-xs text-slate-300 font-medium truncate mt-0.5">Pemeriksaan Gerbang • SMKN 2 Depok Sleman</p>
           </div>
         </div>
 

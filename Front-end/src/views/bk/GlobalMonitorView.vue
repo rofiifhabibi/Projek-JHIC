@@ -4,7 +4,7 @@
     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
       <div>
         <h2 class="text-2xl font-black text-slate-900 tracking-tight">Monitoring Izin Seluruh Siswa</h2>
-        <p class="text-xs text-slate-500 mt-0.5">Pantauan status perizinan siswa dari seluruh kelas di SMK N 2 Depok Sleman.</p>
+        <p class="text-xs text-slate-500 mt-0.5">Pantauan status perizinan siswa dari seluruh kelas di SMKN 2 Depok Sleman.</p>
       </div>
       <BaseButton variant="outline" size="sm" @click="loadData">
         <template #icon-left><RefreshCw class="w-3.5 h-3.5" :class="{ 'animate-spin': isRefreshing }" /></template>

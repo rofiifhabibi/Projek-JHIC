@@ -2,7 +2,7 @@
   <div class="min-h-screen bg-[#F4F7F4] text-slate-800 font-sans selection:bg-[#355245] selection:text-white flex flex-col">
     <!-- Top Navbar -->
     <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/80">
-      <div class="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 h-15 sm:h-16 flex items-center justify-between">
+      <div class="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         <router-link to="/" class="flex items-center gap-2 min-w-0">
           <img
             src="/logos/studentcare-logo.png"
@@ -118,7 +118,7 @@
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-6">
-          <div class="bg-[#F4F7F4] p-4.5 sm:p-6 rounded-2xl border border-slate-200/80 space-y-2.5 sm:space-y-3 hover:shadow-md transition">
+          <div class="bg-[#F4F7F4] p-5 sm:p-6 rounded-2xl border border-slate-200/80 space-y-2.5 sm:space-y-3 hover:shadow-md transition">
             <div class="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-[#355245] shadow-xs">
               <QrCode class="w-5 h-5 sm:w-6 sm:h-6" :stroke-width="1.8" />
             </div>
@@ -126,7 +126,7 @@
             <p class="text-xs text-slate-600 leading-relaxed">Pengajuan izin langsung dari ponsel siswa, disetujui guru pengajar saat jam pelajaran, dan diverifikasi di gerbang sekolah.</p>
           </div>
 
-          <div class="bg-[#F4F7F4] p-4.5 sm:p-6 rounded-2xl border border-slate-200/80 space-y-2.5 sm:space-y-3 hover:shadow-md transition">
+          <div class="bg-[#F4F7F4] p-5 sm:p-6 rounded-2xl border border-slate-200/80 space-y-2.5 sm:space-y-3 hover:shadow-md transition">
             <div class="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-[#355245] shadow-xs">
               <ShieldCheck class="w-5 h-5 sm:w-6 sm:h-6" :stroke-width="1.8" />
             </div>
@@ -134,7 +134,7 @@
             <p class="text-xs text-slate-600 leading-relaxed">Petugas keamanan memindai kode QR siswa saat keluar dan mencatat waktu kembali siswa ke lingkungan sekolah.</p>
           </div>
 
-          <div class="bg-[#F4F7F4] p-4.5 sm:p-6 rounded-2xl border border-slate-200/80 space-y-2.5 sm:space-y-3 hover:shadow-md transition">
+          <div class="bg-[#F4F7F4] p-5 sm:p-6 rounded-2xl border border-slate-200/80 space-y-2.5 sm:space-y-3 hover:shadow-md transition">
             <div class="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-[#355245] shadow-xs">
               <Users class="w-5 h-5 sm:w-6 sm:h-6" :stroke-width="1.8" />
             </div>
@@ -142,7 +142,7 @@
             <p class="text-xs text-slate-600 leading-relaxed">Guru dapat melihat siswa yang sedang izin, batas waktu tersisa, dan memastikan ketertiban selama jam belajar.</p>
           </div>
 
-          <div class="bg-[#F4F7F4] p-4.5 sm:p-6 rounded-2xl border border-slate-200/80 space-y-2.5 sm:space-y-3 hover:shadow-md transition">
+          <div class="bg-[#F4F7F4] p-5 sm:p-6 rounded-2xl border border-slate-200/80 space-y-2.5 sm:space-y-3 hover:shadow-md transition">
             <div class="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-[#355245] shadow-xs">
               <HeartHandshake class="w-5 h-5 sm:w-6 sm:h-6" :stroke-width="1.8" />
             </div>
@@ -164,7 +164,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-6">
           <router-link
             to="/login"
-            class="bg-white p-4.5 sm:p-6 rounded-2xl border border-slate-200/90 space-y-3 shadow-xs hover:shadow-md hover:border-[#355245]/40 transition group flex flex-col justify-between"
+            class="bg-white p-5 sm:p-6 rounded-2xl border border-slate-200/90 space-y-3 shadow-xs hover:shadow-md hover:border-[#355245]/40 transition group flex flex-col justify-between"
           >
             <div class="space-y-3">
               <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-[#E8EFEA] text-[#355245] flex items-center justify-center font-bold shadow-xs group-hover:scale-105 transition">
@@ -181,7 +181,7 @@
 
           <router-link
             to="/login"
-            class="bg-white p-4.5 sm:p-6 rounded-2xl border border-slate-200/90 space-y-3 shadow-xs hover:shadow-md hover:border-[#355245]/40 transition group flex flex-col justify-between"
+            class="bg-white p-5 sm:p-6 rounded-2xl border border-slate-200/90 space-y-3 shadow-xs hover:shadow-md hover:border-[#355245]/40 transition group flex flex-col justify-between"
           >
             <div class="space-y-3">
               <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-[#E8EFEA] text-[#355245] flex items-center justify-center font-bold shadow-xs group-hover:scale-105 transition">
@@ -198,7 +198,7 @@
 
           <router-link
             to="/login"
-            class="bg-white p-4.5 sm:p-6 rounded-2xl border border-slate-200/90 space-y-3 shadow-xs hover:shadow-md hover:border-[#355245]/40 transition group flex flex-col justify-between"
+            class="bg-white p-5 sm:p-6 rounded-2xl border border-slate-200/90 space-y-3 shadow-xs hover:shadow-md hover:border-[#355245]/40 transition group flex flex-col justify-between"
           >
             <div class="space-y-3">
               <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-[#E8EFEA] text-[#355245] flex items-center justify-center font-bold shadow-xs group-hover:scale-105 transition">
@@ -215,7 +215,7 @@
 
           <router-link
             to="/login"
-            class="bg-white p-4.5 sm:p-6 rounded-2xl border border-slate-200/90 space-y-3 shadow-xs hover:shadow-md hover:border-[#355245]/40 transition group flex flex-col justify-between"
+            class="bg-white p-5 sm:p-6 rounded-2xl border border-slate-200/90 space-y-3 shadow-xs hover:shadow-md hover:border-[#355245]/40 transition group flex flex-col justify-between"
           >
             <div class="space-y-3">
               <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-[#E8EFEA] text-[#355245] flex items-center justify-center font-bold shadow-xs group-hover:scale-105 transition">
@@ -244,27 +244,27 @@
 
         <div class="flex flex-wrap items-center justify-center gap-2.5 sm:gap-4 md:gap-5">
           <!-- JHIC 2026 -->
-          <div class="w-[calc(50%-0.4rem)] sm:w-36 md:w-44 h-13 sm:h-15 md:h-16 flex items-center justify-center px-3 sm:px-4 py-2 rounded-2xl bg-slate-50/90 border border-slate-200/90 shadow-2xs hover:bg-white hover:border-[#355245]/30 hover:shadow-xs transition">
+          <div class="w-[calc(50%-0.4rem)] sm:w-36 md:w-44 h-14 sm:h-16 flex items-center justify-center px-3 sm:px-4 py-2 rounded-2xl bg-slate-50/90 border border-slate-200/90 shadow-2xs hover:bg-white hover:border-[#355245]/30 hover:shadow-xs transition">
             <img src="/logos/jhic.png" alt="JHIC 2026" class="max-h-7 sm:max-h-8 max-w-[110px] sm:max-w-[120px] object-contain" />
           </div>
 
           <!-- Jagoan Hosting -->
-          <div class="w-[calc(50%-0.4rem)] sm:w-36 md:w-44 h-13 sm:h-15 md:h-16 flex items-center justify-center px-3 sm:px-4 py-2 rounded-2xl bg-slate-50/90 border border-slate-200/90 shadow-2xs hover:bg-white hover:border-[#355245]/30 hover:shadow-xs transition">
+          <div class="w-[calc(50%-0.4rem)] sm:w-36 md:w-44 h-14 sm:h-16 flex items-center justify-center px-3 sm:px-4 py-2 rounded-2xl bg-slate-50/90 border border-slate-200/90 shadow-2xs hover:bg-white hover:border-[#355245]/30 hover:shadow-xs transition">
             <img src="/logos/jagoan-hosting.png" alt="Jagoan Hosting" class="max-h-5 sm:max-h-6.5 max-w-[115px] sm:max-w-[125px] object-contain" />
           </div>
 
           <!-- Komdigi -->
-          <div class="w-[calc(50%-0.4rem)] sm:w-36 md:w-44 h-13 sm:h-15 md:h-16 flex items-center justify-center px-3 sm:px-4 py-2 rounded-2xl bg-slate-50/90 border border-slate-200/90 shadow-2xs hover:bg-white hover:border-[#355245]/30 hover:shadow-xs transition">
+          <div class="w-[calc(50%-0.4rem)] sm:w-36 md:w-44 h-14 sm:h-16 flex items-center justify-center px-3 sm:px-4 py-2 rounded-2xl bg-slate-50/90 border border-slate-200/90 shadow-2xs hover:bg-white hover:border-[#355245]/30 hover:shadow-xs transition">
             <img src="/logos/komdigi.png" alt="Komdigi" class="max-h-6.5 sm:max-h-7.5 max-w-[105px] sm:max-w-[115px] object-contain" />
           </div>
 
           <!-- Garuda Spark -->
-          <div class="w-[calc(50%-0.4rem)] sm:w-36 md:w-44 h-13 sm:h-15 md:h-16 flex items-center justify-center px-3 sm:px-4 py-2 rounded-2xl bg-slate-50/90 border border-slate-200/90 shadow-2xs hover:bg-white hover:border-[#355245]/30 hover:shadow-xs transition">
+          <div class="w-[calc(50%-0.4rem)] sm:w-36 md:w-44 h-14 sm:h-16 flex items-center justify-center px-3 sm:px-4 py-2 rounded-2xl bg-slate-50/90 border border-slate-200/90 shadow-2xs hover:bg-white hover:border-[#355245]/30 hover:shadow-xs transition">
             <img src="/logos/garuda-spark.png" alt="Garuda Spark" class="max-h-5 sm:max-h-6 max-w-[110px] sm:max-w-[120px] object-contain" />
           </div>
 
           <!-- Ngalup.co -->
-          <div class="w-[calc(50%-0.4rem)] sm:w-36 md:w-44 h-13 sm:h-15 md:h-16 flex items-center justify-center px-3 sm:px-4 py-2 rounded-2xl bg-slate-50/90 border border-slate-200/90 shadow-2xs hover:bg-white hover:border-[#355245]/30 hover:shadow-xs transition">
+          <div class="w-[calc(50%-0.4rem)] sm:w-36 md:w-44 h-14 sm:h-16 flex items-center justify-center px-3 sm:px-4 py-2 rounded-2xl bg-slate-50/90 border border-slate-200/90 shadow-2xs hover:bg-white hover:border-[#355245]/30 hover:shadow-xs transition">
             <img src="/logos/ngalup.png" alt="Ngalup.co" class="max-h-4.5 sm:max-h-5.5 max-w-[110px] sm:max-w-[120px] object-contain" />
           </div>
         </div>
