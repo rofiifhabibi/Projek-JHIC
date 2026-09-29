@@ -36,7 +36,7 @@
     </div>
 
     <!-- Stat Widgets Grid for BK -->
-    <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs flex items-center justify-between">
         <div>
           <p class="text-xs font-semibold text-slate-500">Total Izin Hari Ini</p>

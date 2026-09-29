@@ -1,26 +1,29 @@
 <template>
-  <div class="flex-1 relative flex flex-col items-center justify-center p-3 sm:p-6 max-w-md mx-auto w-full space-y-4">
+  <div class="flex-1 relative flex flex-col items-center justify-center p-3.5 sm:p-6 lg:p-8 max-w-md lg:max-w-5xl mx-auto w-full">
       
-      <!-- Camera Reader Container -->
-      <div class="w-full bg-slate-900 rounded-2xl border border-slate-800 p-4 sm:p-5 flex flex-col items-center shadow-sm space-y-4">
+    <div class="w-full grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6 items-start">
+      <!-- Left Column: Camera Reader & Manual Form -->
+      <div class="lg:col-span-7 bg-slate-900 rounded-2xl border border-slate-800 p-4 sm:p-5 flex flex-col items-center shadow-sm space-y-4">
         <!-- Top bar of scanner card -->
         <div class="flex items-center justify-between w-full border-b border-slate-800/80 pb-3">
           <div class="flex items-center gap-2">
-            <Camera class="w-4 h-4 text-slate-300 shrink-0" />
-            <span class="text-xs font-bold text-slate-200">Pemindai Kamera</span>
+            <span class="w-2.5 h-2.5 rounded-full" :class="isCameraActive ? 'bg-emerald-400 animate-pulse' : 'bg-slate-500'"></span>
+            <span class="text-xs font-bold text-slate-200">
+              {{ isCameraActive ? 'Kamera Pemindai Aktif' : 'Pemindai Kamera Gerbang' }}
+            </span>
           </div>
           <button
             @click="toggleCamera"
-            class="whitespace-nowrap text-xs font-bold px-3 py-1.5 rounded-xl border transition-all active:scale-95 flex items-center gap-1.5"
-            :class="isCameraActive ? 'border-rose-500/50 bg-rose-500/15 text-rose-300 hover:bg-rose-500/25' : 'border-emerald-500/50 bg-emerald-500/15 text-emerald-300 hover:bg-emerald-500/25'"
+            class="whitespace-nowrap text-xs font-extrabold px-3.5 py-1.5 rounded-xl border transition-all active:scale-95 flex items-center gap-1.5 shadow-sm"
+            :class="isCameraActive ? 'border-rose-500/50 bg-rose-600 text-white hover:bg-rose-500' : 'border-emerald-500/50 bg-emerald-600 text-white hover:bg-emerald-500'"
           >
-            <span class="w-1.5 h-1.5 rounded-full" :class="isCameraActive ? 'bg-rose-400' : 'bg-emerald-400'"></span>
+            <Camera class="w-3.5 h-3.5" />
             {{ isCameraActive ? 'Matikan Kamera' : 'Nyalakan Kamera' }}
           </button>
         </div>
 
         <!-- Video Reader Element with Viewfinder Styling -->
-        <div class="w-full min-h-[230px] bg-slate-950 rounded-2xl border border-slate-800 overflow-hidden relative flex items-center justify-center">
+        <div class="w-full min-h-[260px] sm:min-h-[300px] bg-slate-950 rounded-2xl border border-slate-800 overflow-hidden relative flex items-center justify-center">
           <div id="qr-reader" class="w-full" :class="{ 'hidden': !isCameraActive }"></div>
 
           <!-- Processing Overlay -->
@@ -40,118 +43,147 @@
             Kamera dijeda sejenak...
           </div>
 
-          <!-- Idle Placeholder Viewfinder -->
+          <!-- Camera Inactive Viewfinder with Big Obvious Action Button -->
           <div
             v-if="!isCameraActive"
-            class="absolute inset-0 flex flex-col items-center justify-center p-5 text-center space-y-2.5 pointer-events-none"
+            class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center space-y-3.5 bg-slate-950/95"
           >
-            <div class="w-12 h-12 rounded-2xl bg-slate-900/90 border border-slate-800 flex items-center justify-center mx-auto text-slate-300 shadow-sm">
-              <QrCode class="w-6 h-6" />
+            <div class="w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center shadow-md">
+              <Camera class="w-7 h-7" />
             </div>
-            <div>
-              <p class="text-xs font-bold text-slate-200">Arahkan QR ke Kamera</p>
-              <p class="text-xs text-slate-300 mt-1 max-w-[240px] mx-auto leading-relaxed">
-                Nyalakan kamera untuk memindai surat izin siswa, atau gunakan tombol simulasi di bawah.
+            <div class="space-y-1 max-w-xs">
+              <p class="text-xs font-bold uppercase tracking-wider text-amber-400">Kamera Sedang Nonaktif</p>
+              <h3 class="text-sm font-extrabold text-white">Klik Tombol di Bawah untuk Mulai</h3>
+              <p class="text-xs text-slate-400 leading-relaxed">
+                Tekan tombol hijau di bawah untuk membuka kamera dan memindai kode QR surat izin siswa.
               </p>
             </div>
+            <button
+              type="button"
+              @click="startCamera"
+              class="px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-extrabold text-xs sm:text-sm flex items-center gap-2.5 shadow-lg shadow-emerald-950/60 border border-emerald-400/40 transition-all cursor-pointer"
+            >
+              <Camera class="w-4 h-4 sm:w-5 sm:h-5" />
+              <span>KLIK UNTUK NYALAKAN KAMERA</span>
+            </button>
           </div>
         </div>
 
-        <!-- Quick Simulation Selector -->
-        <div class="w-full space-y-2 bg-slate-950/60 p-3.5 rounded-xl border border-slate-800/70">
-          <div class="flex items-center justify-between text-xs font-bold uppercase tracking-wider text-slate-300 px-0.5">
-            <span>Simulasi Cepat</span>
-            <span class="text-emerald-400 font-medium text-xs">Pilih Siswa</span>
-          </div>
-
-          <div class="grid grid-cols-1 gap-1.5">
-            <!-- Skenario 1: Siti (TEMP Normal) -->
-            <button
-              @click="scanToken('QR-ACTIVE-XII-RPL1-002')"
-              :disabled="isProcessing"
-              class="w-full bg-slate-900 hover:bg-slate-800/90 border border-slate-800 hover:border-emerald-500/50 p-2.5 rounded-xl transition-all text-left flex items-center justify-between gap-2 group active:scale-98 disabled:opacity-50 disabled:pointer-events-none"
-            >
-              <div class="flex items-center gap-2.5 min-w-0">
-                <div class="w-7 h-7 rounded-lg bg-emerald-500/15 text-emerald-400 flex items-center justify-center font-bold text-xs border border-emerald-500/20 shrink-0">
-                  SR
-                </div>
-                <div class="min-w-0">
-                  <div class="text-xs font-bold text-slate-200 group-hover:text-emerald-300 transition-colors truncate">
-                    Siti Rahmawati
-                  </div>
-                  <div class="text-xs text-slate-300 truncate">XII RPL 1 • Izin Sementara UKS</div>
-                </div>
-              </div>
-              <span class="shrink-0 text-xs font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                Keluar
-              </span>
-            </button>
-
-            <!-- Skenario 2: Andi (Overdue) -->
-            <button
-              @click="scanToken('QR-OVERDUE-XII-TKJ2-003')"
-              :disabled="isProcessing"
-              class="w-full bg-slate-900 hover:bg-slate-800/90 border border-slate-800 hover:border-rose-500/50 p-2.5 rounded-xl transition-all text-left flex items-center justify-between gap-2 group active:scale-98 disabled:opacity-50 disabled:pointer-events-none"
-            >
-              <div class="flex items-center gap-2.5 min-w-0">
-                <div class="w-7 h-7 rounded-lg bg-rose-500/15 text-rose-400 flex items-center justify-center font-bold text-xs border border-rose-500/20 shrink-0">
-                  AS
-                </div>
-                <div class="min-w-0">
-                  <div class="text-xs font-bold text-slate-200 group-hover:text-rose-300 transition-colors truncate">
-                    Andi Saputra
-                  </div>
-                  <div class="text-xs text-slate-300 truncate">XII TKJ 2 • Durasi Lewat Waktu</div>
-                </div>
-              </div>
-              <span class="shrink-0 text-xs font-bold px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30">
-                Terlambat
-              </span>
-            </button>
-
-            <!-- Skenario 3: Rizky (Exit School) -->
-            <button
-              @click="scanToken('QR-EXIT-X-AK3-005')"
-              :disabled="isProcessing"
-              class="w-full bg-slate-900 hover:bg-slate-800/90 border border-slate-800 hover:border-amber-500/50 p-2.5 rounded-xl transition-all text-left flex items-center justify-between gap-2 group active:scale-98 disabled:opacity-50 disabled:pointer-events-none"
-            >
-              <div class="flex items-center gap-2.5 min-w-0">
-                <div class="w-7 h-7 rounded-lg bg-amber-500/15 text-amber-400 flex items-center justify-center font-bold text-xs border border-amber-500/20 shrink-0">
-                  RP
-                </div>
-                <div class="min-w-0">
-                  <div class="text-xs font-bold text-slate-200 group-hover:text-amber-300 transition-colors truncate">
-                    Rizky Pratama
-                  </div>
-                  <div class="text-xs text-slate-300 truncate">X AK 3 • Izin Pulang Sekolah</div>
-                </div>
-              </div>
-              <span class="shrink-0 text-xs font-bold px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">
-                Pulang
-              </span>
-            </button>
-          </div>
+        <!-- Live Scanning Helper Hint -->
+        <div v-if="isCameraActive" class="w-full bg-emerald-950/40 border border-emerald-500/30 rounded-xl p-2.5 flex items-center gap-2 text-xs text-emerald-300">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping shrink-0"></span>
+          <span>Arahkan kamera ke layar HP siswa. Kode QR akan dipindai otomatis.</span>
         </div>
 
         <!-- Manual Token Form -->
-        <form @submit.prevent="scanToken(inputQrToken)" class="w-full space-y-1.5">
+        <form @submit.prevent="scanToken(inputQrToken)" class="w-full space-y-1.5 pt-1">
           <label class="block text-xs font-bold uppercase tracking-wider text-slate-300 px-0.5">
-            Input Kode Izin Manual
+            Input Kode Izin Manual (Alternatif)
           </label>
           <div class="flex items-center gap-2">
             <input
               v-model="inputQrToken"
               type="text"
-              placeholder="Masukkan kode surat izin..."
+              placeholder="Masukkan kode surat izin siswa..."
               :disabled="isProcessing"
-              class="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs outline-none focus:border-emerald-500 text-white font-mono placeholder:text-slate-500 transition min-h-[36px] disabled:opacity-50"
+              class="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs outline-none focus:border-emerald-500 text-white font-mono placeholder:text-slate-500 transition min-h-[38px] disabled:opacity-50"
             />
             <BaseButton type="submit" variant="primary" size="sm" :disabled="!inputQrToken || isProcessing" :loading="isProcessing">
               Periksa
             </BaseButton>
           </div>
+          <p class="text-[11px] text-slate-400 px-0.5">
+            Gunakan kolom ini bila kamera ponsel/komputer buram atau tidak dapat memindai layar siswa.
+          </p>
         </form>
       </div>
+
+      <!-- Right Column: Panduan Operasional Pos Satpam -->
+      <div class="lg:col-span-5 space-y-4">
+        <!-- Card 1: Langkah Penggunaan -->
+        <div class="bg-slate-900 p-4 sm:p-5 rounded-2xl border border-slate-800 shadow-sm space-y-3">
+          <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-emerald-400 pb-2 border-b border-slate-800/80">
+            <ShieldCheck class="w-4 h-4 text-emerald-400 shrink-0" />
+            <span>Petunjuk Penggunaan Petugas</span>
+          </div>
+
+          <div class="space-y-3 text-xs">
+            <div class="flex items-start gap-2.5">
+              <span class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-300 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">
+                1
+              </span>
+              <div>
+                <strong class="text-slate-200 block">Nyalakan Kamera</strong>
+                <p class="text-slate-400 mt-0.5 leading-relaxed">
+                  Tekan tombol hijau <strong class="text-emerald-300">"Nyalakan Kamera"</strong> di tengah kotak kamera atau di sudut kanan atas.
+                </p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-2.5">
+              <span class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-300 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">
+                2
+              </span>
+              <div>
+                <strong class="text-slate-200 block">Izinkan Akses Kamera</strong>
+                <p class="text-slate-400 mt-0.5 leading-relaxed">
+                  Jika layar memunculkan konfirmasi izin kamera browser, pilih <strong class="text-slate-200">"Izinkan" / "Allow"</strong>.
+                </p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-2.5">
+              <span class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-300 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">
+                3
+              </span>
+              <div>
+                <strong class="text-slate-200 block">Arahkan ke QR Siswa</strong>
+                <p class="text-slate-400 mt-0.5 leading-relaxed">
+                  Minta siswa membuka surat izin di aplikasi HP mereka, lalu hadapkan kode QR ke depan kamera.
+                </p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-2.5">
+              <span class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-300 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">
+                4
+              </span>
+              <div>
+                <strong class="text-slate-200 block">Lihat Hasil Pemeriksaan</strong>
+                <p class="text-slate-400 mt-0.5 leading-relaxed">
+                  Layar otomatis memunculkan data nama siswa, status izin, dan instruksi (Boleh Keluar / Boleh Masuk).
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2: Standar Hasil Pemeriksaan -->
+        <div class="bg-slate-900/80 p-4 rounded-2xl border border-slate-800 text-xs space-y-2.5">
+          <p class="font-bold text-slate-200 uppercase tracking-wider text-[11px] pb-1 border-b border-slate-800/80">
+            Arti Hasil Pemeriksaan:
+          </p>
+          <div class="space-y-2">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 shrink-0"></span>
+              <span class="text-slate-300"><strong class="text-emerald-300">Scan Keluar:</strong> Siswa diizinkan keluar sekolah.</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 shrink-0"></span>
+              <span class="text-slate-300"><strong class="text-emerald-300">Scan Masuk (Tepat Waktu):</strong> Siswa kembali, izin selesai.</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-amber-400 shrink-0"></span>
+              <span class="text-slate-300"><strong class="text-amber-300">Terlambat:</strong> Siswa melewati batas waktu (tercatat otomatis di BK).</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-rose-400 shrink-0"></span>
+              <span class="text-slate-300"><strong class="text-rose-300">Alpha / Ditolak:</strong> Surat izin tidak berlaku / dibatalkan guru.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- Scan Verification Dialog Modal -->
     <BaseModal
@@ -290,7 +322,7 @@ import { useToast } from '@/composables/useToast'
 import BaseModal from '@/components/ui/BaseModal.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
 import BaseBadge from '@/components/ui/BaseBadge.vue'
-import { Camera, QrCode, CheckCircle, XCircle, AlertTriangle, Clock } from 'lucide-vue-next'
+import { Camera, QrCode, CheckCircle, XCircle, AlertTriangle, Clock, ShieldCheck } from 'lucide-vue-next'
 
 const permitStore = usePermitStore()
 const toast = useToast()

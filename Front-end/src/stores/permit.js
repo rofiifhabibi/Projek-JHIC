@@ -4,6 +4,7 @@ import api from '@/api/axios'
 export const usePermitStore = defineStore('permit', {
   state: () => ({
     activePermit: null,
+    permitHistory: [],
     teachersList: [],
     currentSchedule: null,
     pendingApprovals: [],
@@ -98,13 +99,26 @@ export const usePermitStore = defineStore('permit', {
       this.error = null;
       try {
         const res = await api.delete(`/student/permits/${permitId}`);
-        await this.fetchActivePermit();
+        await Promise.all([
+          this.fetchActivePermit(),
+          this.fetchPermitHistory()
+        ]);
         return res.data;
       } catch (err) {
         this.error = err.response?.data?.message || 'Gagal membatalkan izin.';
         throw err;
       } finally {
         this.loading = false;
+      }
+    },
+    async fetchPermitHistory(page = 1) {
+      try {
+        const res = await api.get(`/student/permits/history?page=${page}`);
+        this.permitHistory = res.data.data?.data || res.data.data || [];
+        return res.data;
+      } catch (err) {
+        console.error('Failed to fetch permit history:', err);
+        this.permitHistory = [];
       }
     },
     async fetchPendingApprovals() {

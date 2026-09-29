@@ -16,9 +16,17 @@ class Report extends Model
         'student_id',
         'request_id',
         'category',    // 'BULLYING', 'FACILITY', 'ACADEMIC', 'PERSONAL', 'OTHERS'
+        'follow_up_preference', // 'WEB_MESSAGE', 'WHATSAPP', 'NEUTRAL_MEET', 'INFO_ONLY'
         'title',
         'description',
+        'counselor_response',
+        'responded_at',
+        'counselor_id',
         'status',      // 'OPEN', 'IN_PROGRESS', 'RESOLVED'
+    ];
+
+    protected $casts = [
+        'responded_at' => 'datetime',
     ];
 
     /**
@@ -27,6 +35,14 @@ class Report extends Model
     public function student()
     {
         return $this->belongsTo(User::class, 'student_id', 'user_id');
+    }
+
+    /**
+     * Relasi ke guru BK yang merespons
+     */
+    public function counselor()
+    {
+        return $this->belongsTo(User::class, 'counselor_id', 'user_id');
     }
 
     /**

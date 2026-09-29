@@ -10,7 +10,10 @@
       {{ title }}
     </h4>
 
-    <p class="text-xs sm:text-sm text-slate-500 max-w-sm mb-6 leading-relaxed">
+    <p
+      class="text-xs sm:text-sm text-slate-500 max-w-sm leading-relaxed"
+      :class="$slots.action ? 'mb-6' : 'mb-0'"
+    >
       {{ description }}
     </p>
 

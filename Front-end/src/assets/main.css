@@ -71,3 +71,30 @@ body {
 * {
   -webkit-tap-highlight-color: transparent;
 }
+
+/* Safe area support for mobile floating nav and fixed headers */
+:root {
+  --sat: env(safe-area-inset-top, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+  --sal: env(safe-area-inset-left, 0px);
+  --sar: env(safe-area-inset-right, 0px);
+}
+
+.pb-safe {
+  padding-bottom: max(1rem, var(--sab));
+}
+
+/* Standar Layout Containers */
+.container-narrow {
+  width: 100%;
+  max-width: 56rem; /* 896px */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.container-wide {
+  width: 100%;
+  max-width: 80rem; /* 1280px */
+  margin-left: auto;
+  margin-right: auto;
+}

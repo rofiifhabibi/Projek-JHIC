@@ -80,6 +80,43 @@
           ></textarea>
         </div>
 
+        <!-- Pilihan Cara Bimbingan yang Membuat Siswa Nyaman -->
+        <div class="space-y-3">
+          <label class="text-xs font-semibold uppercase tracking-wider text-slate-700">
+            4. Pilihan Cara Bimbingan yang Membuatmu Nyaman <span class="text-rose-500">*</span>
+          </label>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <RadioCard
+              v-model="form.follow_up_preference"
+              value="WEB_MESSAGE"
+              name="report-pref"
+              title="Pesan Tertulis di Web"
+              description="Ingin menerima saran atau tanggapan tertulis di sistem tanpa tatap muka langsung."
+            />
+            <RadioCard
+              v-model="form.follow_up_preference"
+              value="WHATSAPP"
+              name="report-pref"
+              title="Chat WhatsApp Pribadi"
+              description="Bicara lebih santai melalui pesan chat dengan kontak khusus Guru BK."
+            />
+            <RadioCard
+              v-model="form.follow_up_preference"
+              value="NEUTRAL_MEET"
+              name="report-pref"
+              title="Janji Temu di Tempat Netral"
+              description="Bertemu langsung di tempat yang tenang (misal: perpustakaan), bukan ruang BK umum."
+            />
+            <RadioCard
+              v-model="form.follow_up_preference"
+              value="INFO_ONLY"
+              name="report-pref"
+              title="Hanya Laporan Informasi"
+              description="Sekolah cukup mengetahui kejadian ini, kamu belum perlu dihubungi."
+            />
+          </div>
+        </div>
+
         <!-- Jaminan Kerahasiaan -->
         <div class="p-4 rounded-2xl bg-[#E8EFEA] border border-[#355245]/20 flex items-start gap-3.5">
           <div class="w-9 h-9 rounded-xl bg-[#355245] text-white flex items-center justify-center shrink-0 mt-0.5">
@@ -138,6 +175,7 @@ const toast = useToast()
 
 const form = ref({
   category: 'BULLYING',
+  follow_up_preference: 'WEB_MESSAGE',
   title: '',
   description: '',
   request_id: null

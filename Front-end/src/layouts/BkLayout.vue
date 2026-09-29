@@ -123,7 +123,7 @@
         </div>
       </div>
 
-      <div class="p-4 sm:p-6 lg:p-8 flex-1 max-w-[1600px] w-full mx-auto">
+      <div class="p-4 sm:p-6 lg:p-8 flex-1 max-w-7xl 2xl:max-w-[1440px] w-full mx-auto">
         <router-view v-slot="{ Component }">
           <transition name="page-fade" mode="out-in">
             <component :is="Component" />

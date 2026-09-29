@@ -44,7 +44,7 @@
         </div>
 
         <!-- Action Buttons -->
-        <div class="grid grid-cols-2 gap-2.5 pt-1">
+        <div class="grid grid-cols-1 min-[380px]:grid-cols-2 gap-2.5 pt-1">
           <BaseButton
             variant="primary"
             size="sm"
@@ -71,8 +71,8 @@
     <!-- Empty State -->
     <EmptyState
       v-else
-      title="Tidak Ada Pengajuan Izin"
-      description="Saat ini belum ada pengajuan izin siswa yang menunggu persetujuan."
+      title="Tidak Ada Pengajuan Menunggu"
+      description="Semua permohonan izin siswa pada jam pelajaran ini telah selesai ditinjau."
     />
 
     <!-- Approve Confirm Dialog -->

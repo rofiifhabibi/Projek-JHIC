@@ -131,7 +131,7 @@
           </p>
           <div class="inline-flex items-center gap-2 text-xs text-amber-700 bg-amber-50 px-3 py-1.5 rounded-full">
             <RefreshCw class="w-3.5 h-3.5 animate-spin" />
-            Memeriksa status otomatis...
+            Memeriksa persetujuan guru...
           </div>
           <div class="pt-3">
             <BaseButton

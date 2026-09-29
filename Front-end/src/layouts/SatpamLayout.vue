@@ -2,7 +2,7 @@
   <div class="min-h-screen bg-slate-950 text-white flex flex-col font-sans">
     <!-- Top Bar -->
     <header class="bg-slate-900 border-b border-slate-800 px-4 py-3 sticky top-0 z-30 shadow-xs">
-      <div class="max-w-md sm:max-w-4xl mx-auto flex items-center justify-between gap-3">
+      <div class="max-w-5xl lg:max-w-6xl mx-auto flex items-center justify-between gap-3">
         <div class="flex items-center gap-2.5 min-w-0">
           <AppLogo variant="satpam" size="md" theme="emerald" class="shrink-0" />
           <div class="min-w-0">

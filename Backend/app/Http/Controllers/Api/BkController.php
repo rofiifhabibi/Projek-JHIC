@@ -32,7 +32,8 @@ class BkController extends Controller
     {
         $reports = Report::with([
             'student:user_id,name,username,class_name,email',
-            'permit:request_id,type,status,reason,duration_minutes,alpha_at'
+            'permit:request_id,type,status,reason,duration_minutes,alpha_at',
+            'counselor:user_id,name,username,email'
         ])
             ->latest()
             ->get();
@@ -81,7 +82,61 @@ class BkController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Status laporan berhasil diperbarui.',
-            'data' => $report->load('permit'),
+            'data' => $report->load(['permit', 'counselor:user_id,name']),
+        ]);
+    }
+
+    // Guru BK mengirimkan pesan tanggapan / solusi ke siswa (Dua Arah)
+    public function respondToStudent(Request $request, int $id)
+    {
+        $request->validate([
+            'response_message' => ['required', 'string'],
+            'internal_notes' => ['nullable', 'string'],
+            'status' => ['nullable', 'in:OPEN,IN_PROGRESS,RESOLVED'],
+        ]);
+
+        $report = Report::findOrFail($id);
+
+        $updateData = [
+            'counselor_response' => $request->response_message,
+            'responded_at' => Carbon::now(),
+            'counselor_id' => $request->user()->user_id,
+        ];
+
+        if ($request->status) {
+            $updateData['status'] = $request->status;
+        } elseif ($report->status === 'OPEN') {
+            $updateData['status'] = 'IN_PROGRESS';
+        }
+
+        if ($request->filled('internal_notes')) {
+            $updateData['description'] = $report->description . "\n\n[Catatan Internal BK - " . Carbon::now()->format('d/m/Y H:i') . "]:\n" . $request->internal_notes;
+        }
+
+        $report->update($updateData);
+
+        // Jika status diubah menjadi RESOLVED, pulihkan izin jika terkait Alpha
+        if ($report->status === 'RESOLVED') {
+            if ($report->request_id) {
+                PermitRequest::where('request_id', $report->request_id)
+                    ->where('status', 'ALPHA')
+                    ->update(['status' => 'COMPLETED']);
+            } elseif ($report->student_id && ($report->category === 'OTHERS' || str_contains(strtolower($report->title), 'klarifikasi'))) {
+                $latestAlpha = PermitRequest::where('student_id', $report->student_id)
+                    ->where('status', 'ALPHA')
+                    ->latest()
+                    ->first();
+
+                if ($latestAlpha) {
+                    $latestAlpha->update(['status' => 'COMPLETED']);
+                }
+            }
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Pesan tanggapan bimbingan konseling berhasil dikirim ke siswa.',
+            'data' => $report->load(['permit', 'counselor:user_id,name']),
         ]);
     }
 

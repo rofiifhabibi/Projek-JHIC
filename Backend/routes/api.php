@@ -21,6 +21,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/teachers', [PermitController::class, 'getTeachers']);
         Route::post('/permits', [PermitController::class, 'store']);
         Route::get('/permits/active', [PermitController::class, 'myActivePermit']);
+        Route::get('/permits/history', [PermitController::class, 'myPermitHistory']);
         Route::delete('/permits/{id}', [PermitController::class, 'cancel']);
         Route::post('/reports', [ReportController::class, 'store']);
         Route::get('/reports/my', [ReportController::class, 'myReports']);
@@ -45,6 +46,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/metrics', [BkController::class, 'metrics']);
         Route::get('/kanban', [BkController::class, 'getKanbanReports']);
         Route::patch('/reports/{id}/status', [BkController::class, 'updateReportStatus']);
+        Route::post('/reports/{id}/respond', [BkController::class, 'respondToStudent']);
         Route::post('/reports/{id}/investigate', [BkController::class, 'addInvestigationNote']);
         Route::get('/global-monitor', [BkController::class, 'globalMobilityMonitor']);
     });

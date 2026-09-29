@@ -8,7 +8,7 @@
           v-model="searchQuery"
           type="text"
           :placeholder="searchPlaceholder"
-          class="w-full pl-9 pr-4 py-2 text-xs font-medium rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#355245] transition"
+          class="w-full pl-9 pr-4 py-2 text-xs font-medium rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#355245] transition min-h-[38px]"
         />
       </div>
 
@@ -35,7 +35,7 @@
         <tbody class="divide-y divide-slate-100">
           <tr v-if="filteredData.length === 0">
             <td :colspan="columns.length" class="px-4 py-8 text-center text-slate-400">
-              Tidak ada data yang cocok dengan kriteria pencarian.
+              Data tidak ditemukan. Coba periksa kembali kata kunci pencarian.
             </td>
           </tr>
           <tr

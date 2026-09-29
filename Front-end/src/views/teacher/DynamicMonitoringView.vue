@@ -116,7 +116,7 @@
             size="sm"
             @click="confirmAction(row, 'COMPLETED')"
           >
-            Siswa Kembali
+            Konfirmasi Kembali
           </BaseButton>
           <BaseButton
             v-if="row.status !== 'ALPHA' && row.status !== 'CLOSED'"

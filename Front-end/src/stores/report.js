@@ -89,6 +89,23 @@ export const useReportStore = defineStore('report', {
         this.loading = false;
       }
     },
+    async sendCounselorResponse(id, payload) {
+      this.loading = true;
+      this.error = null;
+      try {
+        const res = await api.post(`/bk/reports/${id}/respond`, payload);
+        await Promise.all([
+          this.fetchKanban(),
+          this.fetchBkMetrics()
+        ]);
+        return res.data;
+      } catch (err) {
+        this.error = err.response?.data?.message || 'Gagal mengirim tanggapan konseling.';
+        throw err;
+      } finally {
+        this.loading = false;
+      }
+    },
     async fetchGlobalMobility() {
       this.loading = true;
       this.error = null;

@@ -37,10 +37,44 @@
       </div>
     </div>
 
+    <!-- Mobile/Tablet Column Selector (below xl) -->
+    <div class="xl:hidden flex items-center bg-slate-200/70 p-1.5 rounded-2xl border border-slate-200 gap-1">
+      <button
+        @click="activeColumnTab = 'OPEN'"
+        class="flex-1 py-2 px-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5"
+        :class="activeColumnTab === 'OPEN' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'"
+      >
+        <span class="w-2 h-2 rounded-full bg-amber-500 shrink-0"></span>
+        <span class="truncate">Aduan Masuk</span>
+        <span class="ml-0.5 px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[10px] font-bold">{{ filteredOpen.length }}</span>
+      </button>
+      <button
+        @click="activeColumnTab = 'IN_PROGRESS'"
+        class="flex-1 py-2 px-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5"
+        :class="activeColumnTab === 'IN_PROGRESS' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'"
+      >
+        <span class="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></span>
+        <span class="truncate">Ditangani</span>
+        <span class="ml-0.5 px-1.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold">{{ filteredInProgress.length }}</span>
+      </button>
+      <button
+        @click="activeColumnTab = 'RESOLVED'"
+        class="flex-1 py-2 px-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5"
+        :class="activeColumnTab === 'RESOLVED' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'"
+      >
+        <span class="w-2 h-2 rounded-full bg-slate-500 shrink-0"></span>
+        <span class="truncate">Selesai</span>
+        <span class="ml-0.5 px-1.5 py-0.5 rounded-full bg-slate-200 text-slate-700 text-[10px] font-bold">{{ filteredResolved.length }}</span>
+      </button>
+    </div>
+
     <!-- Kanban Board Columns -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
       <!-- COLUMN 1: OPEN -->
-      <div class="bg-slate-100/70 p-4 rounded-3xl border border-slate-200/80 space-y-4 flex flex-col">
+      <div
+        class="bg-slate-100/70 p-4 rounded-3xl border border-slate-200/80 space-y-4 flex-col"
+        :class="activeColumnTab === 'OPEN' ? 'flex' : 'hidden xl:flex'"
+      >
         <div class="flex items-center justify-between px-2 shrink-0">
           <div class="flex items-center gap-2">
             <span class="w-3 h-3 rounded-full bg-amber-500"></span>
@@ -96,7 +130,17 @@
               </div>
             </div>
 
-            <div class="pt-2 border-t border-slate-100 flex items-center justify-end text-xs">
+            <!-- Jalur Bimbingan Pilihan Siswa -->
+            <div class="flex items-center justify-between text-xs text-slate-500 bg-slate-50 px-2.5 py-1.5 rounded-xl border border-slate-200/80">
+              <span class="text-slate-500">Jalur Dipilih:</span>
+              <span class="font-semibold text-slate-800">{{ formatPreference(rep.follow_up_preference) }}</span>
+            </div>
+
+            <div class="pt-2 border-t border-slate-100 flex items-center justify-between gap-2 text-xs">
+              <BaseButton variant="outline" size="sm" @click="openResponseModal(rep)">
+                <template #icon-left><MessageSquare class="w-3.5 h-3.5" /></template>
+                <span>Tanggapi</span>
+              </BaseButton>
               <BaseButton variant="secondary" size="sm" @click="moveStatus(rep.report_id, 'IN_PROGRESS')">
                 <span>Tindak Lanjuti</span>
                 <template #icon-right><ArrowRight class="w-3.5 h-3.5" /></template>
@@ -106,14 +150,17 @@
 
           <EmptyState
             v-if="!filteredOpen || filteredOpen.length === 0"
-            title="Kosong"
-            description="Tidak ada aduan di kolom ini yang sesuai filter."
+            title="Belum Ada Laporan"
+            description="Tidak ada laporan siswa pada kolom ini yang sesuai filter."
           />
         </div>
       </div>
 
       <!-- COLUMN 2: IN_PROGRESS -->
-      <div class="bg-slate-100/70 p-4 rounded-3xl border border-slate-200/80 space-y-4 flex flex-col">
+      <div
+        class="bg-slate-100/70 p-4 rounded-3xl border border-slate-200/80 space-y-4 flex-col"
+        :class="activeColumnTab === 'IN_PROGRESS' ? 'flex' : 'hidden xl:flex'"
+      >
         <div class="flex items-center justify-between px-2 shrink-0">
           <div class="flex items-center gap-2">
             <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
@@ -169,10 +216,29 @@
               </div>
             </div>
 
+            <!-- Jalur Bimbingan Pilihan Siswa -->
+            <div class="flex items-center justify-between text-xs text-slate-500 bg-slate-50 px-2.5 py-1.5 rounded-xl border border-slate-200/80">
+              <span class="text-slate-500">Jalur Dipilih:</span>
+              <span class="font-semibold text-slate-800">{{ formatPreference(rep.follow_up_preference) }}</span>
+            </div>
+
+            <!-- Preview Tanggapan Siswa jika sudah ada -->
+            <div v-if="rep.counselor_response" class="bg-emerald-50/80 border border-emerald-200 rounded-xl p-2.5 text-xs space-y-1">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-emerald-800 flex items-center gap-1 text-[11px]">
+                  <MessageSquare class="w-3 h-3 text-emerald-600" /> Tanggapan Terkirim:
+                </span>
+                <span v-if="rep.counselor?.name" class="text-[10px] text-emerald-700 font-medium truncate max-w-[120px]">
+                  {{ rep.counselor.name }}
+                </span>
+              </div>
+              <p class="text-emerald-950 line-clamp-2">{{ rep.counselor_response }}</p>
+            </div>
+
             <div class="pt-2 border-t border-slate-100 flex flex-col gap-2">
-              <BaseButton variant="outline" size="sm" block @click="openNoteModal(rep)">
-                <template #icon-left><FileText class="w-3.5 h-3.5" /></template>
-                Catatan Konseling
+              <BaseButton variant="outline" size="sm" block @click="openResponseModal(rep)">
+                <template #icon-left><MessageSquare class="w-3.5 h-3.5" /></template>
+                {{ rep.counselor_response ? 'Ubah Tanggapan & Catatan' : 'Tanggapi Siswa' }}
               </BaseButton>
               <BaseButton variant="primary" size="sm" block :loading="reportStore.loading" @click="requestResolve(rep)">
                 <template #icon-left><CheckCircle class="w-3.5 h-3.5" :stroke-width="2.25" /></template>
@@ -183,14 +249,17 @@
 
           <EmptyState
             v-if="!filteredInProgress || filteredInProgress.length === 0"
-            title="Kosong"
-            description="Tidak ada kasus yang sesuai filter di kolom ini."
+            title="Belum Ada Kasus Ditangani"
+            description="Tidak ada kasus yang sedang ditangani pada filter ini."
           />
         </div>
       </div>
 
       <!-- COLUMN 3: RESOLVED -->
-      <div class="bg-slate-100/70 p-4 rounded-3xl border border-slate-200/80 space-y-4 flex flex-col">
+      <div
+        class="bg-slate-100/70 p-4 rounded-3xl border border-slate-200/80 space-y-4 flex-col"
+        :class="activeColumnTab === 'RESOLVED' ? 'flex' : 'hidden xl:flex'"
+      >
         <div class="flex items-center justify-between px-2 shrink-0">
           <div class="flex items-center gap-2">
             <span class="w-3 h-3 rounded-full bg-slate-500"></span>
@@ -244,31 +313,49 @@
               </div>
             </div>
 
-            <div class="pt-2 border-t border-slate-100 flex justify-end">
+            <!-- Jalur Bimbingan Pilihan Siswa -->
+            <div class="flex items-center justify-between text-xs text-slate-500 bg-slate-50 px-2.5 py-1.5 rounded-xl border border-slate-200/80">
+              <span class="text-slate-500">Jalur Dipilih:</span>
+              <span class="font-semibold text-slate-800">{{ formatPreference(rep.follow_up_preference) }}</span>
+            </div>
+
+            <!-- Preview Tanggapan Siswa jika sudah ada -->
+            <div v-if="rep.counselor_response" class="bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs space-y-1">
+              <span class="font-bold text-slate-700 flex items-center gap-1 text-[11px]">
+                <MessageSquare class="w-3 h-3 text-emerald-600" /> Tanggapan Diberikan:
+              </span>
+              <p class="text-slate-600 line-clamp-2">{{ rep.counselor_response }}</p>
+            </div>
+
+            <div class="pt-2 border-t border-slate-100 flex items-center justify-between gap-2">
+              <BaseButton variant="outline" size="sm" @click="openResponseModal(rep)">
+                <template #icon-left><MessageSquare class="w-3.5 h-3.5" /></template>
+                Lihat Tanggapan
+              </BaseButton>
               <BaseButton variant="ghost" size="sm" @click="moveStatus(rep.report_id, 'IN_PROGRESS')">
-                Tangani Kembali
+                Buka Kembali Kasus
               </BaseButton>
             </div>
           </div>
 
           <EmptyState
             v-if="!filteredResolved || filteredResolved.length === 0"
-            title="Kosong"
+            title="Belum Ada Kasus Selesai"
             description="Tidak ada kasus selesai yang sesuai filter."
           />
         </div>
       </div>
     </div>
 
-    <!-- Catatan Konseling Modal -->
+    <!-- Modal Tindak Lanjut & Tanggapan Siswa (Dua Arah) -->
     <BaseModal
-      :show="showNoteModal"
-      title="Tambah Catatan Konseling"
-      max-width="md"
-      @close="showNoteModal = false"
+      :show="showResponseModal"
+      title="Tindak Lanjut & Tanggapan Siswa"
+      max-width="lg"
+      @close="showResponseModal = false"
     >
       <div class="space-y-4">
-        <!-- Rincian Identitas Siswa Lengkap -->
+        <!-- Rincian Identitas Siswa -->
         <div v-if="selectedReport?.student" class="p-3.5 bg-slate-50 rounded-2xl border border-slate-200 text-xs space-y-1.5">
           <div class="font-bold text-slate-900 flex items-center justify-between">
             <span class="flex items-center gap-1.5 text-sm">
@@ -285,27 +372,72 @@
           </div>
         </div>
 
-        <div class="bg-amber-50 p-3 rounded-xl border border-amber-200 text-xs">
-          <p class="text-amber-800">
-            Aduan / Masalah: <strong class="text-amber-950">{{ selectedReport?.title }}</strong>
+        <!-- Rincian Aduan & Pilihan Siswa -->
+        <div class="p-3.5 rounded-xl bg-amber-50 border border-amber-200/90 text-xs space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-amber-950">Aduan: {{ selectedReport?.title }}</span>
+            <span class="font-bold text-amber-900 bg-amber-100/90 px-2 py-0.5 rounded text-[11px]">
+              {{ formatCategory(selectedReport?.category) }}
+            </span>
+          </div>
+          <p class="text-amber-950 leading-relaxed whitespace-pre-line">{{ selectedReport?.description }}</p>
+          <div class="pt-1.5 border-t border-amber-200 text-amber-900 flex items-center gap-1.5 font-medium">
+            <span>Jalur Bimbingan Pilihan Siswa:</span>
+            <strong class="underline font-bold">{{ formatPreference(selectedReport?.follow_up_preference) }}</strong>
+          </div>
+        </div>
+
+        <!-- Pesan Tanggapan untuk Siswa (Dua Arah) -->
+        <div class="space-y-1.5">
+          <div class="flex items-center justify-between">
+            <label class="text-xs font-semibold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
+              <MessageSquare class="w-3.5 h-3.5 text-teal-700" />
+              Pesan Tanggapan untuk Siswa <span class="text-rose-500">*</span>
+            </label>
+            <span class="text-[11px] text-teal-700 font-medium">Terbaca langsung di HP Siswa</span>
+          </div>
+          <textarea
+            v-model="responseInput"
+            rows="3"
+            placeholder="Tulis pesan empati, saran, atau konfirmasi waktu/lokasi pertemuan yang aman..."
+            class="w-full rounded-xl border border-slate-200 p-3 text-xs focus:border-[#355245] focus:outline-none transition leading-relaxed"
+          ></textarea>
+          <p class="text-[11px] text-slate-500 leading-tight">
+            Pesan tanggapan ini akan langsung tampil di menu Konseling pada akun siswa yang bersangkutan.
           </p>
         </div>
 
+        <!-- Catatan Investigasi Internal BK (Opsional) -->
         <div class="space-y-1.5">
-          <label class="text-xs font-semibold uppercase tracking-wider text-slate-700">Catatan Konseling / Tindak Lanjut</label>
+          <label class="text-xs font-semibold uppercase tracking-wider text-slate-700">
+            Catatan Investigasi Internal BK (Opsional)
+          </label>
           <textarea
-            v-model="noteInput"
-            rows="4"
-            placeholder="Tulis catatan konseling, pembinaan, atau kesepakatan tindak lanjut..."
-            class="w-full rounded-xl border border-slate-200 p-3 text-xs focus:border-[#355245] focus:outline-none"
+            v-model="internalNoteInput"
+            rows="2"
+            placeholder="Catatan tertutup untuk arsip tim BK (tidak dikirim ke siswa)..."
+            class="w-full rounded-xl border border-slate-200 p-3 text-xs focus:border-[#355245] focus:outline-none bg-slate-50/50"
           ></textarea>
+        </div>
+
+        <!-- Status Kasus -->
+        <div class="flex items-center gap-3 pt-1">
+          <label class="text-xs font-semibold text-slate-700">Update Status:</label>
+          <select
+            v-model="statusAfterResponse"
+            class="text-xs rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 font-medium text-slate-800 focus:border-[#355245] focus:outline-none"
+          >
+            <option value="IN_PROGRESS">Sedang Ditangani (In Progress)</option>
+            <option value="RESOLVED">Selesai Ditangani (Resolved)</option>
+            <option value="OPEN">Tetap Di Aduan Masuk (Open)</option>
+          </select>
         </div>
       </div>
 
       <template #footer>
-        <BaseButton variant="outline" size="sm" @click="showNoteModal = false">Batal</BaseButton>
-        <BaseButton variant="primary" size="sm" :loading="reportStore.loading" @click="saveNote">
-          Simpan Catatan
+        <BaseButton variant="outline" size="sm" @click="showResponseModal = false">Batal</BaseButton>
+        <BaseButton variant="primary" size="sm" :loading="reportStore.loading" @click="submitResponse">
+          Kirim Tanggapan ke Siswa
         </BaseButton>
       </template>
     </BaseModal>
@@ -332,20 +464,23 @@ import BaseBadge from '@/components/ui/BaseBadge.vue'
 import BaseModal from '@/components/ui/BaseModal.vue'
 import ConfirmDialog from '@/components/ui/ConfirmDialog.vue'
 import EmptyState from '@/components/ui/EmptyState.vue'
-import { RefreshCw, User, ArrowRight, FileText, CheckCircle, Search, AlertOctagon } from 'lucide-vue-next'
+import { RefreshCw, User, ArrowRight, CheckCircle, Search, AlertOctagon, MessageSquare } from 'lucide-vue-next'
 
 const reportStore = useReportStore()
 const toast = useToast()
 
-const showNoteModal = ref(false)
+const showResponseModal = ref(false)
 const selectedReport = ref(null)
-const noteInput = ref('')
+const responseInput = ref('')
+const internalNoteInput = ref('')
+const statusAfterResponse = ref('IN_PROGRESS')
 
 const showResolveConfirm = ref(false)
 const reportToResolve = ref(null)
 
 const searchQuery = ref('')
 const selectedCategory = ref('ALL')
+const activeColumnTab = ref('OPEN')
 
 const categoryFilters = [
   { label: 'Semua Kategori', value: 'ALL' },
@@ -362,6 +497,16 @@ const formatCategory = (cat) => {
     case 'PERSONAL': return 'Konseling Pribadi'
     case 'OTHERS': return 'Klarifikasi & Lainnya'
     default: return cat
+  }
+}
+
+const formatPreference = (pref) => {
+  switch (pref) {
+    case 'WEB_MESSAGE': return 'Pesan Tertulis di Web'
+    case 'WHATSAPP': return 'Chat WhatsApp Pribadi'
+    case 'NEUTRAL_MEET': return 'Janji Temu di Tempat Netral'
+    case 'INFO_ONLY': return 'Hanya Laporan Informasi'
+    default: return 'Pesan Tertulis di Web'
   }
 }
 
@@ -430,23 +575,31 @@ const handleConfirmResolve = async () => {
   cancelResolve()
 }
 
-const openNoteModal = (rep) => {
+const openResponseModal = (rep) => {
   selectedReport.value = rep
-  noteInput.value = ''
-  showNoteModal.value = true
+  responseInput.value = rep.counselor_response || ''
+  internalNoteInput.value = ''
+  statusAfterResponse.value = rep.status === 'RESOLVED' ? 'RESOLVED' : 'IN_PROGRESS'
+  showResponseModal.value = true
 }
 
-const saveNote = async () => {
-  if (!selectedReport.value || !noteInput.value.trim()) {
-    toast.warning('Isi catatan terlebih dahulu!')
+const submitResponse = async () => {
+  if (!selectedReport.value) return
+  if (!responseInput.value.trim()) {
+    toast.warning('Pesan tanggapan untuk siswa wajib diisi!')
     return
   }
+
   try {
-    await reportStore.addInvestigationNote(selectedReport.value.report_id, noteInput.value)
-    toast.success('Catatan konseling berhasil disimpan!')
-    showNoteModal.value = false
+    await reportStore.sendCounselorResponse(selectedReport.value.report_id, {
+      response_message: responseInput.value,
+      internal_notes: internalNoteInput.value,
+      status: statusAfterResponse.value
+    })
+    toast.success('Tanggapan bimbingan konseling berhasil dikirim ke siswa!')
+    showResponseModal.value = false
   } catch (err) {
-    toast.error('Gagal menyimpan catatan.')
+    toast.error('Gagal mengirim tanggapan ke siswa.')
   }
 }
 </script>

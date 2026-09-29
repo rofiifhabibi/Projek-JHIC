@@ -10,7 +10,7 @@
     >
       <div
         v-if="show"
-        class="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6"
+        class="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-6"
         @click.self="handleBackdropClick"
         @keydown.escape="handleEscape"
         tabindex="-1"
@@ -26,7 +26,7 @@
         >
           <div
             v-if="show"
-            class="w-full bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden flex flex-col max-h-[90vh]"
+            class="w-full bg-white rounded-2xl sm:rounded-3xl shadow-xl border border-slate-200 overflow-hidden flex flex-col max-h-[88dvh] my-auto"
             :class="maxWidthClass"
             role="dialog"
             aria-modal="true"

@@ -1,75 +1,75 @@
 <template>
-  <div class="min-h-screen bg-[#F4F7F4] flex items-center justify-center p-4 sm:p-6 lg:p-8 font-sans">
-    <div class="w-full max-w-5xl bg-white rounded-3xl shadow-md border border-slate-200 overflow-hidden grid grid-cols-1 lg:grid-cols-12 min-h-[600px]">
+  <div class="min-h-screen bg-[#F4F7F4] flex items-center justify-center p-3.5 sm:p-6 lg:p-8 font-sans">
+    <div class="w-full max-w-5xl bg-white rounded-2xl sm:rounded-3xl shadow-md border border-slate-200 overflow-hidden grid grid-cols-1 md:grid-cols-12 min-h-[580px]">
       
-      <!-- Left Column: Branding Showcase (Desktop) -->
-      <div class="lg:col-span-5 bg-gradient-to-br from-[#355245] via-[#273e34] to-[#1c2e26] text-white p-8 lg:p-12 flex flex-col justify-between relative overflow-hidden">
+      <!-- Left Column: Branding Showcase (Tablet & Desktop) -->
+      <div class="hidden md:flex md:col-span-5 bg-gradient-to-br from-[#355245] via-[#273e34] to-[#1c2e26] text-white p-6 md:p-8 lg:p-12 flex-col justify-between relative overflow-hidden">
         <div class="relative z-10 space-y-4">
-          <router-link to="/" class="inline-flex items-center gap-2.5 text-white/80 hover:text-white transition text-xs font-semibold uppercase tracking-wider">
+          <router-link to="/" class="inline-flex items-center gap-2 text-white/80 hover:text-white transition text-xs font-semibold uppercase tracking-wider">
             <ArrowLeft class="w-4 h-4" />
             Kembali ke Beranda
           </router-link>
 
-          <div class="pt-6 space-y-2">
-            <img src="/logos/studentcare-logo-white.png" alt="StudentCare SMKN 2 Depok Sleman" class="h-12 lg:h-14 object-contain" />
-            <p class="text-xs font-semibold text-emerald-300 uppercase tracking-widest">
-              Sistem Perizinan & Konseling Digital
+          <div class="pt-4 lg:pt-6 space-y-2">
+            <img src="/logos/studentcare-logo-white.png" alt="StudentCare SMKN 2 Depok Sleman" class="h-10 md:h-12 lg:h-14 object-contain" />
+            <p class="text-[11px] lg:text-xs font-semibold text-emerald-300 uppercase tracking-widest">
+              Sistem Perizinan & Konseling Siswa
             </p>
           </div>
         </div>
 
-        <div class="relative z-10 space-y-4 my-8">
+        <div class="relative z-10 space-y-3.5 my-6 lg:my-8">
           <p class="text-xs text-slate-300 leading-relaxed">
-            Platform terpadu layanan perizinan siswa, pemantauan kelas, serta bimbingan dan konseling di lingkungan SMK N 2 Depok Sleman.
+            Layanan izin keluar-masuk sekolah dan bimbingan konseling untuk warga SMKN 2 Depok Sleman.
           </p>
-          <div class="p-4 rounded-2xl bg-[#1c2e26]/60 border border-emerald-500/20 text-xs space-y-1.5">
-            <div class="flex items-center gap-2 font-semibold text-emerald-200">
-              <ShieldCheck class="w-4 h-4" />
-              Aman & Terintegrasi
+          <div class="p-3.5 lg:p-4 rounded-2xl bg-[#1c2e26]/60 border border-emerald-500/20 text-xs space-y-1">
+            <div class="flex items-center gap-2 font-semibold text-emerald-200 text-xs">
+              <ShieldCheck class="w-4 h-4 shrink-0" />
+              Terhubung ke Guru & BK
             </div>
             <p class="text-xs text-slate-300/90 leading-relaxed">
-              Setiap aktivitas izin dan konseling terhubung langsung serta dipantau oleh bapak/ibu guru dan pihak sekolah.
+              Setiap aktivitas izin dan konseling terhubung langsung dengan guru pengajar dan guru BK.
             </p>
           </div>
         </div>
 
         <div class="relative z-10 text-xs text-emerald-200/60 font-medium">
-          &copy; 2026 STEMBAYO • Projek JHIC
+          &copy; 2026 StudentCare • SMKN 2 Depok Sleman
         </div>
       </div>
 
       <!-- Right Column: Login Form -->
-      <div class="lg:col-span-7 p-8 lg:p-12 flex flex-col justify-center bg-white space-y-6">
+      <div class="md:col-span-7 p-5 sm:p-8 lg:p-12 flex flex-col justify-center bg-white space-y-5 sm:space-y-6">
         <div>
           <!-- Mobile Branding Logo -->
-          <div class="lg:hidden mb-4">
-            <img src="/logos/studentcare-logo.png" alt="StudentCare" class="h-9 object-contain" />
+          <div class="md:hidden mb-3">
+            <img src="/logos/studentcare-logo.png" alt="StudentCare" class="h-8 sm:h-9 object-contain" />
           </div>
-          <h2 class="text-2xl font-black text-slate-900 tracking-tight">Masuk ke Akun Anda</h2>
-          <p class="text-xs text-slate-600 font-medium mt-1">Masukkan NIS, NIP, atau username beserta kata sandi Anda.</p>
+          <h2 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">Masuk ke Akun Anda</h2>
+          <p class="text-xs text-slate-600 font-medium mt-0.5">Masukkan NIS, NIP, atau username beserta kata sandi Anda.</p>
         </div>
 
         <!-- Preset Selector for Development Testing -->
         <div v-if="isDevMode" class="space-y-2">
           <div class="flex items-center justify-between text-xs font-bold uppercase tracking-wider text-slate-600">
             <span>Akun Uji Coba Cepat</span>
-            <span class="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded font-mono text-xs">Sandi: password</span>
+            <span class="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded font-mono text-[11px]">Sandi: password</span>
           </div>
 
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-2.5">
             <button
               v-for="role in presets"
               :key="role.id"
               type="button"
               @click="quickLogin(role)"
               :disabled="authStore.loading"
-              class="flex flex-col items-center justify-center p-3 rounded-2xl border border-slate-200 hover:border-[#355245] bg-slate-50/70 hover:bg-[#E8EFEA]/60 transition-all text-center group active:scale-95 disabled:opacity-50 shadow-xs"
+              class="flex flex-col items-center justify-center p-2.5 sm:p-3 rounded-2xl border border-slate-200 hover:border-[#355245] bg-slate-50/70 hover:bg-[#E8EFEA]/60 transition-all text-center group active:scale-95 disabled:opacity-50 shadow-xs"
             >
-              <div class="w-8 h-8 rounded-xl bg-white border border-slate-200 flex items-center justify-center mb-1.5 text-[#355245] group-hover:bg-[#355245] group-hover:text-white transition-all shadow-xs">
-                <component :is="role.icon" class="w-4 h-4" />
+              <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-white border border-slate-200 flex items-center justify-center mb-1 text-[#355245] group-hover:bg-[#355245] group-hover:text-white transition-all shadow-xs">
+                <component :is="role.icon" class="w-3.5 h-3.5 sm:w-4 sm:h-4" />
               </div>
               <span class="text-xs font-bold text-slate-800 group-hover:text-[#355245]">{{ role.label }}</span>
-              <span class="text-xs text-slate-600 font-mono mt-0.5">{{ role.username }}</span>
+              <span class="text-[11px] text-slate-500 font-mono mt-0.5">{{ role.username }}</span>
             </button>
           </div>
         </div>

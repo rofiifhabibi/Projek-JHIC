@@ -167,6 +167,24 @@ class PermitController extends Controller
         ]);
     }
 
+    /**
+     * 3b. Siswa melihat seluruh riwayat perizinan miliknya (lampau / selesai)
+     */
+    public function myPermitHistory(Request $request)
+    {
+        PermitRequest::syncOverdueStatuses();
+
+        $history = PermitRequest::with(['teacher:user_id,name,username'])
+            ->where('student_id', $request->user()->user_id)
+            ->latest()
+            ->paginate(15);
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $history,
+        ]);
+    }
+
     // ==========================================
     // AREA GURU (TEACHER)
     // ==========================================
@@ -229,10 +247,20 @@ class PermitController extends Controller
             'action' => ['required', 'in:COMPLETED,ALPHA,REJECTED'],
         ]);
 
-        $permit = PermitRequest::findOrFail($id);
+        $permit = PermitRequest::with('student')->findOrFail($id);
 
-        // Check authorization
-        if ($permit->initial_teacher_id !== $request->user()->user_id) {
+        $teacherId = $request->user()->user_id;
+        $isInitialTeacher = $permit->initial_teacher_id === $teacherId;
+        $isClassTeacher = false;
+
+        if ($permit->student?->class_name) {
+            $isClassTeacher = Schedule::where('teacher_id', $teacherId)
+                ->where('class_name', $permit->student->class_name)
+                ->exists();
+        }
+
+        // Check authorization: Guru yang dituju (initial_teacher) ATAU guru pengajar rombel kelas siswa
+        if (!$isInitialTeacher && !$isClassTeacher) {
             return response()->json([
                 'status' => 'forbidden',
                 'message' => 'Anda tidak memiliki wewenang untuk mengubah status izin ini.',

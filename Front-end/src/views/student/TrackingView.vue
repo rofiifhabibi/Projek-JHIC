@@ -3,18 +3,19 @@
     <!-- Header Page -->
     <div class="flex items-start justify-between gap-3">
       <div>
-        <h2 class="text-lg sm:text-xl font-extrabold text-slate-900 tracking-tight leading-tight">
+        <h2 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight leading-tight">
           Status & Riwayat Perizinan
         </h2>
         <p class="text-xs text-slate-500 mt-1">Pantau status izin dan tindak lanjut konseling BK kamu di sini.</p>
       </div>
-      <button
+      <BaseButton
+        variant="outline"
+        size="sm"
         @click="refreshData"
-        class="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-600 text-xs font-semibold shadow-xs active:scale-95 transition"
       >
-        <RefreshCw class="w-3.5 h-3.5" :class="{ 'animate-spin': isRefreshing }" />
+        <template #icon-left><RefreshCw class="w-3.5 h-3.5" :class="{ 'animate-spin': isRefreshing }" /></template>
         <span>Segarkan</span>
-      </button>
+      </BaseButton>
     </div>
 
     <!-- Active Permit Card -->
@@ -188,30 +189,111 @@
         <span class="text-xs text-slate-500 font-semibold">{{ reportStore.myReports?.length || 0 }} Laporan</span>
       </div>
 
-      <div v-if="reportStore.myReports && reportStore.myReports.length > 0" class="space-y-2.5">
+      <div v-if="reportStore.myReports && reportStore.myReports.length > 0" class="space-y-3">
         <div
           v-for="rep in reportStore.myReports"
           :key="rep.report_id"
-          class="p-3.5 rounded-xl bg-slate-50 border border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5"
+          class="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-3 shadow-xs"
         >
-          <div class="space-y-1 min-w-0">
-            <div class="flex items-center gap-2 flex-wrap">
-              <span class="px-2 py-0.5 rounded text-xs font-bold bg-teal-50 text-teal-800 border border-teal-200/60 uppercase">
-                {{ rep.category }}
-              </span>
-              <h4 class="font-bold text-xs text-slate-900 truncate">{{ rep.title }}</h4>
+          <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-2.5">
+            <div class="space-y-1 min-w-0 flex-1">
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="px-2 py-0.5 rounded text-xs font-bold bg-teal-50 text-teal-800 border border-teal-200/60 uppercase">
+                  {{ formatCategory(rep.category) }}
+                </span>
+                <span class="text-xs font-mono text-slate-400">#REP-{{ rep.report_id }}</span>
+                <h4 class="font-bold text-xs sm:text-sm text-slate-900 leading-snug">{{ rep.title }}</h4>
+              </div>
+              <p class="text-xs text-slate-600 leading-relaxed whitespace-pre-line">{{ rep.description }}</p>
             </div>
-            <p class="text-xs text-slate-500 line-clamp-2">{{ rep.description }}</p>
+
+            <BaseBadge :status="rep.status" class="self-start sm:self-center shrink-0" />
           </div>
 
-          <BaseBadge :status="rep.status" class="self-start sm:self-center shrink-0" />
+          <!-- Jalur Bimbingan Pilihan Siswa -->
+          <div class="flex items-center gap-1.5 text-xs text-slate-500 pt-2 border-t border-slate-200/70">
+            <span>Pilihan Jalur:</span>
+            <span class="font-semibold text-slate-800">{{ formatPreference(rep.follow_up_preference) }}</span>
+          </div>
+
+          <!-- Kotak Tanggapan Empati dari Guru BK -->
+          <div v-if="rep.counselor_response" class="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs space-y-1.5">
+            <div class="flex items-center justify-between gap-2">
+              <span class="font-bold text-emerald-900 flex items-center gap-1.5">
+                <MessageSquare class="w-3.5 h-3.5 text-emerald-700 shrink-0" />
+                Tanggapan dari Guru BK:
+              </span>
+              <span v-if="rep.counselor?.name" class="text-[11px] font-medium text-emerald-800">
+                {{ rep.counselor.name }}
+              </span>
+            </div>
+            <p class="text-emerald-950 whitespace-pre-line leading-relaxed">{{ rep.counselor_response }}</p>
+          </div>
         </div>
       </div>
 
       <EmptyState
         v-else
         title="Belum Ada Aduan BK"
-        description="Anda belum pernah mengirimkan laporan konseling ke Guru BK."
+        description="Kamu belum pernah mengirimkan laporan konseling ke Guru BK."
+      />
+    </div>
+
+    <!-- Riwayat Seluruh Surat Izin Siswa -->
+    <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 shadow-sm space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 class="text-xs font-bold text-slate-900 flex items-center gap-2">
+          <History class="w-4 h-4 text-emerald-700" />
+          Riwayat Perizinan Siswa
+        </h3>
+        <span class="text-xs text-slate-500 font-semibold">{{ permitStore.permitHistory?.length || 0 }} Riwayat</span>
+      </div>
+
+      <div v-if="permitStore.permitHistory && permitStore.permitHistory.length > 0" class="space-y-3">
+        <div
+          v-for="permit in permitStore.permitHistory"
+          :key="permit.request_id"
+          class="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2.5 shadow-xs"
+        >
+          <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-2">
+            <div class="space-y-1 min-w-0 flex-1">
+              <div class="flex items-center gap-2 flex-wrap">
+                <span
+                  class="px-2 py-0.5 rounded text-xs font-bold uppercase"
+                  :class="permit.type === 'EXIT_SCHOOL' ? 'bg-amber-50 text-amber-800 border border-amber-200/60' : 'bg-emerald-50 text-emerald-800 border border-emerald-200/60'"
+                >
+                  {{ permit.type === 'EXIT_SCHOOL' ? 'Izin Pulang' : 'Izin Sementara' }}
+                </span>
+                <span class="text-xs font-mono text-slate-400">#{{ permit.request_id }}</span>
+                <span class="text-xs text-slate-500 flex items-center gap-1">
+                  <Calendar class="w-3 h-3 text-slate-400" />
+                  {{ formatDate(permit.created_at) }}
+                </span>
+              </div>
+              <p class="text-xs font-semibold text-slate-800 mt-1">
+                Alasan: <span class="font-normal text-slate-600">{{ permit.reason || '-' }}</span>
+              </p>
+            </div>
+            <BaseBadge :status="permit.status" class="self-start sm:self-center shrink-0" />
+          </div>
+
+          <div class="grid grid-cols-2 gap-2 text-xs text-slate-500 pt-2 border-t border-slate-200/70">
+            <div>
+              Guru Pengampu:
+              <span class="font-semibold text-slate-700 block truncate">{{ permit.teacher?.name || '-' }}</span>
+            </div>
+            <div>
+              Durasi:
+              <span class="font-semibold text-slate-700 block">{{ permit.duration_minutes ? permit.duration_minutes + ' Menit' : '-' }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <EmptyState
+        v-else
+        title="Belum Ada Riwayat Izin"
+        description="Belum ada riwayat surat izin yang tercatat di akun kamu."
       />
     </div>
   </div>
@@ -224,11 +306,47 @@ import { usePermitStore } from '@/stores/permit'
 import BaseButton from '@/components/ui/BaseButton.vue'
 import BaseBadge from '@/components/ui/BaseBadge.vue'
 import EmptyState from '@/components/ui/EmptyState.vue'
-import { RefreshCw, ShieldAlert, QrCode, AlertTriangle, AlertOctagon, HeartHandshake, Clock, CheckCircle } from 'lucide-vue-next'
+import { RefreshCw, ShieldAlert, QrCode, AlertTriangle, AlertOctagon, HeartHandshake, Clock, CheckCircle, MessageSquare, History, Calendar } from 'lucide-vue-next'
 
 const reportStore = useReportStore()
 const permitStore = usePermitStore()
 const isRefreshing = ref(false)
+
+const formatCategory = (cat) => {
+  switch (cat) {
+    case 'BULLYING': return 'Perundungan'
+    case 'ACADEMIC': return 'Masalah Belajar'
+    case 'PERSONAL': return 'Konseling Pribadi'
+    case 'OTHERS': return 'Klarifikasi & Lainnya'
+    default: return cat
+  }
+}
+
+const formatPreference = (pref) => {
+  switch (pref) {
+    case 'WEB_MESSAGE': return 'Pesan Tertulis di Web'
+    case 'WHATSAPP': return 'Chat WhatsApp Pribadi'
+    case 'NEUTRAL_MEET': return 'Janji Temu di Tempat Netral'
+    case 'INFO_ONLY': return 'Hanya Laporan Informasi'
+    default: return 'Pesan Tertulis di Web'
+  }
+}
+
+const formatDate = (dateStr) => {
+  if (!dateStr) return '-'
+  try {
+    const d = new Date(dateStr)
+    return d.toLocaleDateString('id-ID', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    })
+  } catch (e) {
+    return dateStr
+  }
+}
 
 const pendingClarification = computed(() => {
   return reportStore.myReports?.find(r => 
@@ -242,7 +360,8 @@ const refreshData = async () => {
   try {
     await Promise.allSettled([
       reportStore.fetchMyReports(),
-      permitStore.fetchActivePermit()
+      permitStore.fetchActivePermit(),
+      permitStore.fetchPermitHistory()
     ])
   } finally {
     setTimeout(() => {

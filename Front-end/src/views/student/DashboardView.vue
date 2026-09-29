@@ -1,7 +1,7 @@
 <template>
   <div class="space-y-6">
     <!-- Welcome Banner -->
-    <div class="bg-gradient-to-r from-[#355245] to-[#273e34] rounded-3xl p-6 text-white shadow-sm border border-emerald-500/20 relative overflow-hidden">
+    <div class="bg-gradient-to-r from-[#355245] to-[#273e34] rounded-2xl sm:rounded-3xl p-5 sm:p-7 text-white shadow-sm border border-emerald-500/20 relative overflow-hidden">
       <div class="relative z-10 space-y-2">
         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-emerald-200 text-xs font-semibold backdrop-blur-md">
           <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
@@ -169,7 +169,7 @@
           </router-link>
           <router-link to="/student/permit/pass" class="flex-1">
             <BaseButton variant="outline" size="md" block>
-              Lihat Alasan Ditolak
+              Lihat Keterangan Penolakan
             </BaseButton>
           </router-link>
         </div>
@@ -215,7 +215,7 @@
       </div>
       <router-link to="/student/permit/create" class="shrink-0">
         <BaseButton variant="secondary" size="sm">
-          Buat Izin
+          Ajukan Izin
         </BaseButton>
       </router-link>
     </div>

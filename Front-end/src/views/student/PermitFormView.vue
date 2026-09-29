@@ -16,7 +16,7 @@
           <span>Kamu Masih Memiliki Izin Aktif (#{{ permitStore.activePermit?.request_id }})</span>
         </div>
         <p class="text-xs text-amber-700 leading-relaxed">
-          Kamu saat ini memiliki permohonan izin (Status: <strong class="uppercase font-bold text-amber-950">{{ permitStore.activePermit?.status }}</strong>) yang sedang berjalan. Kamu bisa melihat surat izin aktif, atau membatalkannya untuk mereset dan menguji formulir baru.
+          Kamu saat ini memiliki permohonan izin (Status: <strong class="uppercase font-bold text-amber-950">{{ permitStore.activePermit?.status }}</strong>) yang sedang berjalan. Kamu bisa melihat surat izin aktif, atau membatalkannya sebelum mengajukan izin baru.
         </p>
         <div class="flex flex-col sm:flex-row gap-2 pt-1">
           <router-link to="/student/permit/pass" class="flex-1">
@@ -31,7 +31,7 @@
             :loading="isCancelling"
             @click="handleCancelActiveForTesting"
           >
-            Batalkan Izin Sebelumnya (Reset Testing)
+            Batalkan Izin Aktif
           </BaseButton>
           <router-link to="/student/dashboard" class="flex-1">
             <BaseButton variant="outline" size="sm" block>
@@ -77,13 +77,13 @@
           </div>
 
           <!-- Opsi Cepat (Quick Presets) -->
-          <div class="grid grid-cols-4 gap-1.5 sm:gap-2">
+          <div class="grid grid-cols-2 min-[380px]:grid-cols-4 gap-2">
             <button
               v-for="dur in [10, 15, 30, 45]"
               :key="dur"
               type="button"
               @click="setDuration(dur)"
-              class="py-2.5 px-1 sm:px-2 rounded-xl border text-xs font-bold transition text-center"
+              class="py-2.5 px-2 rounded-xl border text-xs font-bold transition text-center"
               :class="form.duration_minutes === dur ? 'border-[#355245] bg-[#E8EFEA] text-[#355245] shadow-xs' : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'"
             >
               {{ dur }} Menit
@@ -178,7 +178,7 @@
               @click="isManualSelect = !isManualSelect"
               class="text-xs font-bold text-[#355245] hover:underline flex items-center gap-1"
             >
-              <span>{{ isManualSelect ? 'Gunakan Otomatis' : 'Ganti Guru Manual' }}</span>
+              <span>{{ isManualSelect ? 'Sesuai Jadwal' : 'Ganti Guru Manual' }}</span>
             </button>
           </div>
 
