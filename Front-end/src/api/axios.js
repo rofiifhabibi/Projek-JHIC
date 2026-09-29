@@ -1,8 +1,21 @@
 import axios from 'axios'
 import { useAuthStore } from '@/stores/auth'
 
+const getBaseUrl = () => {
+  if (import.meta.env.VITE_API_BASE_URL) {
+    return import.meta.env.VITE_API_BASE_URL
+  }
+  // Di production (dihosting satu domain dengan backend atau reverse proxy HTTPS)
+  if (import.meta.env.PROD) {
+    return '/api'
+  }
+  // Di development lokal (Vite dev server terpisah port)
+  const host = typeof window !== 'undefined' ? window.location.hostname : '127.0.0.1'
+  return `http://${host}:8000/api`
+}
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || `http://${typeof window !== 'undefined' ? window.location.hostname : '127.0.0.1'}:8000/api`,
+  baseURL: getBaseUrl(),
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json'
