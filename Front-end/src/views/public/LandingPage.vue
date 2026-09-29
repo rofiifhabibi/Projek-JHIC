@@ -132,39 +132,35 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div class="bg-white p-6 rounded-2xl border border-slate-200 space-y-3 shadow-xs">
-            <div class="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#355245]">
-              <span class="w-1.5 h-1.5 rounded-full bg-[#355245]"></span>
-              <span>Siswa</span>
+          <div class="bg-white p-6 rounded-2xl border border-slate-200/90 space-y-3.5 shadow-xs hover:shadow-md hover:border-[#355245]/30 transition group">
+            <div class="w-11 h-11 rounded-xl bg-[#E8EFEA] text-[#355245] flex items-center justify-center font-bold shadow-xs group-hover:scale-105 transition">
+              <GraduationCap class="w-6 h-6" :stroke-width="1.8" />
             </div>
-            <h4 class="font-bold text-slate-900 text-base">Portal Siswa</h4>
-            <p class="text-xs text-slate-600 leading-relaxed">Pengajuan izin keluar/pulang, tampilan surat izin digital, riwayat perizinan, dan layanan bimbingan konseling.</p>
+            <h4 class="font-bold text-slate-900 text-base group-hover:text-[#355245] transition-colors">Portal Siswa</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">Pengajuan izin keluar atau pulang, surat izin resmi ber-QR code, riwayat perizinan, dan layanan bimbingan konseling.</p>
           </div>
 
-          <div class="bg-white p-6 rounded-2xl border border-slate-200 space-y-3 shadow-xs">
-            <div class="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-amber-700">
-              <span class="w-1.5 h-1.5 rounded-full bg-amber-600"></span>
-              <span>Guru</span>
+          <div class="bg-white p-6 rounded-2xl border border-slate-200/90 space-y-3.5 shadow-xs hover:shadow-md hover:border-[#355245]/30 transition group">
+            <div class="w-11 h-11 rounded-xl bg-[#E8EFEA] text-[#355245] flex items-center justify-center font-bold shadow-xs group-hover:scale-105 transition">
+              <UserCheck class="w-6 h-6" :stroke-width="1.8" />
             </div>
-            <h4 class="font-bold text-slate-900 text-base">Portal Guru</h4>
-            <p class="text-xs text-slate-600 leading-relaxed">Persetujuan izin siswa yang diajar, penetapan durasi izin, dan pemantauan siswa yang sedang berada di luar kelas.</p>
+            <h4 class="font-bold text-slate-900 text-base group-hover:text-[#355245] transition-colors">Portal Guru</h4>
+            <p class="text-xs text-slate-600 leading-relaxed">Persetujuan izin siswa yang diajar, penentuan batas durasi izin, serta pemantauan siswa yang sedang di luar kelas.</p>
           </div>
 
-          <div class="bg-white p-6 rounded-2xl border border-slate-200 space-y-3 shadow-xs">
-            <div class="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-600">
-              <span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
-              <span>Satpam</span>
+          <div class="bg-white p-6 rounded-2xl border border-slate-200/90 space-y-3.5 shadow-xs hover:shadow-md hover:border-[#355245]/30 transition group">
+            <div class="w-11 h-11 rounded-xl bg-[#E8EFEA] text-[#355245] flex items-center justify-center font-bold shadow-xs group-hover:scale-105 transition">
+              <Shield class="w-6 h-6" :stroke-width="1.8" />
             </div>
-            <h4 class="font-bold text-slate-900 text-base">Pos Satpam</h4>
+            <h4 class="font-bold text-slate-900 text-base group-hover:text-[#355245] transition-colors">Pos Satpam</h4>
             <p class="text-xs text-slate-600 leading-relaxed">Pemeriksaan surat izin siswa di gerbang utama sekolah menggunakan kamera pemindai atau input kode manual.</p>
           </div>
 
-          <div class="bg-white p-6 rounded-2xl border border-slate-200 space-y-3 shadow-xs">
-            <div class="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-teal-700">
-              <span class="w-1.5 h-1.5 rounded-full bg-teal-600"></span>
-              <span>Guru BK</span>
+          <div class="bg-white p-6 rounded-2xl border border-slate-200/90 space-y-3.5 shadow-xs hover:shadow-md hover:border-[#355245]/30 transition group">
+            <div class="w-11 h-11 rounded-xl bg-[#E8EFEA] text-[#355245] flex items-center justify-center font-bold shadow-xs group-hover:scale-105 transition">
+              <HeartHandshake class="w-6 h-6" :stroke-width="1.8" />
             </div>
-            <h4 class="font-bold text-slate-900 text-base">Portal BK</h4>
+            <h4 class="font-bold text-slate-900 text-base group-hover:text-[#355245] transition-colors">Portal BK</h4>
             <p class="text-xs text-slate-600 leading-relaxed">Pencatatan aduan konseling siswa, jadwal tindak lanjut, serta pantauan keterlambatan izin seluruh sekolah.</p>
           </div>
         </div>
@@ -234,7 +230,7 @@
 import { ref } from 'vue'
 import AppLogo from '@/components/ui/AppLogo.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
-import { ArrowRight, QrCode, ShieldCheck, Users, HeartHandshake, LogIn, Menu, X } from 'lucide-vue-next'
+import { ArrowRight, QrCode, ShieldCheck, Users, HeartHandshake, LogIn, Menu, X, GraduationCap, UserCheck, Shield } from 'lucide-vue-next'
 
 const isMobileMenuOpen = ref(false)
 </script>
