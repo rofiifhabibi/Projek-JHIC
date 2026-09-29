@@ -18,54 +18,54 @@ class DatabaseSeeder extends Seeder
         // 1. SEED USERS (Idempotent with firstOrCreate to safely run on every deploy)
         $student1 = User::firstOrCreate(
             ['username' => 'siswa1'],
-            ['password' => Hash::make('password'), 'role' => 'student', 'name' => 'Budi Santoso', 'email' => 'budi@student.stembayo.sch.id', 'class_name' => 'XII RPL 1']
+            ['password' => Hash::make('password'), 'role' => 'student', 'name' => 'Budi Santoso', 'email' => 'budi@student.smkn2depoksleman.sch.id', 'class_name' => 'XII RPL 1']
         );
         $student2 = User::firstOrCreate(
             ['username' => 'siswa2'],
-            ['password' => Hash::make('password'), 'role' => 'student', 'name' => 'Siti Nurhaliza', 'email' => 'siti@student.stembayo.sch.id', 'class_name' => 'XII RPL 1']
+            ['password' => Hash::make('password'), 'role' => 'student', 'name' => 'Siti Nurhaliza', 'email' => 'siti@student.smkn2depoksleman.sch.id', 'class_name' => 'XII RPL 1']
         );
         $student3 = User::firstOrCreate(
             ['username' => 'siswa3'],
-            ['password' => Hash::make('password'), 'role' => 'student', 'name' => 'Andi Saputra', 'email' => 'andi@student.stembayo.sch.id', 'class_name' => 'XII TKJ 2']
+            ['password' => Hash::make('password'), 'role' => 'student', 'name' => 'Andi Saputra', 'email' => 'andi@student.smkn2depoksleman.sch.id', 'class_name' => 'XII TKJ 2']
         );
         $student4 = User::firstOrCreate(
             ['username' => 'siswa4'],
-            ['password' => Hash::make('password'), 'role' => 'student', 'name' => 'Dewi Lestari', 'email' => 'dewi@student.stembayo.sch.id', 'class_name' => 'XI MM 1']
+            ['password' => Hash::make('password'), 'role' => 'student', 'name' => 'Dewi Lestari', 'email' => 'dewi@student.smkn2depoksleman.sch.id', 'class_name' => 'XI MM 1']
         );
         $student5 = User::firstOrCreate(
             ['username' => 'siswa5'],
-            ['password' => Hash::make('password'), 'role' => 'student', 'name' => 'Rizky Ramadhan', 'email' => 'rizky@student.stembayo.sch.id', 'class_name' => 'X AK 3']
+            ['password' => Hash::make('password'), 'role' => 'student', 'name' => 'Rizky Ramadhan', 'email' => 'rizky@student.smkn2depoksleman.sch.id', 'class_name' => 'X AK 3']
         );
 
         $guru1 = User::firstOrCreate(
             ['username' => 'guru1'],
-            ['password' => Hash::make('password'), 'role' => 'teacher', 'name' => 'Ahmad Dahlan, S.Pd.', 'email' => 'ahmad@stembayo.sch.id']
+            ['password' => Hash::make('password'), 'role' => 'teacher', 'name' => 'Ahmad Dahlan, S.Pd.', 'email' => 'ahmad@smkn2depoksleman.sch.id']
         );
         $guru2 = User::firstOrCreate(
             ['username' => 'guru2'],
-            ['password' => Hash::make('password'), 'role' => 'teacher', 'name' => 'Ratna Dewi, M.Pd.', 'email' => 'ratna@stembayo.sch.id']
+            ['password' => Hash::make('password'), 'role' => 'teacher', 'name' => 'Ratna Dewi, M.Pd.', 'email' => 'ratna@smkn2depoksleman.sch.id']
         );
         $guru3 = User::firstOrCreate(
             ['username' => 'guru3'],
-            ['password' => Hash::make('password'), 'role' => 'teacher', 'name' => 'Bambang Pamungkas, S.Kom', 'email' => 'bambang@stembayo.sch.id']
+            ['password' => Hash::make('password'), 'role' => 'teacher', 'name' => 'Bambang Pamungkas, S.Kom', 'email' => 'bambang@smkn2depoksleman.sch.id']
         );
 
         $satpam1 = User::firstOrCreate(
             ['username' => 'satpam1'],
-            ['password' => Hash::make('password'), 'role' => 'satpam', 'name' => 'Joko Widodo (Gerbang Utama)', 'email' => 'satpam1@stembayo.sch.id']
+            ['password' => Hash::make('password'), 'role' => 'satpam', 'name' => 'Joko Widodo (Gerbang Utama)', 'email' => 'satpam1@smkn2depoksleman.sch.id']
         );
         $satpam2 = User::firstOrCreate(
             ['username' => 'satpam2'],
-            ['password' => Hash::make('password'), 'role' => 'satpam', 'name' => 'Sutarman (Pos II)', 'email' => 'satpam2@stembayo.sch.id']
+            ['password' => Hash::make('password'), 'role' => 'satpam', 'name' => 'Sutarman (Pos II)', 'email' => 'satpam2@smkn2depoksleman.sch.id']
         );
 
         $bk1 = User::firstOrCreate(
             ['username' => 'bk1'],
-            ['password' => Hash::make('password'), 'role' => 'bk', 'name' => 'Hani Saraswati, S.Psi (Koordinator BK)', 'email' => 'hani.bk@stembayo.sch.id']
+            ['password' => Hash::make('password'), 'role' => 'bk', 'name' => 'Hani Saraswati, S.Psi (Koordinator BK)', 'email' => 'hani.bk@smkn2depoksleman.sch.id']
         );
         $bk2 = User::firstOrCreate(
             ['username' => 'bk2'],
-            ['password' => Hash::make('password'), 'role' => 'bk', 'name' => 'Drs. Edi Suwarno', 'email' => 'edi.bk@stembayo.sch.id']
+            ['password' => Hash::make('password'), 'role' => 'bk', 'name' => 'Drs. Edi Suwarno', 'email' => 'edi.bk@smkn2depoksleman.sch.id']
         );
 
         // 2. SUBJECTS

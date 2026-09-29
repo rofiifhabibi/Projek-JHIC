@@ -3,13 +3,13 @@
     <!-- Desktop Sidebar -->
     <aside class="w-64 bg-slate-900 border-r border-slate-800 hidden md:flex flex-col justify-between shadow-md z-20 shrink-0">
       <div>
-        <div class="h-20 flex items-center gap-3 px-6 border-b border-slate-800 bg-slate-950/40">
-          <AppLogo variant="bk" size="md" theme="emerald" />
+        <router-link to="/bk/kanban" class="h-20 flex items-center gap-3 px-6 border-b border-slate-800 bg-slate-950/40 group">
+          <AppLogo variant="bk" size="md" theme="emerald" class="group-hover:scale-105 transition" />
           <div>
-            <h1 class="text-sm font-extrabold text-white tracking-tight leading-tight">Bimbingan Konseling</h1>
+            <h1 class="text-sm font-extrabold text-white group-hover:text-teal-300 transition tracking-tight leading-tight">Bimbingan Konseling</h1>
             <p class="text-xs text-teal-400 font-semibold uppercase tracking-wider mt-0.5">SMKN 2 Depok Sleman</p>
           </div>
-        </div>
+        </router-link>
 
         <nav class="p-4 space-y-1.5">
           <div class="px-3 py-2 text-xs font-bold text-slate-500 uppercase tracking-widest">Menu Konseling</div>
@@ -70,10 +70,10 @@
       <!-- Mobile Header WITH Navigation Tabs -->
       <header class="md:hidden bg-slate-900 text-white border-b border-slate-800 sticky top-0 z-30">
         <div class="h-16 px-4 flex items-center justify-between">
-          <div class="flex items-center gap-2">
-            <AppLogo variant="bk" size="sm" theme="emerald" />
-            <h1 class="font-extrabold text-sm text-white">Bimbingan Konseling</h1>
-          </div>
+          <router-link to="/bk/kanban" class="flex items-center gap-2 group">
+            <AppLogo variant="bk" size="sm" theme="emerald" class="group-hover:scale-105 transition" />
+            <h1 class="font-extrabold text-sm text-white group-hover:text-teal-300 transition">Bimbingan Konseling</h1>
+          </router-link>
           <button
             type="button"
             @click="showLogoutConfirm = true"

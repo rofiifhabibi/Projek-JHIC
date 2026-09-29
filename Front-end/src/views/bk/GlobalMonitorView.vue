@@ -40,7 +40,8 @@
       <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs flex items-center justify-between">
         <div>
           <p class="text-xs font-semibold text-slate-500">Total Izin Hari Ini</p>
-          <p class="text-2xl font-black text-slate-900 mt-1">{{ allPermits.length }}</p>
+          <p class="text-2xl font-black text-slate-900 mt-1">{{ todayPermitsCount }}</p>
+          <p class="text-[10px] text-slate-400 mt-0.5 font-medium">{{ allPermits.length }} total riwayat</p>
         </div>
         <div class="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center font-bold">
           <Users class="w-5 h-5" />
@@ -154,6 +155,14 @@ const columns = [
 ]
 
 const allPermits = computed(() => reportStore.globalMobility || [])
+
+const todayPermitsCount = computed(() => {
+  const today = new Date().toISOString().slice(0, 10)
+  return allPermits.value.filter(p => {
+    if (!p.created_at) return true
+    return p.created_at.slice(0, 10) === today
+  }).length
+})
 
 const overdueList = computed(() => {
   return allPermits.value.filter(p => p.status === 'OVERDUE')

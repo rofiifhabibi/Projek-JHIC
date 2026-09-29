@@ -3,11 +3,11 @@
     <!-- Top Bar -->
     <header class="bg-slate-900 border-b border-slate-800 px-4 py-3 sticky top-0 z-30 shadow-xs">
       <div class="max-w-5xl lg:max-w-6xl mx-auto flex items-center justify-between gap-3">
-        <div class="flex items-center gap-2.5 min-w-0">
-          <AppLogo variant="satpam" size="md" theme="emerald" class="shrink-0" />
+        <router-link to="/satpam/scanner" class="flex items-center gap-2.5 min-w-0 group">
+          <AppLogo variant="satpam" size="md" theme="emerald" class="shrink-0 group-hover:scale-105 transition" />
           <div class="min-w-0">
             <div class="flex items-center gap-2">
-              <h1 class="font-extrabold text-sm sm:text-base tracking-tight text-white leading-tight truncate">
+              <h1 class="font-extrabold text-sm sm:text-base tracking-tight text-white group-hover:text-emerald-300 transition leading-tight truncate">
                 Satpam
               </h1>
               <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-semibold border border-emerald-500/30 shrink-0">
@@ -17,7 +17,7 @@
             </div>
             <p class="text-xs text-slate-300 font-medium truncate mt-0.5">Pemeriksaan Gerbang • SMKN 2 Depok Sleman</p>
           </div>
-        </div>
+        </router-link>
 
         <div class="flex items-center gap-2.5 sm:gap-3 shrink-0">
           <div class="hidden sm:block text-right">

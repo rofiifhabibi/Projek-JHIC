@@ -15,22 +15,29 @@
           <AlertCircle class="w-4 h-4 text-amber-600 shrink-0" />
           <span>Kamu Masih Memiliki Izin Aktif (#{{ permitStore.activePermit?.request_id }})</span>
         </div>
-        <p class="text-xs text-amber-700 leading-relaxed">
-          Kamu saat ini memiliki permohonan izin (Status: <strong class="uppercase font-bold text-amber-950">{{ permitStore.activePermit?.status }}</strong>) yang sedang berjalan. Kamu bisa melihat surat izin aktif, atau membatalkannya sebelum mengajukan izin baru.
+        <p class="text-xs text-amber-800 leading-relaxed">
+          Kamu saat ini memiliki permohonan izin (Status: <strong class="uppercase font-bold text-amber-950">{{ permitStore.activePermit?.status }}</strong>).
+          <span v-if="canCancelActivePermit">
+            Kamu dapat melihat surat izin aktif atau membatalkannya jika belum digunakan keluar gerbang.
+          </span>
+          <span v-else>
+            Izin telah divalidasi di gerbang. Harap kembali ke kelas dan laporkan ke guru pengajar untuk menyelesaikan izin sebelum mengajukan izin baru.
+          </span>
         </p>
         <div class="flex flex-col sm:flex-row gap-2 pt-1">
           <BaseButton to="/student/permit/pass" variant="primary" size="sm" block class="flex-1">
-            Lihat Izin Aktif
+            Lihat Surat Izin & QR
           </BaseButton>
           <BaseButton
+            v-if="canCancelActivePermit"
             type="button"
             variant="danger"
             size="sm"
             class="flex-1"
             :loading="isCancelling"
-            @click="handleCancelActiveForTesting"
+            @click="handleCancelActive"
           >
-            Batalkan Izin Aktif
+            Batalkan Pengajuan
           </BaseButton>
           <BaseButton to="/student/dashboard" variant="outline" size="sm" block class="flex-1">
             Kembali ke Beranda
@@ -343,12 +350,16 @@ onMounted(async () => {
   }
 })
 
-const handleCancelActiveForTesting = async () => {
+const canCancelActivePermit = computed(() => {
+  return permitStore.activePermit && ['PENDING', 'APPROVED'].includes(permitStore.activePermit.status)
+})
+
+const handleCancelActive = async () => {
   if (!permitStore.activePermit?.request_id) return
   isCancelling.value = true
   try {
     await permitStore.cancelPermit(permitStore.activePermit.request_id)
-    toast.success('Izin sebelumnya berhasil dibatalkan. Formulir siap diuji!')
+    toast.success('Permohonan izin sebelumnya berhasil dibatalkan.')
   } catch (err) {
     toast.error(err.response?.data?.message || 'Gagal membatalkan izin.')
   } finally {

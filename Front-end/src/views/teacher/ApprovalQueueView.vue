@@ -82,20 +82,46 @@
       :message="`Apakah Anda yakin ingin menyetujui izin dari ${selectedReq?.student?.name} (${selectedReq?.duration_minutes ? selectedReq.duration_minutes + ' menit' : 'Izin Pulang'})? Kode QR izin akan langsung dibuat untuk siswa.`"
       variant="warning"
       confirm-text="Ya, Setujui Izin"
+      :loading="isApproving"
       @confirm="executeApprove"
       @cancel="showApproveConfirm = false"
     />
 
-    <!-- Reject Confirm Dialog -->
-    <ConfirmDialog
+    <!-- Reject Modal with Reason Input -->
+    <BaseModal
       :show="showConfirm"
       title="Tolak Permohonan Izin"
-      :message="`Apakah Anda yakin ingin menolak permohonan izin dari ${selectedReq?.student?.name}?`"
-      variant="danger"
-      confirm-text="Ya, Tolak Izin"
-      @confirm="executeReject"
-      @cancel="showConfirm = false"
-    />
+      max-width="sm"
+      @close="showConfirm = false"
+    >
+      <template #icon>
+        <XCircle class="w-5 h-5 text-rose-600" />
+      </template>
+
+      <div class="space-y-3">
+        <p class="text-sm text-slate-600 leading-relaxed">
+          Apakah Anda yakin ingin menolak izin dari <strong class="text-slate-900">{{ selectedReq?.student?.name }}</strong>?
+        </p>
+        <div class="space-y-1 text-left">
+          <label class="text-xs font-semibold text-slate-700">Alasan Penolakan (Opsional)</label>
+          <textarea
+            v-model="rejectReason"
+            rows="2"
+            placeholder="Misal: Sedang ada ulangan/praktik penting, batas waktu tidak sesuai..."
+            class="w-full rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-xs text-slate-900 placeholder:text-slate-400 focus:bg-white focus:border-rose-500 focus:ring-1 focus:ring-rose-500 focus:outline-none transition"
+          ></textarea>
+        </div>
+      </div>
+
+      <template #footer>
+        <BaseButton variant="outline" size="sm" @click="showConfirm = false">
+          Batal
+        </BaseButton>
+        <BaseButton variant="danger" size="sm" :loading="isRejecting" @click="executeReject">
+          Tolak Izin
+        </BaseButton>
+      </template>
+    </BaseModal>
   </div>
 </template>
 
@@ -105,6 +131,7 @@ import { usePermitStore } from '@/stores/permit'
 import { useToast } from '@/composables/useToast'
 import BaseButton from '@/components/ui/BaseButton.vue'
 import BaseBadge from '@/components/ui/BaseBadge.vue'
+import BaseModal from '@/components/ui/BaseModal.vue'
 import EmptyState from '@/components/ui/EmptyState.vue'
 import ConfirmDialog from '@/components/ui/ConfirmDialog.vue'
 import { CheckCircle, XCircle, RefreshCw } from 'lucide-vue-next'
@@ -115,6 +142,9 @@ const toast = useToast()
 const showApproveConfirm = ref(false)
 const showConfirm = ref(false)
 const selectedReq = ref(null)
+const rejectReason = ref('')
+const isApproving = ref(false)
+const isRejecting = ref(false)
 
 const loadRequests = async () => {
   await permitStore.fetchPendingApprovals()
@@ -131,28 +161,36 @@ const confirmApprove = (req) => {
 
 const executeApprove = async () => {
   if (!selectedReq.value) return
+  isApproving.value = true
   try {
     await permitStore.approvePermit(selectedReq.value.request_id)
     toast.success('Izin siswa berhasil disetujui!')
     showApproveConfirm.value = false
   } catch (err) {
     toast.error(err.response?.data?.message || 'Gagal menyetujui izin.')
+  } finally {
+    isApproving.value = false
   }
 }
 
 const confirmReject = (req) => {
   selectedReq.value = req
+  rejectReason.value = ''
   showConfirm.value = true
 }
 
 const executeReject = async () => {
   if (!selectedReq.value) return
+  isRejecting.value = true
   try {
-    await permitStore.resolvePermit(selectedReq.value.request_id, 'REJECTED')
+    await permitStore.resolvePermit(selectedReq.value.request_id, 'REJECTED', rejectReason.value.trim() || null)
     toast.success('Permohonan izin ditolak!')
     showConfirm.value = false
+    rejectReason.value = ''
   } catch (err) {
     toast.error('Gagal menolak permohonan izin.')
+  } finally {
+    isRejecting.value = false
   }
 }
 </script>

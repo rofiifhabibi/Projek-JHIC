@@ -244,6 +244,7 @@
     <!-- Confirm Cancel Dialog -->
     <ConfirmDialog
       :show="showCancelConfirm"
+      :loading="isCancelling"
       title="Batalkan Permohonan Izin"
       message="Apakah Anda yakin ingin membatalkan permohonan izin ini? Anda dapat mengajukan izin baru setelahnya."
       confirm-text="Ya, Batalkan Izin"

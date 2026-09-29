@@ -5,13 +5,13 @@
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16">
           <div class="flex items-center gap-3 sm:gap-6 min-w-0">
-            <div class="flex items-center gap-2.5 sm:gap-3 shrink-0">
-              <AppLogo variant="teacher" size="md" theme="white-trans" class="shrink-0" />
+            <router-link to="/teacher/monitoring" class="flex items-center gap-2.5 sm:gap-3 shrink-0 group">
+              <AppLogo variant="teacher" size="md" theme="white-trans" class="shrink-0 group-hover:scale-105 transition" />
               <div class="min-w-0">
-                <h1 class="font-extrabold text-sm sm:text-base tracking-tight leading-none text-white truncate">Guru Pengajar</h1>
+                <h1 class="font-extrabold text-sm sm:text-base tracking-tight leading-none text-white group-hover:text-emerald-200 transition truncate">Guru Pengajar</h1>
                 <p class="text-xs text-[#E8EFEA]/80 font-medium tracking-wide mt-0.5 uppercase truncate">SMKN 2 Depok Sleman</p>
               </div>
-            </div>
+            </router-link>
 
             <!-- Tablet & Desktop Nav Tabs -->
             <nav class="hidden md:flex items-center gap-1.5 lg:gap-2 ml-1 lg:ml-4 bg-black/15 p-1 rounded-xl border border-white/10 shrink-0">

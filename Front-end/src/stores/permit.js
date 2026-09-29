@@ -164,11 +164,13 @@ export const usePermitStore = defineStore('permit', {
         this.loading = false;
       }
     },
-    async resolvePermit(permitId, action) {
+    async resolvePermit(permitId, action, rejectReason = null) {
       this.loading = true;
       this.error = null;
       try {
-        const res = await api.patch(`/teacher/permits/${permitId}/resolve`, { action });
+        const payload = { action };
+        if (rejectReason) payload.reject_reason = rejectReason;
+        const res = await api.patch(`/teacher/permits/${permitId}/resolve`, payload);
         await Promise.all([
           this.fetchPendingApprovals(),
           this.fetchTeacherMonitoring()

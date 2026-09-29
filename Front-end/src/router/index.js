@@ -6,7 +6,7 @@ const routes = [
     path: '/',
     name: 'landing',
     component: () => import('@/views/public/LandingPage.vue'),
-    meta: { layout: 'BlankLayout', requiresGuest: true }
+    meta: { layout: 'BlankLayout' }
   },
   {
     path: '/login',
@@ -18,6 +18,7 @@ const routes = [
   {
     path: '/student',
     component: () => import('@/layouts/StudentLayout.vue'),
+    redirect: { name: 'student-dashboard' },
     meta: { requiresAuth: true, roles: ['student'] },
     children: [
       { path: 'dashboard', name: 'student-dashboard', component: () => import('@/views/student/DashboardView.vue') },
@@ -31,6 +32,7 @@ const routes = [
   {
     path: '/teacher',
     component: () => import('@/layouts/TeacherLayout.vue'),
+    redirect: { name: 'teacher-monitoring' },
     meta: { requiresAuth: true, roles: ['teacher'] },
     children: [
       { path: 'monitoring', name: 'teacher-monitoring', component: () => import('@/views/teacher/DynamicMonitoringView.vue') },
@@ -41,6 +43,7 @@ const routes = [
   {
     path: '/satpam',
     component: () => import('@/layouts/SatpamLayout.vue'),
+    redirect: { name: 'satpam-scanner' },
     meta: { requiresAuth: true, roles: ['satpam'] },
     children: [
       { path: 'scanner', name: 'satpam-scanner', component: () => import('@/views/satpam/WebScannerView.vue') }
@@ -50,6 +53,7 @@ const routes = [
   {
     path: '/bk',
     component: () => import('@/layouts/BkLayout.vue'),
+    redirect: { name: 'bk-kanban' },
     meta: { requiresAuth: true, roles: ['bk'] },
     children: [
       { path: 'kanban', name: 'bk-kanban', component: () => import('@/views/bk/KanbanView.vue') },

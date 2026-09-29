@@ -245,6 +245,7 @@ class PermitController extends Controller
     {
         $request->validate([
             'action' => ['required', 'in:COMPLETED,ALPHA,REJECTED'],
+            'reject_reason' => ['nullable', 'string', 'max:255'],
         ]);
 
         $permit = PermitRequest::with('student')->findOrFail($id);
@@ -273,6 +274,11 @@ class PermitController extends Controller
 
         if ($request->action === 'ALPHA') {
             $updateData['alpha_at'] = Carbon::now();
+        }
+
+        if ($request->action === 'REJECTED' && $request->filled('reject_reason')) {
+            $prefix = $permit->reason ? ($permit->reason . " [Catatan Guru: " . $request->reject_reason . "]") : ("Ditolak: " . $request->reject_reason);
+            $updateData['reason'] = $prefix;
         }
 
         $permit->update($updateData);
