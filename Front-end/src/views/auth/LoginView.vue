@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen bg-[#F4F7F4] flex items-center justify-center p-3.5 sm:p-6 lg:p-8 font-sans">
-    <div class="w-full max-w-5xl bg-white rounded-2xl sm:rounded-3xl shadow-md border border-slate-200 overflow-hidden grid grid-cols-1 md:grid-cols-12 min-h-[580px]">
+    <div class="w-full max-w-md md:max-w-5xl bg-white rounded-2xl sm:rounded-3xl shadow-sm md:shadow-md border border-slate-200 overflow-hidden grid grid-cols-1 md:grid-cols-12 md:min-h-[560px]">
       
       <!-- Left Column: Branding Showcase (Tablet & Desktop) -->
       <div class="hidden md:flex md:col-span-5 bg-gradient-to-br from-[#355245] via-[#273e34] to-[#1c2e26] text-white p-6 md:p-8 lg:p-12 flex-col justify-between relative overflow-hidden">
@@ -41,16 +41,21 @@
       <!-- Right Column: Login Form -->
       <div class="md:col-span-7 p-5 sm:p-8 lg:p-12 flex flex-col justify-center bg-white space-y-5 sm:space-y-6">
         <div>
-          <!-- Mobile Branding Logo -->
-          <div class="md:hidden mb-3">
-            <img src="/logos/studentcare-logo.png" alt="StudentCare" class="h-8 sm:h-9 object-contain" />
+          <!-- Mobile Top Bar: Back Link + Logo -->
+          <div class="md:hidden flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
+            <router-link to="/" class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-[#355245] transition">
+              <ArrowLeft class="w-4 h-4" />
+              <span>Beranda</span>
+            </router-link>
+            <img src="/logos/studentcare-logo.png" alt="StudentCare" class="h-7 object-contain" />
           </div>
+
           <h2 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">Masuk ke Akun Anda</h2>
-          <p class="text-xs text-slate-600 font-medium mt-0.5">Masukkan NIS, NIP, atau username beserta kata sandi Anda.</p>
+          <p class="text-xs text-slate-600 font-medium mt-1">Masukkan NIS, NIP, atau username beserta kata sandi Anda.</p>
         </div>
 
-        <!-- Preset Selector for Development Testing -->
-        <div v-if="isDevMode" class="space-y-2">
+        <!-- Preset Selector for Development Testing (Only shown in DEV mode) -->
+        <div v-if="isDevMode" class="space-y-3">
           <div class="flex items-center justify-between text-xs font-bold uppercase tracking-wider text-slate-600">
             <span>Akun Uji Coba Cepat</span>
             <span class="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded font-mono text-[11px]">Sandi: password</span>
@@ -72,11 +77,11 @@
               <span class="text-[11px] text-slate-500 font-mono mt-0.5">{{ role.username }}</span>
             </button>
           </div>
-        </div>
 
-        <div class="relative flex items-center justify-center">
-          <div class="border-t border-slate-200 w-full"></div>
-          <span class="bg-white px-3 text-xs font-bold uppercase tracking-widest text-slate-500 absolute">Atau Masuk Manual</span>
+          <div class="relative flex items-center justify-center pt-1">
+            <div class="border-t border-slate-200 w-full"></div>
+            <span class="bg-white px-3 text-xs font-bold uppercase tracking-widest text-slate-400 absolute">Atau Masuk Manual</span>
+          </div>
         </div>
 
         <!-- Form -->
@@ -123,7 +128,6 @@ import { useToast } from '@/composables/useToast'
 import BaseInput from '@/components/ui/BaseInput.vue'
 import PasswordInput from '@/components/ui/PasswordInput.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
-import AppLogo from '@/components/ui/AppLogo.vue'
 import { User, Lock, ArrowLeft, ShieldCheck, GraduationCap, UserCheck, Shield, HeartHandshake } from 'lucide-vue-next'
 
 const authStore = useAuthStore()
