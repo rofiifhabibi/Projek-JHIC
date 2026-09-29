@@ -14,7 +14,7 @@ const routes = [
     component: () => import('@/views/auth/LoginView.vue'),
     meta: { layout: 'BlankLayout', requiresGuest: true }
   },
-  // 1. RUTE PORTAL SISWA (PWA)
+  // 1. RUTE SISWA (PWA)
   {
     path: '/student',
     component: () => import('@/layouts/StudentLayout.vue'),
@@ -37,7 +37,7 @@ const routes = [
       { path: 'approvals', name: 'teacher-approvals', component: () => import('@/views/teacher/ApprovalQueueView.vue') }
     ]
   },
-  // 3. RUTE PORTAL SATPAM
+  // 3. RUTE SATPAM
   {
     path: '/satpam',
     component: () => import('@/layouts/SatpamLayout.vue'),

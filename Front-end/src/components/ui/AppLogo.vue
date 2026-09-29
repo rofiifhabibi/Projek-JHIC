@@ -28,7 +28,7 @@
     <div v-else-if="variant === 'teacher' || variant === 'gp'" class="relative flex items-center justify-center">
       <img
         :src="isWhiteIcon ? '/logos/studentcare-icon-white.png' : '/logos/studentcare-icon.png'"
-        alt="Portal Guru"
+        alt="Guru Pengajar"
         :class="iconSizeClass"
         class="object-contain"
       />
@@ -38,7 +38,7 @@
     <div v-else-if="variant === 'bk'" class="relative flex items-center justify-center">
       <img
         :src="isWhiteIcon ? '/logos/studentcare-icon-white.png' : '/logos/studentcare-icon.png'"
-        alt="Portal BK"
+        alt="Bimbingan Konseling"
         :class="iconSizeClass"
         class="object-contain"
       />
@@ -48,7 +48,7 @@
     <div v-else-if="variant === 'satpam' || variant === 'sp'" class="relative flex items-center justify-center">
       <img
         :src="isWhiteIcon ? '/logos/studentcare-icon-white.png' : '/logos/studentcare-icon.png'"
-        alt="Pos Satpam"
+        alt="Satpam"
         :class="iconSizeClass"
         class="object-contain"
       />

@@ -8,7 +8,7 @@
           <div class="min-w-0">
             <div class="flex items-center gap-2">
               <h1 class="font-extrabold text-sm sm:text-base tracking-tight text-white leading-tight truncate">
-                Pos Satpam
+                Satpam
               </h1>
               <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-semibold border border-emerald-500/30 shrink-0">
                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>

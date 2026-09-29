@@ -6,8 +6,8 @@
         <div class="h-20 flex items-center gap-3 px-6 border-b border-slate-800 bg-slate-950/40">
           <AppLogo variant="bk" size="md" theme="emerald" />
           <div>
-            <h1 class="text-sm font-extrabold text-white tracking-tight leading-tight">Portal BK</h1>
-            <p class="text-xs text-teal-400 font-semibold uppercase tracking-wider mt-0.5">Bimbingan Konseling</p>
+            <h1 class="text-sm font-extrabold text-white tracking-tight leading-tight">Bimbingan Konseling</h1>
+            <p class="text-xs text-teal-400 font-semibold uppercase tracking-wider mt-0.5">SMKN 2 Depok Sleman</p>
           </div>
         </div>
 
@@ -71,7 +71,7 @@
         <div class="h-16 px-4 flex items-center justify-between">
           <div class="flex items-center gap-2">
             <AppLogo variant="bk" size="sm" theme="emerald" />
-            <h1 class="font-extrabold text-sm text-white">Portal BK</h1>
+            <h1 class="font-extrabold text-sm text-white">Bimbingan Konseling</h1>
           </div>
           <button @click="showLogoutConfirm = true" class="text-xs bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700">
             Keluar

@@ -8,7 +8,7 @@
             <div class="flex items-center gap-2.5 sm:gap-3 shrink-0">
               <AppLogo variant="teacher" size="md" theme="white-trans" class="shrink-0" />
               <div class="min-w-0">
-                <h1 class="font-extrabold text-sm sm:text-base tracking-tight leading-none text-white truncate">Portal Guru</h1>
+                <h1 class="font-extrabold text-sm sm:text-base tracking-tight leading-none text-white truncate">Guru Pengajar</h1>
                 <p class="text-xs text-[#E8EFEA]/80 font-medium tracking-wide mt-0.5 uppercase truncate">SMKN 2 Depok Sleman</p>
               </div>
             </div>

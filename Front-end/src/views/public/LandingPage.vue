@@ -73,7 +73,7 @@
         <div class="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 pt-2">
           <router-link to="/login" class="w-full sm:w-auto">
             <BaseButton variant="primary" size="lg" block>
-              Masuk ke Portal
+              Masuk ke Akun
               <template #icon-right><ArrowRight class="w-4 h-4" /></template>
             </BaseButton>
           </router-link>
@@ -123,7 +123,7 @@
       </div>
     </section>
 
-    <!-- Role Portals Section -->
+    <!-- Role Section -->
     <section id="peran" class="py-20 bg-[#F4F7F4]">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         <div class="text-center max-w-2xl mx-auto space-y-3">
@@ -136,7 +136,7 @@
             <div class="w-11 h-11 rounded-xl bg-[#E8EFEA] text-[#355245] flex items-center justify-center font-bold shadow-xs group-hover:scale-105 transition">
               <GraduationCap class="w-6 h-6" :stroke-width="1.8" />
             </div>
-            <h4 class="font-bold text-slate-900 text-base group-hover:text-[#355245] transition-colors">Portal Siswa</h4>
+            <h4 class="font-bold text-slate-900 text-base group-hover:text-[#355245] transition-colors">Siswa</h4>
             <p class="text-xs text-slate-600 leading-relaxed">Pengajuan izin keluar atau pulang, surat izin resmi ber-QR code, riwayat perizinan, dan layanan bimbingan konseling.</p>
           </div>
 
@@ -144,7 +144,7 @@
             <div class="w-11 h-11 rounded-xl bg-[#E8EFEA] text-[#355245] flex items-center justify-center font-bold shadow-xs group-hover:scale-105 transition">
               <UserCheck class="w-6 h-6" :stroke-width="1.8" />
             </div>
-            <h4 class="font-bold text-slate-900 text-base group-hover:text-[#355245] transition-colors">Portal Guru</h4>
+            <h4 class="font-bold text-slate-900 text-base group-hover:text-[#355245] transition-colors">Guru Pengajar</h4>
             <p class="text-xs text-slate-600 leading-relaxed">Persetujuan izin siswa yang diajar, penentuan batas durasi izin, serta pemantauan siswa yang sedang di luar kelas.</p>
           </div>
 
@@ -152,7 +152,7 @@
             <div class="w-11 h-11 rounded-xl bg-[#E8EFEA] text-[#355245] flex items-center justify-center font-bold shadow-xs group-hover:scale-105 transition">
               <Shield class="w-6 h-6" :stroke-width="1.8" />
             </div>
-            <h4 class="font-bold text-slate-900 text-base group-hover:text-[#355245] transition-colors">Pos Satpam</h4>
+            <h4 class="font-bold text-slate-900 text-base group-hover:text-[#355245] transition-colors">Satpam</h4>
             <p class="text-xs text-slate-600 leading-relaxed">Pemeriksaan surat izin siswa di gerbang utama sekolah menggunakan kamera pemindai atau input kode manual.</p>
           </div>
 
@@ -160,7 +160,7 @@
             <div class="w-11 h-11 rounded-xl bg-[#E8EFEA] text-[#355245] flex items-center justify-center font-bold shadow-xs group-hover:scale-105 transition">
               <HeartHandshake class="w-6 h-6" :stroke-width="1.8" />
             </div>
-            <h4 class="font-bold text-slate-900 text-base group-hover:text-[#355245] transition-colors">Portal BK</h4>
+            <h4 class="font-bold text-slate-900 text-base group-hover:text-[#355245] transition-colors">Bimbingan Konseling (BK)</h4>
             <p class="text-xs text-slate-600 leading-relaxed">Pencatatan aduan konseling siswa, jadwal tindak lanjut, serta pantauan keterlambatan izin seluruh sekolah.</p>
           </div>
         </div>
