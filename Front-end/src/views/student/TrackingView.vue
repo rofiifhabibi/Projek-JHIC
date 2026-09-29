@@ -145,24 +145,25 @@
               Klarifikasi Terkirim (Menunggu BK)
             </BaseButton>
           </div>
-          <router-link v-else :to="'/student/report/create?type=alpha&request_id=' + permitStore.activePermit.request_id" class="flex-1">
-            <BaseButton variant="danger" size="md" block>
-              <template #icon-left><HeartHandshake class="w-4 h-4" /></template>
-              Kirim Klarifikasi ke BK
-            </BaseButton>
-          </router-link>
-          <router-link to="/student/permit/pass" class="flex-1">
-            <BaseButton variant="outline" size="md" block>
-              Lihat Detail Izin
-            </BaseButton>
-          </router-link>
-        </div>
-        <router-link v-else to="/student/permit/pass" class="block pt-0.5">
-          <BaseButton variant="primary" size="md" block>
-            <template #icon-left><QrCode class="w-4 h-4" /></template>
-            Tampilkan Kode QR Izin
+          <BaseButton
+            v-else
+            :to="'/student/report/create?type=alpha&request_id=' + permitStore.activePermit.request_id"
+            variant="danger"
+            size="md"
+            block
+            class="flex-1"
+          >
+            <template #icon-left><HeartHandshake class="w-4 h-4" /></template>
+            Kirim Klarifikasi ke BK
           </BaseButton>
-        </router-link>
+          <BaseButton to="/student/permit/pass" variant="outline" size="md" block class="flex-1">
+            Lihat Detail Izin
+          </BaseButton>
+        </div>
+        <BaseButton v-else to="/student/permit/pass" variant="primary" size="md" block class="block pt-0.5">
+          <template #icon-left><QrCode class="w-4 h-4" /></template>
+          Tampilkan Kode QR Izin
+        </BaseButton>
       </div>
     </div>
 
@@ -172,11 +173,9 @@
         <p class="text-xs font-bold text-slate-800">Tidak Ada Izin Keluar Aktif</p>
         <p class="text-xs text-slate-500">Kamu terdaftar sedang berada di dalam kelas.</p>
       </div>
-      <router-link to="/student/permit/create" class="shrink-0">
-        <BaseButton variant="outline" size="sm">
-          Buat Izin
-        </BaseButton>
-      </router-link>
+      <BaseButton to="/student/permit/create" variant="outline" size="sm" class="shrink-0">
+        Buat Izin
+      </BaseButton>
     </div>
 
     <!-- BK Reports Feed -->

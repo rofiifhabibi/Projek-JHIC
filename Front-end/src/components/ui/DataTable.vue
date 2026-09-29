@@ -65,16 +65,20 @@
       </span>
       <div class="flex items-center gap-1.5">
         <button
+          type="button"
           @click="currentPage--"
           :disabled="currentPage === 1"
-          class="p-1.5 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed"
+          class="min-w-[36px] min-h-[36px] flex items-center justify-center rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer touch-manipulation transition"
+          aria-label="Halaman sebelumnya"
         >
           <ChevronLeft class="w-4 h-4" />
         </button>
         <button
+          type="button"
           @click="currentPage++"
           :disabled="currentPage === totalPages"
-          class="p-1.5 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed"
+          class="min-w-[36px] min-h-[36px] flex items-center justify-center rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer touch-manipulation transition"
+          aria-label="Halaman berikutnya"
         >
           <ChevronRight class="w-4 h-4" />
         </button>
@@ -98,14 +102,22 @@ const props = defineProps({
 const searchQuery = ref('')
 const currentPage = ref(1)
 
+const deepIncludes = (val, query) => {
+  if (val == null) return false
+  if (typeof val === 'string' || typeof val === 'number') {
+    return String(val).toLowerCase().includes(query)
+  }
+  if (typeof val === 'object') {
+    return Object.values(val).some(child => deepIncludes(child, query))
+  }
+  return false
+}
+
 const filteredData = computed(() => {
   if (!searchQuery.value) return props.data
-  const q = searchQuery.value.toLowerCase()
-  return props.data.filter((row) =>
-    Object.values(row).some(
-      (val) => val && String(val).toLowerCase().includes(q)
-    )
-  )
+  const q = searchQuery.value.toLowerCase().trim()
+  if (!q) return props.data
+  return props.data.filter((row) => deepIncludes(row, q))
 })
 
 const totalPages = computed(() => Math.ceil(filteredData.value.length / props.pageSize) || 1)

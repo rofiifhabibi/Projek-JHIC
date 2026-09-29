@@ -19,12 +19,11 @@
           Kamu saat ini memiliki permohonan izin (Status: <strong class="uppercase font-bold text-amber-950">{{ permitStore.activePermit?.status }}</strong>) yang sedang berjalan. Kamu bisa melihat surat izin aktif, atau membatalkannya sebelum mengajukan izin baru.
         </p>
         <div class="flex flex-col sm:flex-row gap-2 pt-1">
-          <router-link to="/student/permit/pass" class="flex-1">
-            <BaseButton variant="primary" size="sm" block>
-              Lihat Izin Aktif
-            </BaseButton>
-          </router-link>
+          <BaseButton to="/student/permit/pass" variant="primary" size="sm" block class="flex-1">
+            Lihat Izin Aktif
+          </BaseButton>
           <BaseButton
+            type="button"
             variant="danger"
             size="sm"
             class="flex-1"
@@ -33,11 +32,9 @@
           >
             Batalkan Izin Aktif
           </BaseButton>
-          <router-link to="/student/dashboard" class="flex-1">
-            <BaseButton variant="outline" size="sm" block>
-              Kembali ke Beranda
-            </BaseButton>
-          </router-link>
+          <BaseButton to="/student/dashboard" variant="outline" size="sm" block class="flex-1">
+            Kembali ke Beranda
+          </BaseButton>
         </div>
       </div>
 
@@ -237,16 +234,15 @@
 
         <!-- Action Buttons -->
         <div class="pt-2 flex flex-col sm:flex-row gap-3">
-          <router-link to="/student/dashboard" class="flex-1 order-2 sm:order-1">
-            <BaseButton
-              type="button"
-              variant="outline"
-              size="lg"
-              block
-            >
-              Batal & Kembali
-            </BaseButton>
-          </router-link>
+          <BaseButton
+            to="/student/dashboard"
+            variant="outline"
+            size="lg"
+            block
+            class="flex-1 order-2 sm:order-1"
+          >
+            Batal & Kembali
+          </BaseButton>
           <div class="flex-1 order-1 sm:order-2">
             <BaseButton
               type="submit"

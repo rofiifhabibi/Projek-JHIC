@@ -1,6 +1,6 @@
 <template>
   <label
-    class="relative flex items-start gap-3 p-4 rounded-2xl border-2 transition-all duration-150 cursor-pointer select-none active:scale-[0.98] focus-within:ring-2 focus-within:ring-[#355245] focus-within:ring-offset-2"
+    class="relative flex items-start gap-3 p-4 rounded-2xl border-2 transition-all duration-150 cursor-pointer select-none active:scale-[0.98] focus-within:ring-2 focus-within:ring-[#355245] focus-within:ring-offset-2 touch-manipulation"
     :class="[
       selected
         ? 'border-[#355245] bg-[#E8EFEA]/40 shadow-sm'

@@ -56,8 +56,9 @@
           </div>
 
           <button
+            type="button"
             @click="showLogoutConfirm = true"
-            class="text-xs bg-white/10 hover:bg-white/20 active:scale-95 px-2.5 sm:px-3 py-1.5 rounded-xl font-semibold border border-white/15 transition-all flex items-center gap-1.5 text-white"
+            class="text-xs bg-white/10 hover:bg-white/20 active:scale-95 px-2.5 sm:px-3 py-1.5 rounded-xl font-semibold border border-white/15 transition-all flex items-center gap-1.5 text-white cursor-pointer touch-manipulation"
           >
             <LogOut class="w-3.5 h-3.5 opacity-80" />
             <span class="hidden sm:inline">Keluar</span>

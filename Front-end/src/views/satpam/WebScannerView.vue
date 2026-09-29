@@ -13,8 +13,9 @@
             </span>
           </div>
           <button
+            type="button"
             @click="toggleCamera"
-            class="whitespace-nowrap text-xs font-extrabold px-3.5 py-1.5 rounded-xl border transition-all active:scale-95 flex items-center gap-1.5 shadow-sm"
+            class="whitespace-nowrap text-xs font-extrabold px-3.5 py-1.5 rounded-xl border transition-all active:scale-95 flex items-center gap-1.5 shadow-sm cursor-pointer touch-manipulation"
             :class="isCameraActive ? 'border-rose-500/50 bg-rose-600 text-white hover:bg-rose-500' : 'border-emerald-500/50 bg-emerald-600 text-white hover:bg-emerald-500'"
           >
             <Camera class="w-3.5 h-3.5" />
@@ -61,7 +62,7 @@
             <button
               type="button"
               @click="startCamera"
-              class="px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-extrabold text-xs sm:text-sm flex items-center gap-2.5 shadow-lg shadow-emerald-950/60 border border-emerald-400/40 transition-all cursor-pointer"
+              class="px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-extrabold text-xs sm:text-sm flex items-center gap-2.5 shadow-lg shadow-emerald-950/60 border border-emerald-400/40 transition-all cursor-pointer touch-manipulation"
             >
               <Camera class="w-4 h-4 sm:w-5 sm:h-5" />
               <span>KLIK UNTUK NYALAKAN KAMERA</span>

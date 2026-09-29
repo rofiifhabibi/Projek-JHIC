@@ -14,7 +14,7 @@
         :value="modelValue"
         :disabled="disabled"
         @change="$emit('update:modelValue', $event.target.value)"
-        class="w-full appearance-none rounded-xl border bg-white px-3.5 py-2.5 pr-10 text-sm font-medium text-slate-900 transition-all focus:outline-none focus:ring-2 focus:ring-[#355245] disabled:bg-slate-50 disabled:text-slate-400 disabled:cursor-not-allowed"
+        class="w-full appearance-none rounded-xl border bg-white px-3.5 py-2.5 pr-10 text-sm font-medium text-slate-900 transition-all focus:outline-none focus:ring-2 focus:ring-[#355245] disabled:bg-slate-50 disabled:text-slate-400 disabled:cursor-not-allowed cursor-pointer touch-manipulation"
         :class="error ? 'border-rose-300 focus:border-rose-500' : 'border-slate-200 focus:border-[#355245]'"
       >
         <option v-if="placeholder" value="" disabled selected>{{ placeholder }}</option>

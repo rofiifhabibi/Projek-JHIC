@@ -48,17 +48,18 @@
             <p class="text-xs text-rose-700">Kode QR ini sudah tidak bisa digunakan di pos satpam. Segera temui guru yang bersangkutan atau Guru BK.</p>
           </div>
           <div class="pt-2 flex flex-col gap-2">
-            <router-link :to="'/student/report/create?type=alpha&request_id=' + activePermit.request_id">
-              <BaseButton variant="danger" size="md" block>
-                <template #icon-left><HeartHandshake class="w-4 h-4" /></template>
-                Kirim Klarifikasi ke BK
-              </BaseButton>
-            </router-link>
-            <router-link to="/student/dashboard">
-              <BaseButton variant="outline" size="sm" block>
-                Kembali ke Beranda
-              </BaseButton>
-            </router-link>
+            <BaseButton
+              :to="'/student/report/create?type=alpha&request_id=' + activePermit.request_id"
+              variant="danger"
+              size="md"
+              block
+            >
+              <template #icon-left><HeartHandshake class="w-4 h-4" /></template>
+              Kirim Klarifikasi ke BK
+            </BaseButton>
+            <BaseButton to="/student/dashboard" variant="outline" size="sm" block>
+              Kembali ke Beranda
+            </BaseButton>
           </div>
         </div>
 
@@ -77,17 +78,13 @@
             </p>
           </div>
           <div class="pt-2 flex flex-col sm:flex-row gap-2">
-            <router-link to="/student/permit/create" class="flex-1">
-              <BaseButton variant="primary" size="md" block>
-                <template #icon-left><FilePlus class="w-4 h-4" /></template>
-                Ajukan Izin Baru
-              </BaseButton>
-            </router-link>
-            <router-link to="/student/dashboard" class="flex-1">
-              <BaseButton variant="outline" size="md" block>
-                Kembali ke Beranda
-              </BaseButton>
-            </router-link>
+            <BaseButton to="/student/permit/create" variant="primary" size="md" block class="flex-1">
+              <template #icon-left><FilePlus class="w-4 h-4" /></template>
+              Ajukan Izin Baru
+            </BaseButton>
+            <BaseButton to="/student/dashboard" variant="outline" size="md" block class="flex-1">
+              Kembali ke Beranda
+            </BaseButton>
           </div>
         </div>
 
@@ -106,17 +103,13 @@
             </p>
           </div>
           <div class="pt-2 flex flex-col sm:flex-row gap-2">
-            <router-link to="/student/permit/create" class="flex-1">
-              <BaseButton variant="primary" size="md" block>
-                <template #icon-left><FilePlus class="w-4 h-4" /></template>
-                Buat Izin Baru
-              </BaseButton>
-            </router-link>
-            <router-link to="/student/dashboard" class="flex-1">
-              <BaseButton variant="outline" size="md" block>
-                Kembali ke Beranda
-              </BaseButton>
-            </router-link>
+            <BaseButton to="/student/permit/create" variant="primary" size="md" block class="flex-1">
+              <template #icon-left><FilePlus class="w-4 h-4" /></template>
+              Buat Izin Baru
+            </BaseButton>
+            <BaseButton to="/student/dashboard" variant="outline" size="md" block class="flex-1">
+              Kembali ke Beranda
+            </BaseButton>
           </div>
         </div>
 
@@ -296,11 +289,9 @@
       description="Anda tidak memiliki surat izin aktif atau dalam proses pengajuan saat ini."
     >
       <template #action>
-        <router-link to="/student/permit/create">
-          <BaseButton variant="primary" size="md">
-            Buat Izin Baru
-          </BaseButton>
-        </router-link>
+        <BaseButton to="/student/permit/create" variant="primary" size="md">
+          Buat Izin Baru
+        </BaseButton>
       </template>
     </EmptyState>
 

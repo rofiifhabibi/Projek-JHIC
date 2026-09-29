@@ -39,8 +39,9 @@
                 {{ title }}
               </h3>
               <button
+                type="button"
                 @click="close"
-                class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-300"
+                class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-300 cursor-pointer touch-manipulation"
                 aria-label="Tutup dialog"
               >
                 <X class="w-5 h-5" />

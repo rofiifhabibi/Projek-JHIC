@@ -11,12 +11,23 @@
         <p class="text-xs text-[#E8EFEA]/80">Pantau siswa yang sedang izin atau terlambat kembali ke kelas Anda.</p>
       </div>
 
-      <div class="bg-black/20 p-4 rounded-2xl border border-white/10 text-left md:text-right min-w-[220px]">
-        <p class="text-xs text-[#E8EFEA]/80 font-bold uppercase tracking-wider">Kelas yang Diajar</p>
-        <p class="text-lg font-black text-white">
-          {{ permitStore.monitoringData.classes?.join(', ') || 'XII RPL 1' }}
-        </p>
-        <p class="text-xs text-[#E8EFEA]/70 mt-0.5">Jam Pelajaran Aktif</p>
+      <div class="bg-black/20 p-4 rounded-2xl border border-white/10 text-left md:text-right min-w-[220px] flex flex-col md:items-end justify-between gap-2.5">
+        <div>
+          <p class="text-xs text-[#E8EFEA]/80 font-bold uppercase tracking-wider">Kelas yang Diajar</p>
+          <p class="text-lg font-black text-white">
+            {{ permitStore.monitoringData.classes?.join(', ') || 'XII RPL 1' }}
+          </p>
+          <p class="text-xs text-[#E8EFEA]/70 mt-0.5">Jam Pelajaran Aktif</p>
+        </div>
+        <button
+          type="button"
+          @click="loadMonitoring"
+          :disabled="isRefreshing"
+          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 active:scale-95 text-xs font-bold text-white transition border border-white/15 cursor-pointer touch-manipulation disabled:opacity-50"
+        >
+          <RefreshCw class="w-3.5 h-3.5" :class="{ 'animate-spin': isRefreshing }" />
+          <span>Segarkan Data</span>
+        </button>
       </div>
     </div>
 
@@ -152,7 +163,7 @@ import DataTable from '@/components/ui/DataTable.vue'
 import BaseBadge from '@/components/ui/BaseBadge.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
 import ConfirmDialog from '@/components/ui/ConfirmDialog.vue'
-import { Clock, AlertCircle, Users, AlertTriangle } from 'lucide-vue-next'
+import { Clock, AlertCircle, Users, AlertTriangle, RefreshCw } from 'lucide-vue-next'
 
 const permitStore = usePermitStore()
 const toast = useToast()
@@ -167,6 +178,7 @@ const columns = [
 const showConfirm = ref(false)
 const selectedItem = ref(null)
 const selectedAction = ref('')
+const isRefreshing = ref(false)
 
 const activeCount = computed(() => {
   return permitStore.monitoringData.active_permits?.filter(p => p.status === 'ACTIVE').length || 0
@@ -181,7 +193,14 @@ const totalMobilityCount = computed(() => {
 })
 
 const loadMonitoring = async () => {
-  await permitStore.fetchTeacherMonitoring()
+  isRefreshing.value = true
+  try {
+    await permitStore.fetchTeacherMonitoring()
+  } finally {
+    setTimeout(() => {
+      isRefreshing.value = false
+    }, 350)
+  }
 }
 
 onMounted(() => {

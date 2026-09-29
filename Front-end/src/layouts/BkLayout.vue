@@ -55,8 +55,9 @@
           <p class="text-xs text-teal-400 font-semibold">Guru Bimbingan Konseling</p>
         </div>
         <button
+          type="button"
           @click="showLogoutConfirm = true"
-          class="w-full bg-slate-800 hover:bg-slate-700 active:scale-95 text-slate-200 py-2.5 rounded-xl text-xs font-bold transition-all border border-slate-700 flex items-center justify-center gap-2"
+          class="w-full bg-slate-800 hover:bg-slate-700 active:scale-95 text-slate-200 py-2.5 rounded-xl text-xs font-bold transition-all border border-slate-700 flex items-center justify-center gap-2 cursor-pointer touch-manipulation"
         >
           <LogOut class="w-3.5 h-3.5" />
           <span>Keluar</span>
@@ -73,7 +74,11 @@
             <AppLogo variant="bk" size="sm" theme="emerald" />
             <h1 class="font-extrabold text-sm text-white">Bimbingan Konseling</h1>
           </div>
-          <button @click="showLogoutConfirm = true" class="text-xs bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700">
+          <button
+            type="button"
+            @click="showLogoutConfirm = true"
+            class="text-xs bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700 cursor-pointer touch-manipulation"
+          >
             Keluar
           </button>
         </div>

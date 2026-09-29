@@ -51,8 +51,9 @@
               <p class="text-xs text-[#E8EFEA]/80 mt-1">Guru Pengajar</p>
             </div>
             <button
+              type="button"
               @click="showLogoutConfirm = true"
-              class="bg-white/10 hover:bg-white/20 active:scale-95 text-xs font-bold px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl border border-white/15 transition-all text-white flex items-center gap-1.5"
+              class="bg-white/10 hover:bg-white/20 active:scale-95 text-xs font-bold px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl border border-white/15 transition-all text-white flex items-center gap-1.5 cursor-pointer touch-manipulation"
             >
               <LogOut class="w-3.5 h-3.5" />
               <span class="hidden sm:inline">Keluar</span>

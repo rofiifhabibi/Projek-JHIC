@@ -28,8 +28,9 @@
         <button
           v-for="cat in categoryFilters"
           :key="cat.value"
+          type="button"
           @click="selectedCategory = cat.value"
-          class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap"
+          class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer touch-manipulation active:scale-95"
           :class="selectedCategory === cat.value ? 'bg-[#355245] text-white shadow-xs' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'"
         >
           {{ cat.label }}
@@ -40,8 +41,9 @@
     <!-- Mobile/Tablet Column Selector (below xl) -->
     <div class="xl:hidden flex items-center bg-slate-200/70 p-1.5 rounded-2xl border border-slate-200 gap-1">
       <button
+        type="button"
         @click="activeColumnTab = 'OPEN'"
-        class="flex-1 py-2 px-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5"
+        class="flex-1 py-2 px-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer touch-manipulation active:scale-[0.98]"
         :class="activeColumnTab === 'OPEN' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'"
       >
         <span class="w-2 h-2 rounded-full bg-amber-500 shrink-0"></span>
@@ -49,8 +51,9 @@
         <span class="ml-0.5 px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[10px] font-bold">{{ filteredOpen.length }}</span>
       </button>
       <button
+        type="button"
         @click="activeColumnTab = 'IN_PROGRESS'"
-        class="flex-1 py-2 px-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5"
+        class="flex-1 py-2 px-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer touch-manipulation active:scale-[0.98]"
         :class="activeColumnTab === 'IN_PROGRESS' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'"
       >
         <span class="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></span>
@@ -58,8 +61,9 @@
         <span class="ml-0.5 px-1.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold">{{ filteredInProgress.length }}</span>
       </button>
       <button
+        type="button"
         @click="activeColumnTab = 'RESOLVED'"
-        class="flex-1 py-2 px-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5"
+        class="flex-1 py-2 px-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer touch-manipulation active:scale-[0.98]"
         :class="activeColumnTab === 'RESOLVED' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'"
       >
         <span class="w-2 h-2 rounded-full bg-slate-500 shrink-0"></span>

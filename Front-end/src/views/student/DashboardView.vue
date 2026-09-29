@@ -148,43 +148,41 @@
               Klarifikasi Terkirim (Menunggu BK)
             </BaseButton>
           </div>
-          <router-link v-else :to="'/student/report/create?type=alpha&request_id=' + permitStore.activePermit.request_id" class="flex-1">
-            <BaseButton variant="danger" size="md" block>
-              <template #icon-left><HeartHandshake class="w-4 h-4" /></template>
-              Kirim Klarifikasi ke BK
-            </BaseButton>
-          </router-link>
-          <router-link to="/student/permit/pass" class="flex-1">
-            <BaseButton variant="outline" size="md" block>
-              Lihat Detail Izin
-            </BaseButton>
-          </router-link>
+          <BaseButton
+            v-else
+            :to="'/student/report/create?type=alpha&request_id=' + permitStore.activePermit.request_id"
+            variant="danger"
+            size="md"
+            block
+            class="flex-1"
+          >
+            <template #icon-left><HeartHandshake class="w-4 h-4" /></template>
+            Kirim Klarifikasi ke BK
+          </BaseButton>
+          <BaseButton to="/student/permit/pass" variant="outline" size="md" block class="flex-1">
+            Lihat Detail Izin
+          </BaseButton>
         </div>
         <div v-else-if="permitStore.activePermit.status === 'REJECTED'" class="pt-1 flex flex-col sm:flex-row gap-2">
-          <router-link to="/student/permit/create" class="flex-1">
-            <BaseButton variant="primary" size="md" block>
-              <template #icon-left><FilePlus class="w-4 h-4" /></template>
-              Ajukan Izin Baru
-            </BaseButton>
-          </router-link>
-          <router-link to="/student/permit/pass" class="flex-1">
-            <BaseButton variant="outline" size="md" block>
-              Lihat Keterangan Penolakan
-            </BaseButton>
-          </router-link>
+          <BaseButton to="/student/permit/create" variant="primary" size="md" block class="flex-1">
+            <template #icon-left><FilePlus class="w-4 h-4" /></template>
+            Ajukan Izin Baru
+          </BaseButton>
+          <BaseButton to="/student/permit/pass" variant="outline" size="md" block class="flex-1">
+            Lihat Keterangan Penolakan
+          </BaseButton>
         </div>
         <div v-else-if="permitStore.activePermit.status === 'PENDING' || permitStore.activePermit.status === 'APPROVED'" class="pt-1 flex flex-col sm:flex-row gap-2">
-          <router-link to="/student/permit/pass" class="flex-1">
-            <BaseButton variant="primary" size="md" block>
-              <template #icon-left>
-                <Clock v-if="permitStore.activePermit.status === 'PENDING'" class="w-4 h-4" />
-                <QrCode v-else class="w-4 h-4" />
-              </template>
-              {{ permitStore.activePermit.status === 'PENDING' ? 'Menunggu Persetujuan Guru' : 'Tampilkan Kode QR Izin' }}
-            </BaseButton>
-          </router-link>
+          <BaseButton to="/student/permit/pass" variant="primary" size="md" block class="flex-1">
+            <template #icon-left>
+              <Clock v-if="permitStore.activePermit.status === 'PENDING'" class="w-4 h-4" />
+              <QrCode v-else class="w-4 h-4" />
+            </template>
+            {{ permitStore.activePermit.status === 'PENDING' ? 'Menunggu Persetujuan Guru' : 'Tampilkan Kode QR Izin' }}
+          </BaseButton>
           <div class="shrink-0">
             <BaseButton
+              type="button"
               variant="outline"
               size="md"
               class="text-rose-600 border-rose-200 hover:bg-rose-50 w-full sm:w-auto"
@@ -194,12 +192,10 @@
             </BaseButton>
           </div>
         </div>
-        <router-link v-else to="/student/permit/pass" class="block pt-0.5">
-          <BaseButton variant="primary" size="md" block>
-            <template #icon-left><QrCode class="w-4 h-4" /></template>
-            Tampilkan Kode QR Izin
-          </BaseButton>
-        </router-link>
+        <BaseButton v-else to="/student/permit/pass" variant="primary" size="md" block class="block pt-0.5">
+          <template #icon-left><QrCode class="w-4 h-4" /></template>
+          Tampilkan Kode QR Izin
+        </BaseButton>
       </div>
     </div>
 
@@ -213,11 +209,9 @@
         <h3 class="text-base sm:text-lg font-bold text-slate-900">Sedang Belajar di Kelas</h3>
         <p class="text-xs text-slate-500">Kamu tidak memiliki izin keluar aktif saat ini.</p>
       </div>
-      <router-link to="/student/permit/create" class="shrink-0">
-        <BaseButton variant="secondary" size="sm">
-          Ajukan Izin
-        </BaseButton>
-      </router-link>
+      <BaseButton to="/student/permit/create" variant="secondary" size="sm" class="shrink-0">
+        Ajukan Izin
+      </BaseButton>
     </div>
 
     <!-- Quick Action Cards Grid -->

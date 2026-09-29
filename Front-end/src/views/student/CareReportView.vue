@@ -131,16 +131,15 @@
         </div>
 
         <div class="flex flex-col sm:flex-row gap-3 pt-2">
-          <router-link to="/student/dashboard" class="flex-1 order-2 sm:order-1">
-            <BaseButton
-              type="button"
-              variant="outline"
-              size="lg"
-              block
-            >
-              Batal & Kembali
-            </BaseButton>
-          </router-link>
+          <BaseButton
+            to="/student/dashboard"
+            variant="outline"
+            size="lg"
+            block
+            class="flex-1 order-2 sm:order-1"
+          >
+            Batal & Kembali
+          </BaseButton>
           <div class="flex-1 order-1 sm:order-2">
             <BaseButton
               type="submit"

@@ -68,7 +68,7 @@
               type="button"
               @click="quickLogin(role)"
               :disabled="authStore.loading"
-              class="flex flex-col items-center justify-center p-2.5 sm:p-3 rounded-2xl border border-slate-200 hover:border-[#355245] bg-slate-50/70 hover:bg-[#E8EFEA]/60 transition-all text-center group active:scale-95 disabled:opacity-50 shadow-xs"
+              class="flex flex-col items-center justify-center p-2.5 sm:p-3 rounded-2xl border border-slate-200 hover:border-[#355245] bg-slate-50/70 hover:bg-[#E8EFEA]/60 transition-all text-center group active:scale-95 disabled:opacity-50 shadow-xs cursor-pointer touch-manipulation"
             >
               <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-white border border-slate-200 flex items-center justify-center mb-1 text-[#355245] group-hover:bg-[#355245] group-hover:text-white transition-all shadow-xs">
                 <component :is="role.icon" class="w-3.5 h-3.5 sm:w-4 sm:h-4" />
