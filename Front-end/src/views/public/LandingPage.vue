@@ -242,30 +242,30 @@
           </p>
         </div>
 
-        <div class="flex flex-wrap items-center justify-center gap-2.5 sm:gap-4 md:gap-5">
+        <div class="flex flex-wrap items-center justify-center gap-6 sm:gap-8 md:gap-12 lg:gap-14">
           <!-- JHIC 2026 -->
-          <div class="w-[calc(50%-0.4rem)] sm:w-36 md:w-44 h-14 sm:h-16 flex items-center justify-center px-3 sm:px-4 py-2 rounded-2xl bg-slate-50/90 border border-slate-200/90 shadow-2xs hover:bg-white hover:border-[#355245]/30 hover:shadow-xs transition">
-            <img src="/logos/jhic.png" alt="JHIC 2026" class="max-h-7 sm:max-h-8 max-w-[110px] sm:max-w-[120px] object-contain" />
+          <div class="flex items-center justify-center transition-opacity hover:opacity-80">
+            <img src="/logos/jhic.png" alt="JHIC 2026" class="h-8 sm:h-9 md:h-10 w-auto max-w-[120px] sm:max-w-[135px] object-contain" />
           </div>
 
           <!-- Jagoan Hosting -->
-          <div class="w-[calc(50%-0.4rem)] sm:w-36 md:w-44 h-14 sm:h-16 flex items-center justify-center px-3 sm:px-4 py-2 rounded-2xl bg-slate-50/90 border border-slate-200/90 shadow-2xs hover:bg-white hover:border-[#355245]/30 hover:shadow-xs transition">
-            <img src="/logos/jagoan-hosting.png" alt="Jagoan Hosting" class="max-h-5 sm:max-h-6.5 max-w-[115px] sm:max-w-[125px] object-contain" />
+          <div class="flex items-center justify-center transition-opacity hover:opacity-80">
+            <img src="/logos/jagoan-hosting.png" alt="Jagoan Hosting" class="h-6 sm:h-7 md:h-8 w-auto max-w-[130px] sm:max-w-[155px] object-contain" />
           </div>
 
           <!-- Komdigi -->
-          <div class="w-[calc(50%-0.4rem)] sm:w-36 md:w-44 h-14 sm:h-16 flex items-center justify-center px-3 sm:px-4 py-2 rounded-2xl bg-slate-50/90 border border-slate-200/90 shadow-2xs hover:bg-white hover:border-[#355245]/30 hover:shadow-xs transition">
-            <img src="/logos/komdigi.png" alt="Komdigi" class="max-h-6.5 sm:max-h-7.5 max-w-[105px] sm:max-w-[115px] object-contain" />
+          <div class="flex items-center justify-center transition-opacity hover:opacity-80">
+            <img src="/logos/komdigi.png" alt="Komdigi" class="h-8 sm:h-9 md:h-10 w-auto max-w-[105px] sm:max-w-[120px] object-contain" />
           </div>
 
           <!-- Garuda Spark -->
-          <div class="w-[calc(50%-0.4rem)] sm:w-36 md:w-44 h-14 sm:h-16 flex items-center justify-center px-3 sm:px-4 py-2 rounded-2xl bg-slate-50/90 border border-slate-200/90 shadow-2xs hover:bg-white hover:border-[#355245]/30 hover:shadow-xs transition">
-            <img src="/logos/garuda-spark.png" alt="Garuda Spark" class="max-h-5 sm:max-h-6 max-w-[110px] sm:max-w-[120px] object-contain" />
+          <div class="flex items-center justify-center transition-opacity hover:opacity-80">
+            <img src="/logos/garuda-spark.png" alt="Garuda Spark" class="h-6.5 sm:h-7.5 md:h-8.5 w-auto max-w-[120px] sm:max-w-[140px] object-contain" />
           </div>
 
           <!-- Ngalup.co -->
-          <div class="w-[calc(50%-0.4rem)] sm:w-36 md:w-44 h-14 sm:h-16 flex items-center justify-center px-3 sm:px-4 py-2 rounded-2xl bg-slate-50/90 border border-slate-200/90 shadow-2xs hover:bg-white hover:border-[#355245]/30 hover:shadow-xs transition">
-            <img src="/logos/ngalup.png" alt="Ngalup.co" class="max-h-4.5 sm:max-h-5.5 max-w-[110px] sm:max-w-[120px] object-contain" />
+          <div class="flex items-center justify-center transition-opacity hover:opacity-80">
+            <img src="/logos/ngalup.png" alt="Ngalup.co" class="h-5 sm:h-6 md:h-7 w-auto max-w-[130px] sm:max-w-[150px] object-contain" />
           </div>
         </div>
 
