@@ -235,28 +235,41 @@
 
     <!-- Partners & Supporters Section -->
     <section class="py-10 sm:py-16 bg-white border-y border-slate-200/80">
-      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <p class="text-[11px] sm:text-xs font-bold text-slate-500 uppercase tracking-[0.2em] mb-6 sm:mb-10">
-          Didukung Oleh
-        </p>
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:flex md:flex-wrap items-center justify-center gap-3 sm:gap-6 lg:gap-8">
-          <div class="h-11 sm:h-12 flex items-center justify-center p-2 rounded-xl bg-slate-50/80 border border-slate-100">
-            <img src="/logos/jhic.png" alt="JHIC 2026" class="max-h-7 sm:max-h-8 max-w-[120px] object-contain" />
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6 sm:space-y-8">
+        <div>
+          <p class="text-[11px] sm:text-xs font-bold text-slate-500 uppercase tracking-[0.2em]">
+            Didukung Oleh
+          </p>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-center gap-2.5 sm:gap-4 md:gap-5">
+          <!-- JHIC 2026 -->
+          <div class="w-[calc(50%-0.4rem)] sm:w-36 md:w-44 h-13 sm:h-15 md:h-16 flex items-center justify-center px-3 sm:px-4 py-2 rounded-2xl bg-slate-50/90 border border-slate-200/90 shadow-2xs hover:bg-white hover:border-[#355245]/30 hover:shadow-xs transition">
+            <img src="/logos/jhic.png" alt="JHIC 2026" class="max-h-7 sm:max-h-8 max-w-[110px] sm:max-w-[120px] object-contain" />
           </div>
-          <div class="h-11 sm:h-12 flex items-center justify-center p-2 rounded-xl bg-slate-50/80 border border-slate-100">
-            <img src="/logos/jagoan-hosting.png" alt="Jagoan Hosting" class="max-h-6 sm:max-h-7 max-w-[110px] object-contain" />
+
+          <!-- Jagoan Hosting -->
+          <div class="w-[calc(50%-0.4rem)] sm:w-36 md:w-44 h-13 sm:h-15 md:h-16 flex items-center justify-center px-3 sm:px-4 py-2 rounded-2xl bg-slate-50/90 border border-slate-200/90 shadow-2xs hover:bg-white hover:border-[#355245]/30 hover:shadow-xs transition">
+            <img src="/logos/jagoan-hosting.png" alt="Jagoan Hosting" class="max-h-5 sm:max-h-6.5 max-w-[115px] sm:max-w-[125px] object-contain" />
           </div>
-          <div class="h-11 sm:h-12 flex items-center justify-center p-2 rounded-xl bg-slate-50/80 border border-slate-100">
-            <img src="/logos/komdigi.png" alt="Komdigi" class="max-h-7 sm:max-h-8 max-w-[120px] object-contain" />
+
+          <!-- Komdigi -->
+          <div class="w-[calc(50%-0.4rem)] sm:w-36 md:w-44 h-13 sm:h-15 md:h-16 flex items-center justify-center px-3 sm:px-4 py-2 rounded-2xl bg-slate-50/90 border border-slate-200/90 shadow-2xs hover:bg-white hover:border-[#355245]/30 hover:shadow-xs transition">
+            <img src="/logos/komdigi.png" alt="Komdigi" class="max-h-6.5 sm:max-h-7.5 max-w-[105px] sm:max-w-[115px] object-contain" />
           </div>
-          <div class="h-11 sm:h-12 flex items-center justify-center p-2 rounded-xl bg-slate-50/80 border border-slate-100">
-            <img src="/logos/garuda-spark.png" alt="Garuda Spark" class="max-h-6 sm:max-h-7 max-w-[110px] object-contain" />
+
+          <!-- Garuda Spark -->
+          <div class="w-[calc(50%-0.4rem)] sm:w-36 md:w-44 h-13 sm:h-15 md:h-16 flex items-center justify-center px-3 sm:px-4 py-2 rounded-2xl bg-slate-50/90 border border-slate-200/90 shadow-2xs hover:bg-white hover:border-[#355245]/30 hover:shadow-xs transition">
+            <img src="/logos/garuda-spark.png" alt="Garuda Spark" class="max-h-5 sm:max-h-6 max-w-[110px] sm:max-w-[120px] object-contain" />
           </div>
-          <div class="col-span-2 sm:col-span-1 h-11 sm:h-12 flex items-center justify-center p-2 rounded-xl bg-slate-50/80 border border-slate-100 max-w-[180px] sm:max-w-none mx-auto w-full">
-            <img src="/logos/ngalup.png" alt="Ngalup.co" class="max-h-5 sm:max-h-6 max-w-[100px] object-contain" />
+
+          <!-- Ngalup.co -->
+          <div class="w-[calc(50%-0.4rem)] sm:w-36 md:w-44 h-13 sm:h-15 md:h-16 flex items-center justify-center px-3 sm:px-4 py-2 rounded-2xl bg-slate-50/90 border border-slate-200/90 shadow-2xs hover:bg-white hover:border-[#355245]/30 hover:shadow-xs transition">
+            <img src="/logos/ngalup.png" alt="Ngalup.co" class="max-h-4.5 sm:max-h-5.5 max-w-[110px] sm:max-w-[120px] object-contain" />
           </div>
         </div>
-        <p class="text-[11px] sm:text-xs text-slate-500 font-medium mt-6 sm:mt-10">
+
+        <p class="text-[11px] sm:text-xs text-slate-500 font-medium pt-1">
           Jagoan Hosting Innovation Competition 2026
         </p>
       </div>
@@ -281,11 +294,11 @@
 
         <!-- Footer Partner Logos -->
         <div class="border-t border-slate-800 pt-5 flex flex-wrap items-center justify-center gap-4 sm:gap-8">
-          <img src="/logos/jhic-white.png" alt="JHIC" class="h-4 sm:h-6 object-contain opacity-40 hover:opacity-90 transition" />
-          <img src="/logos/jagoan-hosting-white.png" alt="Jagoan Hosting" class="h-3.5 sm:h-5 object-contain opacity-40 hover:opacity-90 transition" />
-          <img src="/logos/komdigi-white.png" alt="Komdigi" class="h-4 sm:h-6 object-contain opacity-40 hover:opacity-90 transition" />
-          <img src="/logos/garuda-spark-white.png" alt="Garuda Spark" class="h-3.5 sm:h-5 object-contain opacity-40 hover:opacity-90 transition" />
-          <img src="/logos/ngalup-white.png" alt="Ngalup" class="h-3 sm:h-4 object-contain opacity-40 hover:opacity-90 transition" />
+          <img src="/logos/jhic-white.png" alt="JHIC" class="h-5 sm:h-6 max-w-[90px] object-contain opacity-40 hover:opacity-90 transition" />
+          <img src="/logos/jagoan-hosting-white.png" alt="Jagoan Hosting" class="h-4 sm:h-5 max-w-[95px] object-contain opacity-40 hover:opacity-90 transition" />
+          <img src="/logos/komdigi-white.png" alt="Komdigi" class="h-5 sm:h-6 max-w-[85px] object-contain opacity-40 hover:opacity-90 transition" />
+          <img src="/logos/garuda-spark-white.png" alt="Garuda Spark" class="h-4 sm:h-5 max-w-[95px] object-contain opacity-40 hover:opacity-90 transition" />
+          <img src="/logos/ngalup-white.png" alt="Ngalup" class="h-3.5 sm:h-4.5 max-w-[95px] object-contain opacity-40 hover:opacity-90 transition" />
         </div>
       </div>
     </footer>

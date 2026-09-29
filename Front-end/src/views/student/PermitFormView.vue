@@ -80,7 +80,7 @@
               :key="dur"
               type="button"
               @click="setDuration(dur)"
-              class="py-2.5 px-2 rounded-xl border text-xs font-bold transition text-center"
+              class="py-2.5 px-2 rounded-xl border text-xs font-bold transition text-center cursor-pointer touch-manipulation active:scale-95"
               :class="form.duration_minutes === dur ? 'border-[#355245] bg-[#E8EFEA] text-[#355245] shadow-xs' : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'"
             >
               {{ dur }} Menit
@@ -100,7 +100,7 @@
                 type="button"
                 @click="adjustDuration(-5)"
                 :disabled="form.duration_minutes <= 5"
-                class="h-10 px-2.5 sm:px-3 rounded-xl bg-white border border-slate-200 text-slate-700 text-xs font-bold hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center transition shadow-xs shrink-0"
+                class="h-10 px-2.5 sm:px-3 rounded-xl bg-white border border-slate-200 text-slate-700 text-xs font-bold hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center transition shadow-xs shrink-0 cursor-pointer touch-manipulation active:scale-95"
                 title="Kurangi 5 menit"
               >
                 -5 mnt
@@ -128,7 +128,7 @@
                 type="button"
                 @click="adjustDuration(5)"
                 :disabled="form.duration_minutes >= 180"
-                class="h-10 px-2.5 sm:px-3 rounded-xl bg-white border border-slate-200 text-slate-700 text-xs font-bold hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center transition shadow-xs shrink-0"
+                class="h-10 px-2.5 sm:px-3 rounded-xl bg-white border border-slate-200 text-slate-700 text-xs font-bold hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center transition shadow-xs shrink-0 cursor-pointer touch-manipulation active:scale-95"
                 title="Tambah 5 menit"
               >
                 +5 mnt
