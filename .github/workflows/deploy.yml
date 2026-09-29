@@ -1,0 +1,43 @@
+name: Auto Deploy Student Care to VPS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Eksekusi Deployment ke VPS via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          port: ${{ secrets.SSH_PORT }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script_stop_on_error: true
+          script: |
+            echo "🚀 1. Menarik update kode terbaru dari GitHub..."
+            cd /home/developer/app
+            git pull origin main
+
+            echo "📦 2. Memperbarui dependensi Backend Laravel..."
+            cd /home/developer/app/Backend
+            composer install --no-dev --optimize-autoloader --no-interaction
+            php artisan migrate --force
+
+            echo "🎨 3. Membangun aset Front-end Vue.js..."
+            cd /home/developer/app/Front-end
+            npm install
+            npm run build
+
+            echo "📁 4. Memindahkan berkas statis ke Backend/public..."
+            cp -r dist/* /home/developer/app/Backend/public/
+
+            echo "⚡ 5. Menyegarkan cache Laravel..."
+            cd /home/developer/app/Backend
+            php artisan optimize:clear
+
+            echo "✅ Deployment selesai! Website https://studentcare.my.id telah terupdate."
