@@ -3,20 +3,25 @@
     <!-- Top Navbar -->
     <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/80">
       <div class="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        <router-link to="/" class="flex items-center gap-2 min-w-0">
-          <img
-            src="/logos/studentcare-logo.png"
-            alt="StudentCare"
-            class="h-7 sm:h-9 object-contain shrink-0 max-w-[160px] sm:max-w-none"
-          />
-        </router-link>
+        <!-- Left: Logo (flex-1 to balance right column) -->
+        <div class="flex-1 flex items-center justify-start min-w-0">
+          <router-link to="/" class="flex items-center shrink-0">
+            <img
+              src="/logos/studentcare-logo.png"
+              alt="StudentCare"
+              class="h-7 sm:h-9 object-contain max-w-[160px] sm:max-w-none"
+            />
+          </router-link>
+        </div>
 
-        <nav class="hidden md:flex items-center gap-8 text-xs font-bold uppercase tracking-wider text-slate-600">
-          <a href="#fitur" class="hover:text-[#355245] transition">Alur Layanan</a>
-          <a href="#peran" class="hover:text-[#355245] transition">Akses Masuk</a>
+        <!-- Center: Nav Links (shrink-0, mathematically locked at 50% center) -->
+        <nav class="hidden md:flex items-center justify-center gap-8 text-xs font-bold uppercase tracking-wider text-slate-600 shrink-0">
+          <a href="#fitur" class="hover:text-[#355245] transition-colors py-1">Alur Layanan</a>
+          <a href="#peran" class="hover:text-[#355245] transition-colors py-1">Pilihan Peran</a>
         </nav>
 
-        <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+        <!-- Right: Masuk Akun CTA + Mobile Hamburger (flex-1 to balance left column) -->
+        <div class="flex-1 flex items-center justify-end gap-2 sm:gap-3 shrink-0">
           <BaseButton to="/login" variant="primary" size="sm" class="!px-3 sm:!px-4">
             <template #icon-left><LogIn class="w-3.5 h-3.5 sm:w-4 sm:h-4" /></template>
             <span class="inline sm:hidden text-xs">Masuk</span>
@@ -53,7 +58,7 @@
           @click="isMobileMenuOpen = false"
           class="block py-2 text-xs font-bold uppercase tracking-wider text-slate-700 hover:text-[#355245]"
         >
-          Akses Masuk
+          Pilihan Peran
         </a>
         <div class="pt-2 border-t border-slate-100">
           <BaseButton to="/login" @click="isMobileMenuOpen = false" variant="primary" size="sm" block>
