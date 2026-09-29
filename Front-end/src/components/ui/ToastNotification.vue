@@ -14,7 +14,8 @@
         <div
           v-for="toast in toasts"
           :key="toast.id"
-          class="pointer-events-auto flex items-start gap-3 p-3.5 sm:p-4 rounded-2xl shadow-xl border backdrop-blur-md transition-all w-full max-w-sm"
+          @click="removeToast(toast.id)"
+          class="pointer-events-auto cursor-pointer select-none flex items-start gap-3 p-3.5 sm:p-4 rounded-2xl shadow-xl border backdrop-blur-md transition-all w-full max-w-sm active:scale-[0.99]"
           :class="getToastClass(toast.type)"
         >
           <!-- Icon -->
@@ -27,8 +28,9 @@
 
           <!-- Close button -->
           <button
-            @click="removeToast(toast.id)"
-            class="shrink-0 p-1 rounded-lg opacity-70 hover:opacity-100 hover:bg-black/5 transition"
+            type="button"
+            @click.stop="removeToast(toast.id)"
+            class="shrink-0 p-1.5 -mr-1 rounded-lg opacity-70 hover:opacity-100 hover:bg-black/5 transition cursor-pointer touch-manipulation"
             aria-label="Tutup notifikasi"
           >
             <X class="w-4 h-4" />

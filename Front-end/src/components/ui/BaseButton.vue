@@ -1,28 +1,40 @@
 <template>
-  <button
-    :type="type"
+  <component
+    :is="componentTag"
+    :to="to"
+    :href="href"
+    :type="componentTag === 'button' ? type : undefined"
     :disabled="disabled || loading"
-    class="inline-flex items-center justify-center font-semibold rounded-xl transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#355245] focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed select-none active:scale-[0.98]"
+    class="inline-flex items-center justify-center font-semibold rounded-xl transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#355245] focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed select-none active:scale-[0.98] cursor-pointer touch-manipulation"
     :class="[variantClasses, sizeClasses, block ? 'w-full' : '']"
   >
     <Loader2 v-if="loading" class="w-4 h-4 animate-spin shrink-0" />
     <slot name="icon-left" />
     <slot />
     <slot name="icon-right" />
-  </button>
+  </component>
 </template>
 
 <script setup>
 import { computed } from 'vue'
+import { RouterLink } from 'vue-router'
 import { Loader2 } from 'lucide-vue-next'
 
 const props = defineProps({
+  to: { type: [String, Object], default: null },
+  href: { type: String, default: null },
   type: { type: String, default: 'button' },
   variant: { type: String, default: 'primary' }, // primary, secondary, danger, outline, ghost
   size: { type: String, default: 'md' }, // sm, md, lg
   disabled: { type: Boolean, default: false },
   loading: { type: Boolean, default: false },
   block: { type: Boolean, default: false },
+})
+
+const componentTag = computed(() => {
+  if (props.to) return RouterLink
+  if (props.href) return 'a'
+  return 'button'
 })
 
 const variantClasses = computed(() => {
@@ -34,9 +46,9 @@ const variantClasses = computed(() => {
     case 'danger':
       return 'bg-rose-600 hover:bg-rose-700 text-white shadow-sm shadow-rose-600/20'
     case 'outline':
-      return 'border border-slate-300 hover:bg-slate-50 text-slate-700'
+      return 'border border-slate-300 hover:bg-slate-50 text-slate-700 bg-transparent'
     case 'ghost':
-      return 'hover:bg-slate-100 text-slate-700'
+      return 'hover:bg-slate-100 text-slate-700 bg-transparent'
     default:
       return 'bg-[#355245] text-white'
   }

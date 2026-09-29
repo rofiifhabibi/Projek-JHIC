@@ -72,6 +72,22 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
+/* Hilangkan delay 300ms saat tap pada layar ponsel */
+button,
+a,
+input,
+select,
+textarea,
+[role="button"] {
+  touch-action: manipulation;
+}
+
+/* Pastikan button di dalam link/router-link tidak menelan klik di ponsel */
+a > button,
+a > [role="button"] {
+  pointer-events: none;
+}
+
 /* Safe area support for mobile floating nav and fixed headers */
 :root {
   --sat: env(safe-area-inset-top, 0px);

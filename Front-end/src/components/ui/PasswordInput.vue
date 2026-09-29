@@ -16,7 +16,7 @@
       <button
         type="button"
         @click="showPassword = !showPassword"
-        class="text-slate-400 hover:text-slate-600 focus:outline-none transition"
+        class="text-slate-400 hover:text-slate-600 focus:outline-none transition p-2 -mr-2 min-w-[36px] min-h-[36px] flex items-center justify-center cursor-pointer touch-manipulation"
         :aria-label="showPassword ? 'Sembunyikan kata sandi' : 'Tampilkan kata sandi'"
       >
         <EyeOff v-if="showPassword" class="w-4 h-4" />

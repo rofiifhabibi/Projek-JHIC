@@ -2,15 +2,36 @@ import { defineStore } from 'pinia'
 import api from '@/api/axios'
 import router from '@/router'
 
+// Safe storage wrapper to prevent crashes in private browsing or restrictive WebViews
+const safeStorage = {
+  get(key) {
+    try {
+      return typeof window !== 'undefined' ? localStorage.getItem(key) : null
+    } catch {
+      return null
+    }
+  },
+  set(key, value) {
+    try {
+      if (typeof window !== 'undefined') localStorage.setItem(key, value)
+    } catch {}
+  },
+  remove(key) {
+    try {
+      if (typeof window !== 'undefined') localStorage.removeItem(key)
+    } catch {}
+  }
+}
+
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    token: localStorage.getItem('token') || null,
+    token: safeStorage.get('token') || null,
     user: (() => {
       try {
-        const stored = localStorage.getItem('user')
+        const stored = safeStorage.get('user')
         return stored ? JSON.parse(stored) : null
       } catch (e) {
-        localStorage.removeItem('user')
+        safeStorage.remove('user')
         return null
       }
     })(),
@@ -42,8 +63,8 @@ export const useAuthStore = defineStore('auth', {
         const data = response.data.data;
         this.token = data.token;
         this.user = data.user;
-        localStorage.setItem('token', this.token);
-        localStorage.setItem('user', JSON.stringify(this.user));
+        safeStorage.set('token', this.token);
+        safeStorage.set('user', JSON.stringify(this.user));
         router.push(this.defaultRedirectRoute);
       } catch (err) {
         this.error = err.response?.data?.message || 'Gagal login. Periksa kembali NIS/Email dan kata sandi Anda.';
@@ -57,7 +78,7 @@ export const useAuthStore = defineStore('auth', {
       try {
         const response = await api.get('/me');
         this.user = response.data.data;
-        localStorage.setItem('user', JSON.stringify(this.user));
+        safeStorage.set('user', JSON.stringify(this.user));
       } catch (err) {
         this.logout();
       }
@@ -70,8 +91,8 @@ export const useAuthStore = defineStore('auth', {
       } catch (e) {}
       this.token = null;
       this.user = null;
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
+      safeStorage.remove('token');
+      safeStorage.remove('user');
       router.push({ name: 'login' });
     }
   }

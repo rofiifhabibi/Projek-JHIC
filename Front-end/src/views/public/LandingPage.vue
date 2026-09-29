@@ -17,18 +17,17 @@
         </nav>
 
         <div class="flex items-center gap-2 sm:gap-3 shrink-0">
-          <router-link to="/login">
-            <BaseButton variant="primary" size="sm" class="!px-3 sm:!px-4">
-              <template #icon-left><LogIn class="w-3.5 h-3.5 sm:w-4 sm:h-4" /></template>
-              <span class="inline sm:hidden text-xs">Masuk</span>
-              <span class="hidden sm:inline text-xs">Masuk Akun</span>
-            </BaseButton>
-          </router-link>
+          <BaseButton to="/login" variant="primary" size="sm" class="!px-3 sm:!px-4">
+            <template #icon-left><LogIn class="w-3.5 h-3.5 sm:w-4 sm:h-4" /></template>
+            <span class="inline sm:hidden text-xs">Masuk</span>
+            <span class="hidden sm:inline text-xs">Masuk Akun</span>
+          </BaseButton>
 
           <!-- Mobile Hamburger Toggle -->
           <button
+            type="button"
             @click="isMobileMenuOpen = !isMobileMenuOpen"
-            class="md:hidden p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition"
+            class="md:hidden p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition cursor-pointer touch-manipulation"
             aria-label="Buka menu navigasi"
           >
             <Menu v-if="!isMobileMenuOpen" class="w-5 h-5" />
@@ -57,11 +56,9 @@
           Akses Masuk
         </a>
         <div class="pt-2 border-t border-slate-100">
-          <router-link to="/login" @click="isMobileMenuOpen = false" class="block w-full">
-            <BaseButton variant="primary" size="sm" block>
-              Masuk ke Akun
-            </BaseButton>
-          </router-link>
+          <BaseButton to="/login" @click="isMobileMenuOpen = false" variant="primary" size="sm" block>
+            Masuk ke Akun
+          </BaseButton>
         </div>
       </div>
     </header>
@@ -84,17 +81,13 @@
 
         <!-- Hero CTAs -->
         <div class="flex flex-col sm:flex-row items-center justify-center gap-2.5 sm:gap-4 pt-1 sm:pt-2 max-w-xs sm:max-w-none mx-auto w-full">
-          <router-link to="/login" class="w-full sm:w-auto">
-            <BaseButton variant="primary" size="lg" block class="shadow-sm">
-              Masuk ke Akun
-              <template #icon-right><ArrowRight class="w-4 h-4" /></template>
-            </BaseButton>
-          </router-link>
-          <a href="#fitur" class="w-full sm:w-auto">
-            <BaseButton variant="outline" size="lg" block>
-              Lihat Alur Izin
-            </BaseButton>
-          </a>
+          <BaseButton to="/login" variant="primary" size="lg" block class="shadow-sm">
+            Masuk ke Akun
+            <template #icon-right><ArrowRight class="w-4 h-4" /></template>
+          </BaseButton>
+          <BaseButton href="#fitur" variant="outline" size="lg" block>
+            Lihat Alur Izin
+          </BaseButton>
         </div>
 
         <!-- Trust / Highlight Badges on Mobile & Desktop -->
