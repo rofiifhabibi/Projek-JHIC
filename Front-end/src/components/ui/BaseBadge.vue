@@ -19,10 +19,9 @@ const props = defineProps({
 const badgeStyle = computed(() => {
   switch (props.status?.toUpperCase()) {
     case 'ACTIVE':
+    case 'APPROVED':
     case 'IN_PROGRESS':
       return 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-    case 'APPROVED':
-      return 'bg-sky-50 text-sky-700 border border-sky-200'
     case 'PENDING':
     case 'OPEN':
       return 'bg-amber-50 text-amber-700 border border-amber-200'
@@ -44,10 +43,9 @@ const badgeStyle = computed(() => {
 const dotStyle = computed(() => {
   switch (props.status?.toUpperCase()) {
     case 'ACTIVE':
+    case 'APPROVED':
     case 'IN_PROGRESS':
       return 'bg-emerald-500'
-    case 'APPROVED':
-      return 'bg-sky-500'
     case 'PENDING':
     case 'OPEN':
       return 'bg-amber-500'

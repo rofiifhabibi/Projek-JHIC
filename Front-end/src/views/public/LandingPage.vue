@@ -106,7 +106,7 @@
             Persetujuan Guru
           </span>
           <span class="inline-flex items-center gap-1.5 bg-slate-100/90 px-2.5 py-1 rounded-lg">
-            <span class="w-1.5 h-1.5 rounded-full bg-teal-600"></span>
+            <span class="w-1.5 h-1.5 rounded-full bg-[#7B9684]"></span>
             Verifikasi Gerbang
           </span>
         </div>

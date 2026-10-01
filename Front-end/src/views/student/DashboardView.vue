@@ -119,12 +119,12 @@
         <!-- Approved Notice Banner if Approved by Teacher -->
         <div
           v-if="permitStore.activePermit.status === 'APPROVED'"
-          class="p-3 bg-sky-50 border border-sky-200 rounded-xl flex items-start gap-2.5 text-xs text-sky-900"
+          class="p-3 bg-emerald-50 border border-emerald-200 rounded-xl flex items-start gap-2.5 text-xs text-emerald-900"
         >
-          <CheckCircle class="w-4 h-4 text-sky-600 shrink-0 mt-0.5" />
+          <CheckCircle class="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
           <div class="leading-relaxed">
-            <strong class="font-bold text-sky-950">Izin Disetujui Guru!</strong>
-            <p class="text-xs text-sky-700 mt-0.5">Tunjukkan kode QR izin ke satpam di gerbang sebelum keluar sekolah.</p>
+            <strong class="font-bold text-emerald-950">Izin Disetujui Guru!</strong>
+            <p class="text-xs text-emerald-700 mt-0.5">Tunjukkan kode QR izin ke satpam di gerbang sebelum keluar sekolah.</p>
           </div>
         </div>
 
@@ -230,7 +230,7 @@
 
       <router-link to="/student/report/create" class="group">
         <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:border-[#355245] transition space-y-3">
-          <div class="w-10 h-10 rounded-xl bg-teal-50 text-teal-700 flex items-center justify-center group-hover:scale-105 transition">
+          <div class="w-10 h-10 rounded-xl bg-[#E8EFEA] text-[#355245] flex items-center justify-center group-hover:scale-105 transition">
             <ShieldAlert class="w-5 h-5" />
           </div>
           <div>

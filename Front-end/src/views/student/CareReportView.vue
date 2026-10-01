@@ -2,7 +2,7 @@
   <div class="space-y-6">
     <div class="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 border border-slate-200 shadow-sm space-y-5 sm:space-y-6">
       <div class="border-b border-slate-100 pb-4">
-        <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-teal-50 text-teal-700 border border-teal-200/60 text-xs font-bold uppercase tracking-wider mb-2">
+        <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#E8EFEA] text-[#355245] border border-[#d8e3db] text-xs font-bold uppercase tracking-wider mb-2">
           <ShieldAlert class="w-3.5 h-3.5" /> Layanan Bimbingan & Konseling (BK)
         </div>
         <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Pengaduan & Konseling Siswa</h2>

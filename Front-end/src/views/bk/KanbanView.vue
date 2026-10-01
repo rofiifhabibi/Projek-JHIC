@@ -395,10 +395,10 @@
         <div class="space-y-1.5">
           <div class="flex items-center justify-between">
             <label class="text-xs font-semibold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
-              <MessageSquare class="w-3.5 h-3.5 text-teal-700" />
+              <MessageSquare class="w-3.5 h-3.5 text-[#355245]" />
               Pesan Tanggapan untuk Siswa <span class="text-rose-500">*</span>
             </label>
-            <span class="text-[11px] text-teal-700 font-medium">Terbaca langsung di HP Siswa</span>
+            <span class="text-[11px] text-[#355245] font-semibold">Terbaca langsung di HP Siswa</span>
           </div>
           <textarea
             v-model="responseInput"

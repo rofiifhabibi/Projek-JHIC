@@ -44,7 +44,7 @@ const iconBgClass = computed(() => {
     case 'success': return 'bg-emerald-50 text-emerald-600'
     case 'warning': return 'bg-amber-50 text-amber-600'
     case 'danger': return 'bg-rose-50 text-rose-600'
-    case 'info': return 'bg-sky-50 text-sky-600'
+    case 'info': return 'bg-[#E8EFEA] text-[#355245]'
     case 'slate': return 'bg-slate-100 text-slate-600'
     default: return 'bg-[#E8EFEA] text-[#355245]'
   }
@@ -55,7 +55,7 @@ const iconColorClass = computed(() => {
     case 'success': return 'text-emerald-600'
     case 'warning': return 'text-amber-600'
     case 'danger': return 'text-rose-600'
-    case 'info': return 'text-sky-600'
+    case 'info': return 'text-[#355245]'
     case 'slate': return 'text-slate-600'
     default: return 'text-[#355245]'
   }

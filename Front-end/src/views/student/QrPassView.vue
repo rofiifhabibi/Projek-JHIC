@@ -204,13 +204,13 @@
           <!-- KONDISI B: Izin TEMP & BELUM DISCAN SATPAM (Status APPROVED atau Belum ada expiry_time) -->
           <div
             v-else-if="activePermit.type === 'TEMP' && (!activePermit.expiry_time || activePermit.status === 'APPROVED')"
-            class="bg-sky-50 p-4 rounded-2xl border border-sky-200 text-xs text-sky-900 max-w-xs mx-auto space-y-2"
+            class="bg-emerald-50 p-4 rounded-2xl border border-emerald-200 text-xs text-emerald-900 max-w-xs mx-auto space-y-2"
           >
-            <div class="flex items-center justify-center gap-2 font-bold text-sky-900">
-              <CheckCircle class="w-4 h-4 text-sky-600" />
+            <div class="flex items-center justify-center gap-2 font-bold text-emerald-900">
+              <CheckCircle class="w-4 h-4 text-emerald-600" />
               Izin Disetujui! Siap Menuju Gerbang
             </div>
-            <p class="text-xs text-sky-700 leading-relaxed">
+            <p class="text-xs text-emerald-700 leading-relaxed">
               Tunjukkan kode QR ini ke Satpam di gerbang sekolah saat hendak keluar. Batas waktu izin (<strong>{{ activePermit.duration_minutes || 30 }} Menit</strong>) akan mulai berjalan setelah di-scan oleh Satpam.
             </p>
             <div class="pt-1">

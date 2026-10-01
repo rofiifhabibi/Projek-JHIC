@@ -1,22 +1,22 @@
 <template>
   <div class="min-h-screen bg-[#F4F7F4] text-slate-800 font-sans flex flex-col md:flex-row">
     <!-- Desktop Sidebar -->
-    <aside class="w-64 bg-slate-900 border-r border-slate-800 hidden md:flex flex-col justify-between shadow-md z-20 shrink-0">
+    <aside class="w-64 bg-[#355245] border-r border-[#273e34] text-white hidden md:flex flex-col justify-between shadow-md z-20 shrink-0">
       <div>
-        <router-link to="/bk/kanban" class="h-20 flex items-center gap-3 px-6 border-b border-slate-800 bg-slate-950/40 group">
-          <AppLogo variant="bk" size="md" theme="emerald" class="group-hover:scale-105 transition" />
+        <router-link to="/bk/kanban" class="h-20 flex items-center gap-3 px-6 border-b border-white/10 bg-black/10 group">
+          <AppLogo variant="bk" size="md" theme="white-trans" class="group-hover:scale-105 transition" />
           <div>
-            <h1 class="text-sm font-extrabold text-white group-hover:text-teal-300 transition tracking-tight leading-tight">Bimbingan Konseling</h1>
-            <p class="text-xs text-teal-400 font-semibold uppercase tracking-wider mt-0.5">SMKN 2 Depok Sleman</p>
+            <h1 class="text-sm font-extrabold text-white group-hover:text-emerald-200 transition tracking-tight leading-tight">Bimbingan Konseling</h1>
+            <p class="text-xs text-[#E8EFEA]/80 font-medium uppercase tracking-wider mt-0.5">SMKN 2 Depok Sleman</p>
           </div>
         </router-link>
 
         <nav class="p-4 space-y-1.5">
-          <div class="px-3 py-2 text-xs font-bold text-slate-500 uppercase tracking-widest">Menu Konseling</div>
+          <div class="px-3 py-2 text-xs font-bold text-[#E8EFEA]/70 uppercase tracking-widest">Menu Konseling</div>
           <router-link
             to="/bk/kanban"
-            class="flex items-center justify-between px-4 py-3 rounded-xl text-xs font-bold transition-all text-slate-300 hover:text-white hover:bg-slate-800"
-            active-class="bg-[#355245] text-white shadow-md"
+            class="flex items-center justify-between px-4 py-3 rounded-xl text-xs font-bold transition-all text-[#E8EFEA]/90 hover:text-white hover:bg-white/10"
+            active-class="!bg-white !text-[#355245] shadow-sm font-extrabold"
           >
             <div class="flex items-center gap-3">
               <Kanban class="w-4 h-4" />
@@ -24,7 +24,7 @@
             </div>
             <span
               v-if="openCasesCount > 0"
-              class="bg-amber-500 text-white text-xs font-bold px-2 py-0.5 rounded-full"
+              class="bg-amber-500 text-white text-xs font-bold px-2 py-0.5 rounded-full shadow-xs"
             >
               {{ openCasesCount }}
             </span>
@@ -32,8 +32,8 @@
 
           <router-link
             to="/bk/global-monitor"
-            class="flex items-center justify-between px-4 py-3 rounded-xl text-xs font-bold transition-all text-slate-300 hover:text-white hover:bg-slate-800"
-            active-class="bg-[#355245] text-white shadow-md"
+            class="flex items-center justify-between px-4 py-3 rounded-xl text-xs font-bold transition-all text-[#E8EFEA]/90 hover:text-white hover:bg-white/10"
+            active-class="!bg-white !text-[#355245] shadow-sm font-extrabold"
           >
             <div class="flex items-center gap-3">
               <Globe class="w-4 h-4" />
@@ -41,7 +41,7 @@
             </div>
             <span
               v-if="overdueCount > 0"
-              class="bg-rose-500 text-white text-xs font-bold px-2 py-0.5 rounded-full flex items-center gap-1 shadow-sm"
+              class="bg-rose-500 text-white text-xs font-bold px-2 py-0.5 rounded-full flex items-center gap-1 shadow-xs"
             >
               {{ overdueCount }} Terlambat
             </span>
@@ -49,15 +49,15 @@
         </nav>
       </div>
 
-      <div class="p-4 border-t border-slate-800 bg-slate-950/40 space-y-3">
+      <div class="p-4 border-t border-white/10 bg-black/10 space-y-3">
         <div class="px-2">
           <p class="text-xs font-bold text-white truncate">{{ authStore.userName }}</p>
-          <p class="text-xs text-teal-400 font-semibold">Guru Bimbingan Konseling</p>
+          <p class="text-xs text-[#E8EFEA]/80 font-medium">Guru Bimbingan Konseling</p>
         </div>
         <button
           type="button"
           @click="showLogoutConfirm = true"
-          class="w-full bg-slate-800 hover:bg-slate-700 active:scale-95 text-slate-200 py-2.5 rounded-xl text-xs font-bold transition-all border border-slate-700 flex items-center justify-center gap-2 cursor-pointer touch-manipulation"
+          class="w-full bg-white/10 hover:bg-white/20 active:scale-95 text-white py-2.5 rounded-xl text-xs font-bold transition-all border border-white/15 flex items-center justify-center gap-2 cursor-pointer touch-manipulation"
         >
           <LogOut class="w-3.5 h-3.5" />
           <span>Keluar</span>
@@ -68,26 +68,29 @@
     <!-- Main Workspace -->
     <main class="flex-1 min-w-0 flex flex-col">
       <!-- Mobile Header WITH Navigation Tabs -->
-      <header class="md:hidden bg-slate-900 text-white border-b border-slate-800 sticky top-0 z-30">
+      <header class="md:hidden bg-[#355245] text-white border-b border-white/10 sticky top-0 z-30 shadow-md">
         <div class="h-16 px-4 flex items-center justify-between">
-          <router-link to="/bk/kanban" class="flex items-center gap-2 group">
-            <AppLogo variant="bk" size="sm" theme="emerald" class="group-hover:scale-105 transition" />
-            <h1 class="font-extrabold text-sm text-white group-hover:text-teal-300 transition">Bimbingan Konseling</h1>
+          <router-link to="/bk/kanban" class="flex items-center gap-2.5 group">
+            <AppLogo variant="bk" size="sm" theme="white-trans" class="group-hover:scale-105 transition" />
+            <div>
+              <h1 class="font-extrabold text-sm text-white group-hover:text-emerald-200 transition leading-tight">Bimbingan Konseling</h1>
+              <p class="text-[11px] text-[#E8EFEA]/80 font-medium">SMKN 2 Depok Sleman</p>
+            </div>
           </router-link>
           <button
             type="button"
             @click="showLogoutConfirm = true"
-            class="text-xs bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700 cursor-pointer touch-manipulation"
+            class="text-xs bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-lg border border-white/15 font-semibold cursor-pointer touch-manipulation transition"
           >
             Keluar
           </button>
         </div>
 
-        <div class="bg-slate-800 px-4 py-2 flex justify-around border-t border-slate-700/80">
+        <div class="bg-black/15 px-4 py-2 flex justify-around border-t border-white/10">
           <router-link
             to="/bk/kanban"
-            class="text-xs font-bold py-1.5 px-3 rounded-lg text-slate-300 flex items-center gap-1.5"
-            active-class="bg-[#355245] text-white"
+            class="text-xs font-bold py-1.5 px-3 rounded-lg text-[#E8EFEA]/90 hover:text-white flex items-center gap-1.5 transition"
+            active-class="!bg-white !text-[#355245] shadow-xs font-extrabold"
           >
             <span>Kasus Siswa</span>
             <span
@@ -99,8 +102,8 @@
           </router-link>
           <router-link
             to="/bk/global-monitor"
-            class="text-xs font-bold py-1.5 px-3 rounded-lg text-slate-300 flex items-center gap-1.5"
-            active-class="bg-[#355245] text-white"
+            class="text-xs font-bold py-1.5 px-3 rounded-lg text-[#E8EFEA]/90 hover:text-white flex items-center gap-1.5 transition"
+            active-class="!bg-white !text-[#355245] shadow-xs font-extrabold"
           >
             <span>Izin Siswa</span>
             <span

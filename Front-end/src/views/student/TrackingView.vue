@@ -116,12 +116,12 @@
         <!-- Approved Notice Banner if Approved by Teacher -->
         <div
           v-if="permitStore.activePermit.status === 'APPROVED'"
-          class="p-3 bg-sky-50 border border-sky-200 rounded-xl flex items-start gap-2.5 text-xs text-sky-900"
+          class="p-3 bg-emerald-50 border border-emerald-200 rounded-xl flex items-start gap-2.5 text-xs text-emerald-900"
         >
-          <CheckCircle class="w-4 h-4 text-sky-600 shrink-0 mt-0.5" />
+          <CheckCircle class="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
           <div class="leading-relaxed">
-            <strong class="font-bold text-sky-950">Izin Disetujui Guru!</strong>
-            <p class="text-xs text-sky-700 mt-0.5">Tunjukkan kode QR ke petugas satpam di gerbang sekolah saat hendak keluar.</p>
+            <strong class="font-bold text-emerald-950">Izin Disetujui Guru!</strong>
+            <p class="text-xs text-emerald-700 mt-0.5">Tunjukkan kode QR ke petugas satpam di gerbang sekolah saat hendak keluar.</p>
           </div>
         </div>
 
@@ -182,7 +182,7 @@
     <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 shadow-sm space-y-4">
       <div class="flex items-center justify-between">
         <h3 class="text-xs font-bold text-slate-900 flex items-center gap-2">
-          <ShieldAlert class="w-4 h-4 text-teal-600" />
+          <ShieldAlert class="w-4 h-4 text-[#355245]" />
           Riwayat Pengaduan & Konseling BK
         </h3>
         <span class="text-xs text-slate-500 font-semibold">{{ reportStore.myReports?.length || 0 }} Laporan</span>
@@ -197,7 +197,7 @@
           <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-2.5">
             <div class="space-y-1 min-w-0 flex-1">
               <div class="flex items-center gap-2 flex-wrap">
-                <span class="px-2 py-0.5 rounded text-xs font-bold bg-teal-50 text-teal-800 border border-teal-200/60 uppercase">
+                <span class="px-2 py-0.5 rounded text-xs font-bold bg-[#E8EFEA] text-[#355245] border border-[#d8e3db] uppercase">
                   {{ formatCategory(rep.category) }}
                 </span>
                 <span class="text-xs font-mono text-slate-400">#REP-{{ rep.report_id }}</span>
