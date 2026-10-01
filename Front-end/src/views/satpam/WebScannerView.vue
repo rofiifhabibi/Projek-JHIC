@@ -7,19 +7,25 @@
         <!-- Top bar of scanner card -->
         <div class="flex items-center justify-between w-full border-b border-slate-100 pb-3">
           <div class="flex items-center gap-2">
-            <span class="w-2.5 h-2.5 rounded-full" :class="isCameraActive ? 'bg-emerald-500' : 'bg-slate-300'"></span>
-            <span class="text-xs font-bold text-slate-800">
-              {{ isCameraActive ? 'Kamera Pemindai Aktif' : 'Pemindai Kamera Gerbang' }}
+            <span
+              class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold transition-colors"
+              :class="isCameraActive ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-slate-100 text-slate-600 border border-slate-200'"
+            >
+              <span class="w-2 h-2 rounded-full" :class="isCameraActive ? 'bg-emerald-500 animate-pulse' : 'bg-slate-400'"></span>
+              {{ isCameraActive ? 'Kamera Sedang Aktif' : 'Kamera Mati' }}
             </span>
           </div>
           <button
             type="button"
             @click="toggleCamera"
-            class="whitespace-nowrap text-xs font-bold px-3 py-1.5 rounded-xl border transition-all active:scale-95 flex items-center gap-1.5 shadow-2xs cursor-pointer touch-manipulation"
-            :class="isCameraActive ? 'border-rose-200 bg-rose-50 text-rose-700 hover:bg-rose-100' : 'border-[#355245] bg-[#355245] text-white hover:bg-[#283e34]'"
+            class="whitespace-nowrap text-xs sm:text-sm font-bold px-3.5 py-2 rounded-xl transition-all active:scale-95 flex items-center gap-2 shadow-xs cursor-pointer touch-manipulation"
+            :class="isCameraActive
+              ? 'bg-rose-600 hover:bg-rose-700 text-white border border-rose-600'
+              : 'bg-emerald-600 hover:bg-emerald-700 text-white border border-emerald-600'"
           >
-            <Camera class="w-3.5 h-3.5" />
-            {{ isCameraActive ? 'Matikan Kamera' : 'Nyalakan Kamera' }}
+            <CameraOff v-if="isCameraActive" class="w-4 h-4" />
+            <Camera v-else class="w-4 h-4" />
+            <span>{{ isCameraActive ? 'Matikan Kamera' : 'Nyalakan Kamera' }}</span>
           </button>
         </div>
 
@@ -50,32 +56,42 @@
           <!-- Camera Inactive Viewfinder with Clean Action Button -->
           <div
             v-if="!isCameraActive"
-            class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center space-y-3 bg-slate-50"
+            class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center space-y-3.5 bg-slate-50"
           >
-            <div class="w-12 h-12 rounded-xl bg-white border border-slate-200 text-[#355245] flex items-center justify-center shadow-2xs">
-              <Camera class="w-6 h-6" />
+            <div class="w-14 h-14 rounded-2xl bg-white border border-slate-200 text-emerald-700 flex items-center justify-center shadow-xs">
+              <Camera class="w-7 h-7" />
             </div>
             <div class="space-y-1 max-w-xs">
-              <h3 class="text-sm font-bold text-slate-800">Kamera Pemindai Nonaktif</h3>
+              <h3 class="text-sm sm:text-base font-bold text-slate-800">Kamera Pemindai Sedang Mati</h3>
               <p class="text-xs text-slate-500 leading-relaxed">
-                Tekan tombol di bawah untuk membuka kamera dan memindai kode QR izin siswa.
+                Sentuh tombol hijau di bawah untuk mulai memindai kode QR izin siswa di gerbang.
               </p>
             </div>
             <button
               type="button"
               @click="startCamera"
-              class="px-4 py-2.5 rounded-xl bg-[#355245] hover:bg-[#283e34] active:scale-95 text-white font-bold text-xs sm:text-sm flex items-center gap-2 shadow-xs transition-all cursor-pointer touch-manipulation"
+              class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-bold text-xs sm:text-sm flex items-center gap-2 shadow-xs transition-all cursor-pointer touch-manipulation"
             >
-              <Camera class="w-4 h-4" />
-              <span>Nyalakan Kamera</span>
+              <Camera class="w-4 h-4 sm:w-4.5 sm:h-4.5" />
+              <span>Nyalakan Kamera Sekarang</span>
             </button>
           </div>
         </div>
 
-        <!-- Live Scanning Helper Hint -->
-        <div v-if="isCameraActive" class="w-full bg-emerald-50 border border-emerald-200 rounded-xl p-2.5 flex items-center gap-2 text-xs text-emerald-800 font-medium">
-          <span class="w-2 h-2 rounded-full bg-emerald-600 shrink-0"></span>
-          <span>Arahkan kamera ke layar HP siswa. Kode QR akan dipindai otomatis.</span>
+        <!-- Live Scanning Helper Hint & Bottom Quick Turn Off Button -->
+        <div v-if="isCameraActive" class="w-full bg-emerald-50 border border-emerald-200 rounded-xl p-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5 text-xs text-emerald-800">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-600 shrink-0"></span>
+            <span class="font-medium">Arahkan kamera ke layar HP siswa. Kode QR akan dipindai otomatis.</span>
+          </div>
+          <button
+            type="button"
+            @click="stopCamera"
+            class="shrink-0 text-xs font-bold text-rose-700 hover:text-rose-800 bg-white hover:bg-rose-50 border border-rose-200 px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition active:scale-95 cursor-pointer touch-manipulation shadow-2xs self-end sm:self-auto"
+          >
+            <CameraOff class="w-3.5 h-3.5 text-rose-600" />
+            <span>Matikan Kamera</span>
+          </button>
         </div>
 
         <!-- Manual Token Form -->
@@ -325,7 +341,7 @@ import { useToast } from '@/composables/useToast'
 import BaseModal from '@/components/ui/BaseModal.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
 import BaseBadge from '@/components/ui/BaseBadge.vue'
-import { Camera, QrCode, CheckCircle, XCircle, AlertTriangle, Clock, ShieldCheck } from 'lucide-vue-next'
+import { Camera, CameraOff, QrCode, CheckCircle, XCircle, AlertTriangle, Clock, ShieldCheck } from 'lucide-vue-next'
 
 const permitStore = usePermitStore()
 const toast = useToast()
