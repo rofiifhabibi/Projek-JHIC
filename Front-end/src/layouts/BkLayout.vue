@@ -11,20 +11,20 @@
           </div>
         </router-link>
 
-        <nav class="p-4 space-y-1.5">
+        <nav class="p-3.5 space-y-1.5">
           <div class="px-3 py-2 text-xs font-bold text-[#E8EFEA]/70 uppercase tracking-widest">Menu Konseling</div>
           <router-link
             to="/bk/kanban"
-            class="flex items-center justify-between px-4 py-3 rounded-xl text-xs font-bold transition-all text-[#E8EFEA]/90 hover:text-white hover:bg-white/10"
+            class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all text-[#E8EFEA]/90 hover:text-white hover:bg-white/10"
             active-class="!bg-white !text-[#355245] shadow-sm font-extrabold"
           >
-            <div class="flex items-center gap-3">
-              <Kanban class="w-4 h-4" />
-              <span>Penanganan Kasus</span>
+            <div class="flex items-center gap-2.5 min-w-0">
+              <Kanban class="w-4 h-4 shrink-0" />
+              <span class="whitespace-nowrap truncate">Penanganan Kasus</span>
             </div>
             <span
               v-if="openCasesCount > 0"
-              class="bg-amber-500 text-white text-xs font-bold px-2 py-0.5 rounded-full shadow-xs"
+              class="bg-amber-500 text-white text-xs font-bold px-2 py-0.5 rounded-full shadow-xs shrink-0 whitespace-nowrap"
             >
               {{ openCasesCount }}
             </span>
@@ -32,16 +32,16 @@
 
           <router-link
             to="/bk/global-monitor"
-            class="flex items-center justify-between px-4 py-3 rounded-xl text-xs font-bold transition-all text-[#E8EFEA]/90 hover:text-white hover:bg-white/10"
+            class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all text-[#E8EFEA]/90 hover:text-white hover:bg-white/10"
             active-class="!bg-white !text-[#355245] shadow-sm font-extrabold"
           >
-            <div class="flex items-center gap-3">
-              <Globe class="w-4 h-4" />
-              <span>Izin Seluruh Siswa</span>
+            <div class="flex items-center gap-2.5 min-w-0">
+              <Globe class="w-4 h-4 shrink-0" />
+              <span class="whitespace-nowrap truncate">Izin Siswa</span>
             </div>
             <span
               v-if="overdueCount > 0"
-              class="bg-rose-500 text-white text-xs font-bold px-2 py-0.5 rounded-full flex items-center gap-1 shadow-xs"
+              class="bg-rose-500 text-white text-[11px] font-bold px-2 py-0.5 rounded-full shadow-xs shrink-0 whitespace-nowrap"
             >
               {{ overdueCount }} Terlambat
             </span>

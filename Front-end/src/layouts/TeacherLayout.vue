@@ -17,13 +17,13 @@
             <nav class="hidden md:flex items-center gap-1.5 lg:gap-2 ml-1 lg:ml-4 bg-black/15 p-1 rounded-xl border border-white/10 shrink-0">
               <router-link
                 to="/teacher/monitoring"
-                class="px-3 lg:px-4 py-2 rounded-lg text-xs font-bold transition-all text-[#E8EFEA]/90 hover:text-white flex items-center gap-2"
+                class="px-3 lg:px-4 py-2 rounded-lg text-xs font-bold transition-all text-[#E8EFEA]/90 hover:text-white flex items-center gap-2 whitespace-nowrap shrink-0"
                 active-class="!bg-white !text-[#355245] shadow-sm font-extrabold"
               >
                 <span>Monitoring Siswa</span>
                 <span
                   v-if="overdueCount > 0"
-                  class="bg-rose-500 text-white text-xs font-bold px-2 py-0.5 rounded-full flex items-center gap-1 shadow-sm"
+                  class="bg-rose-500 text-white text-xs font-bold px-2 py-0.5 rounded-full flex items-center gap-1 shadow-sm whitespace-nowrap shrink-0"
                 >
                   {{ overdueCount }} Terlambat
                 </span>
