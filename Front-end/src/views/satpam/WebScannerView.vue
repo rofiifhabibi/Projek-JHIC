@@ -386,7 +386,7 @@
 
 <script setup>
 import { ref, nextTick, onMounted, onUnmounted } from 'vue'
-import { Html5Qrcode } from 'html5-qrcode'
+import { Html5Qrcode, Html5QrcodeSupportedFormats } from 'html5-qrcode'
 import { usePermitStore } from '@/stores/permit'
 import { useToast } from '@/composables/useToast'
 import BaseModal from '@/components/ui/BaseModal.vue'
@@ -438,10 +438,21 @@ const startCamera = async (silent = false) => {
   try {
     isCameraActive.value = true
     await nextTick()
-    html5QrCode = new Html5Qrcode("qr-reader")
+    // Optimasi performa tinggi: batasi hanya format QR_CODE dan gunakan akselerasi GPU/NPU BarcodeDetector bawaan HP
+    html5QrCode = new Html5Qrcode("qr-reader", {
+      formatsToSupport: [ Html5QrcodeSupportedFormats.QR_CODE ],
+      verbose: false,
+      experimentalFeatures: {
+        useBarCodeDetectorIfSupported: true
+      }
+    })
     await html5QrCode.start(
       { facingMode: "environment" },
-      { fps: 10, qrbox: { width: 220, height: 220 } },
+      {
+        fps: 4, // 4 FPS sangat hemat CPU & RAM ponsel (tidak membuat HP panas / lag)
+        qrbox: { width: 220, height: 220 },
+        aspectRatio: 1.0
+      },
       (decodedText) => {
         scanToken(decodedText)
       },
@@ -462,14 +473,16 @@ const stopCamera = async () => {
   if (isTogglingCamera.value) return
   isTogglingCamera.value = true
   try {
-    if (html5QrCode && isCameraActive.value) {
+    if (html5QrCode) {
       try {
-        if (html5QrCode.getState() === 3) {
-          try { html5QrCode.resume() } catch (e) {}
+        if (html5QrCode.isScanning) {
+          await html5QrCode.stop()
         }
-        await html5QrCode.stop()
         html5QrCode.clear()
-      } catch (err) {}
+      } catch (err) {
+        console.warn('Gagal menghentikan scanner:', err)
+      }
+      html5QrCode = null
       isCameraActive.value = false
     }
   } finally {
