@@ -226,7 +226,7 @@
             <div class="flex items-center gap-2 px-3 py-2 rounded-xl bg-amber-50/90 border border-amber-200/80 text-xs text-amber-900">
               <AlertCircle class="w-4 h-4 text-amber-600 shrink-0" />
               <p class="leading-relaxed">
-                <strong class="font-bold">Catatan:</strong> Jika jadwal berganti mendadak atau guru digantikan piket, klik 
+                <strong class="font-bold">Catatan:</strong> Jika jadwal berganti mendadak, klik 
                 <button type="button" @click="isManualSelect = true" class="font-bold underline text-amber-950 hover:text-[#355245] cursor-pointer">
                   Ganti Guru
                 </button> 
@@ -239,7 +239,7 @@
           <div v-else class="space-y-2 bg-slate-50 p-4 rounded-2xl border border-slate-200">
             <BaseSelect
               v-model="form.teacher_id"
-              label="Pilih Guru Pengganti / Guru Piket"
+              label="Pilih Guru Pengampu"
               placeholder="-- Pilih Guru yang Mengajar --"
               :options="allTeachers"
               value-key="user_id"
@@ -249,7 +249,7 @@
             <div class="flex items-center gap-2 pt-0.5 text-xs text-slate-600">
               <AlertCircle class="w-4 h-4 text-[#355245] shrink-0" />
               <p class="leading-relaxed">
-                Mode manual aktif untuk jadwal berganti atau guru pengganti piket. 
+                Mode manual aktif jika jadwal berganti mendadak. 
                 <button type="button" @click="isManualSelect = false" class="font-bold text-[#355245] underline hover:text-emerald-900 cursor-pointer ml-1">
                   Kembali ke jadwal otomatis
                 </button>
