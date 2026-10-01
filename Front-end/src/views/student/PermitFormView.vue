@@ -172,19 +172,10 @@
         </div>
 
         <!-- Step 4: Pilih Guru yang Mengajar (Otomatis Jadwal / Manual Fallback) -->
-        <div class="space-y-3">
-          <div class="flex items-center justify-between">
-            <label class="text-xs font-semibold uppercase tracking-wider text-slate-700">
-              4. Guru Pengampu Jam Pelajaran <span class="text-rose-500">*</span>
-            </label>
-            <button
-              type="button"
-              @click="isManualSelect = !isManualSelect"
-              class="text-xs font-bold text-[#355245] hover:underline flex items-center gap-1"
-            >
-              <span>{{ isManualSelect ? 'Sesuai Jadwal' : 'Ganti Guru Manual' }}</span>
-            </button>
-          </div>
+        <div class="space-y-2.5">
+          <label class="text-xs font-semibold uppercase tracking-wider text-slate-700 block">
+            4. Guru Pengampu Jam Pelajaran <span class="text-rose-500">*</span>
+          </label>
 
           <!-- Card Otomatis Terdeteksi Sesuai Jadwal (Dummy/Live) -->
           <div v-if="!isManualSelect" class="space-y-2">
@@ -222,15 +213,11 @@
               </button>
             </div>
 
-            <!-- Note Peringatan Ringkas Pergantian Jadwal -->
+            <!-- Note Ringkas Pergantian Jadwal -->
             <div class="flex items-center gap-2 px-3 py-2 rounded-xl bg-amber-50/90 border border-amber-200/80 text-xs text-amber-900">
               <AlertCircle class="w-4 h-4 text-amber-600 shrink-0" />
               <p class="leading-relaxed">
-                <strong class="font-bold">Catatan:</strong> Jika jadwal berganti mendadak, klik 
-                <button type="button" @click="isManualSelect = true" class="font-bold underline text-amber-950 hover:text-[#355245] cursor-pointer">
-                  Ganti Guru
-                </button> 
-                untuk memilih guru secara manual.
+                <strong class="font-bold">Catatan:</strong> Jika jadwal berganti mendadak, gunakan tombol <strong>Ganti Guru</strong> di atas.
               </p>
             </div>
           </div>
@@ -246,14 +233,18 @@
               label-key="display_name"
               required
             />
-            <div class="flex items-center gap-2 pt-0.5 text-xs text-slate-600">
-              <AlertCircle class="w-4 h-4 text-[#355245] shrink-0" />
-              <p class="leading-relaxed">
-                Mode manual aktif jika jadwal berganti mendadak. 
-                <button type="button" @click="isManualSelect = false" class="font-bold text-[#355245] underline hover:text-emerald-900 cursor-pointer ml-1">
-                  Kembali ke jadwal otomatis
-                </button>
-              </p>
+            <div class="flex items-center justify-between gap-3 pt-1 text-xs text-slate-600">
+              <div class="flex items-center gap-1.5">
+                <AlertCircle class="w-4 h-4 text-[#355245] shrink-0" />
+                <span>Mode pemilihan manual aktif.</span>
+              </div>
+              <button
+                type="button"
+                @click="isManualSelect = false"
+                class="font-bold text-[#355245] underline hover:text-emerald-900 cursor-pointer"
+              >
+                Kembali ke Jadwal Otomatis
+              </button>
             </div>
           </div>
         </div>
