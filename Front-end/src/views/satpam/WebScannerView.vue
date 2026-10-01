@@ -15,18 +15,32 @@
               {{ isCameraActive ? 'Kamera Sedang Aktif' : 'Kamera Mati' }}
             </span>
           </div>
-          <button
-            type="button"
-            @click="toggleCamera"
-            class="whitespace-nowrap text-xs sm:text-sm font-bold px-3.5 py-2 rounded-xl transition-all active:scale-95 flex items-center gap-2 shadow-xs cursor-pointer touch-manipulation"
-            :class="isCameraActive
-              ? 'bg-rose-600 hover:bg-rose-700 text-white border border-rose-600'
-              : 'bg-emerald-600 hover:bg-emerald-700 text-white border border-emerald-600'"
-          >
-            <CameraOff v-if="isCameraActive" class="w-4 h-4" />
-            <Camera v-else class="w-4 h-4" />
-            <span>{{ isCameraActive ? 'Matikan Kamera' : 'Nyalakan Kamera' }}</span>
-          </button>
+          <div class="flex items-center gap-2">
+            <button
+              v-if="isCameraActive"
+              type="button"
+              @click="restartCamera"
+              :disabled="isRestarting"
+              title="Segarkan Aliran Kamera"
+              class="text-xs font-bold px-2.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition active:scale-95 border border-slate-200 cursor-pointer touch-manipulation flex items-center gap-1.5 disabled:opacity-50"
+            >
+              <RefreshCw class="w-3.5 h-3.5" :class="{ 'animate-spin': isRestarting }" />
+              <span class="hidden sm:inline">Segarkan</span>
+            </button>
+
+            <button
+              type="button"
+              @click="toggleCamera"
+              class="whitespace-nowrap text-xs sm:text-sm font-bold px-3.5 py-2 rounded-xl transition-all active:scale-95 flex items-center gap-2 shadow-xs cursor-pointer touch-manipulation"
+              :class="isCameraActive
+                ? 'bg-rose-600 hover:bg-rose-700 text-white border border-rose-600'
+                : 'bg-emerald-600 hover:bg-emerald-700 text-white border border-emerald-600'"
+            >
+              <CameraOff v-if="isCameraActive" class="w-4 h-4" />
+              <Camera v-else class="w-4 h-4" />
+              <span>{{ isCameraActive ? 'Matikan Kamera' : 'Nyalakan Kamera' }}</span>
+            </button>
+          </div>
         </div>
 
         <!-- Video Reader Element with Viewfinder Styling -->
@@ -341,7 +355,7 @@ import { useToast } from '@/composables/useToast'
 import BaseModal from '@/components/ui/BaseModal.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
 import BaseBadge from '@/components/ui/BaseBadge.vue'
-import { Camera, CameraOff, QrCode, CheckCircle, XCircle, AlertTriangle, Clock, ShieldCheck } from 'lucide-vue-next'
+import { Camera, CameraOff, QrCode, CheckCircle, XCircle, AlertTriangle, Clock, ShieldCheck, RefreshCw } from 'lucide-vue-next'
 
 const permitStore = usePermitStore()
 const toast = useToast()
@@ -351,6 +365,7 @@ const inputQrToken = ref('')
 const isCameraActive = ref(false)
 const isProcessing = ref(false)
 const isCooldown = ref(false)
+const isRestarting = ref(false)
 const isOnline = ref(typeof navigator !== 'undefined' ? navigator.onLine : true)
 
 let html5QrCode = null
@@ -408,6 +423,21 @@ const stopCamera = async () => {
       html5QrCode.clear()
     } catch (err) {}
     isCameraActive.value = false
+  }
+}
+
+const restartCamera = async () => {
+  if (isRestarting.value) return
+  isRestarting.value = true
+  try {
+    await stopCamera()
+    await new Promise(resolve => setTimeout(resolve, 350))
+    await startCamera()
+    toast.info('Kamera pemindai berhasil disegarkan.')
+  } catch (err) {
+    console.warn('Gagal menyegarkan kamera:', err)
+  } finally {
+    isRestarting.value = false
   }
 }
 

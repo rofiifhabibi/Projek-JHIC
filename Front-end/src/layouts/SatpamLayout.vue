@@ -27,6 +27,16 @@
 
           <button
             type="button"
+            @click="handleReload"
+            title="Segarkan Halaman"
+            class="shrink-0 text-xs bg-white/10 hover:bg-white/20 active:scale-95 px-2.5 sm:px-3 py-1.5 rounded-xl font-bold border border-white/15 transition-all text-white flex items-center gap-1.5 shadow-xs cursor-pointer touch-manipulation"
+          >
+            <RefreshCw class="w-3.5 h-3.5" :class="{ 'animate-spin': isReloading }" />
+            <span class="hidden sm:inline">Segarkan</span>
+          </button>
+
+          <button
+            type="button"
             @click="showLogoutConfirm = true"
             class="shrink-0 text-xs bg-white/10 hover:bg-white/20 active:scale-95 px-3 py-1.5 rounded-xl font-bold border border-white/15 transition-all text-white flex items-center gap-1.5 shadow-xs cursor-pointer touch-manipulation"
           >
@@ -72,11 +82,17 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import ConfirmDialog from '@/components/ui/ConfirmDialog.vue'
 import AppLogo from '@/components/ui/AppLogo.vue'
-import { LogOut, WifiOff } from 'lucide-vue-next'
+import { LogOut, WifiOff, RefreshCw } from 'lucide-vue-next'
 
 const authStore = useAuthStore()
 const showLogoutConfirm = ref(false)
 const isOnline = ref(typeof navigator !== 'undefined' ? navigator.onLine : true)
+const isReloading = ref(false)
+
+const handleReload = () => {
+  isReloading.value = true
+  window.location.reload()
+}
 
 const handleOnline = () => { isOnline.value = true }
 const handleOffline = () => { isOnline.value = false }
