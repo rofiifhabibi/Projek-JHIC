@@ -1,34 +1,34 @@
 <template>
-  <div class="min-h-screen bg-slate-950 text-white flex flex-col font-sans">
+  <div class="min-h-screen bg-[#F4F7F4] text-slate-800 flex flex-col font-sans">
     <!-- Top Bar -->
-    <header class="bg-slate-900 border-b border-slate-800 px-4 py-3 sticky top-0 z-30 shadow-xs">
+    <header class="bg-[#355245] text-white px-4 py-3 sticky top-0 z-30 shadow-xs border-b border-white/10">
       <div class="max-w-5xl lg:max-w-6xl mx-auto flex items-center justify-between gap-3">
         <router-link to="/satpam/scanner" class="flex items-center gap-2.5 min-w-0 group">
-          <AppLogo variant="satpam" size="md" theme="emerald" class="shrink-0 group-hover:scale-105 transition" />
+          <AppLogo variant="satpam" size="md" theme="white-trans" class="shrink-0 group-hover:scale-105 transition" />
           <div class="min-w-0">
             <div class="flex items-center gap-2">
-              <h1 class="font-extrabold text-sm sm:text-base tracking-tight text-white group-hover:text-emerald-300 transition leading-tight truncate">
+              <h1 class="font-extrabold text-sm sm:text-base tracking-tight text-white group-hover:text-emerald-100 transition leading-tight truncate">
                 Satpam
               </h1>
-              <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-semibold border border-emerald-500/30 shrink-0">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+              <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-white/15 text-[#E8EFEA] text-xs font-medium border border-white/20 shrink-0">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-300"></span>
                 Online
               </span>
             </div>
-            <p class="text-xs text-slate-300 font-medium truncate mt-0.5">Pemeriksaan Gerbang • SMKN 2 Depok Sleman</p>
+            <p class="text-xs text-[#E8EFEA]/80 font-medium truncate mt-0.5">Pemeriksaan Gerbang • SMKN 2 Depok Sleman</p>
           </div>
         </router-link>
 
         <div class="flex items-center gap-2.5 sm:gap-3 shrink-0">
           <div class="hidden sm:block text-right">
             <p class="text-xs font-bold text-white leading-none truncate max-w-[150px]">{{ authStore.userName }}</p>
-            <p class="text-xs text-slate-300 mt-0.5">Petugas Keamanan</p>
+            <p class="text-xs text-[#E8EFEA]/80 mt-0.5">Petugas Keamanan</p>
           </div>
 
           <button
             type="button"
             @click="showLogoutConfirm = true"
-            class="shrink-0 text-xs bg-slate-800 hover:bg-slate-700 active:scale-95 px-2.5 sm:px-3 py-1.5 rounded-xl font-bold border border-slate-700 transition-all text-white flex items-center gap-1.5 shadow-sm cursor-pointer touch-manipulation"
+            class="shrink-0 text-xs bg-white/10 hover:bg-white/20 active:scale-95 px-3 py-1.5 rounded-xl font-bold border border-white/15 transition-all text-white flex items-center gap-1.5 shadow-xs cursor-pointer touch-manipulation"
           >
             <LogOut class="w-3.5 h-3.5" />
             <span class="hidden sm:inline">Keluar</span>
@@ -38,8 +38,8 @@
     </header>
 
     <!-- Offline Alert Banner -->
-    <div v-if="!isOnline" class="bg-rose-500/20 border-b border-rose-500/40 px-4 py-2 text-center">
-      <div class="max-w-md mx-auto flex items-center justify-center gap-2 text-rose-300 text-xs font-semibold">
+    <div v-if="!isOnline" class="bg-rose-50 border-b border-rose-200 px-4 py-2.5 text-center">
+      <div class="max-w-md mx-auto flex items-center justify-center gap-2 text-rose-700 text-xs font-medium">
         <WifiOff class="w-4 h-4 shrink-0" />
         <span>Koneksi internet terputus. Mohon periksa jaringan internet untuk memindai surat izin.</span>
       </div>
