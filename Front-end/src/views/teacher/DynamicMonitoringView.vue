@@ -219,14 +219,19 @@ const confirmAction = (item, action) => {
   showConfirm.value = true
 }
 
+const isResolving = ref(false)
+
 const executeAction = async () => {
-  if (!selectedItem.value) return
+  if (!selectedItem.value || isResolving.value) return
+  isResolving.value = true
   try {
     await permitStore.resolvePermit(selectedItem.value.request_id, selectedAction.value)
     toast.success(`Status perizinan ${selectedItem.value.student?.name} diperbarui!`)
     showConfirm.value = false
   } catch (err) {
     toast.error('Gagal memperbarui status perizinan.')
+  } finally {
+    isResolving.value = false
   }
 }
 </script>

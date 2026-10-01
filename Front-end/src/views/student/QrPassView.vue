@@ -326,8 +326,12 @@ const toast = useToast()
 
 const activePermit = computed(() => permitStore.activePermit)
 
+let lastCopyTime = 0
 const copyCode = async (code) => {
   if (!code) return
+  const now = Date.now()
+  if (now - lastCopyTime < 1500) return
+  lastCopyTime = now
   try {
     if (navigator?.clipboard?.writeText) {
       await navigator.clipboard.writeText(code)
@@ -346,7 +350,7 @@ let timerInterval = null
 let pollingInterval = null
 
 const handleCancelPermit = async () => {
-  if (!activePermit.value) return
+  if (!activePermit.value || isCancelling.value) return
   isCancelling.value = true
   try {
     await permitStore.cancelPermit(activePermit.value.request_id)

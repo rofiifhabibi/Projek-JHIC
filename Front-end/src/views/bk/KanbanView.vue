@@ -587,13 +587,16 @@ const openResponseModal = (rep) => {
   showResponseModal.value = true
 }
 
+const isSubmittingResponse = ref(false)
+
 const submitResponse = async () => {
-  if (!selectedReport.value) return
+  if (!selectedReport.value || isSubmittingResponse.value) return
   if (!responseInput.value.trim()) {
     toast.warning('Pesan tanggapan untuk siswa wajib diisi!')
     return
   }
 
+  isSubmittingResponse.value = true
   try {
     await reportStore.sendCounselorResponse(selectedReport.value.report_id, {
       response_message: responseInput.value,
@@ -604,6 +607,8 @@ const submitResponse = async () => {
     showResponseModal.value = false
   } catch (err) {
     toast.error('Gagal mengirim tanggapan ke siswa.')
+  } finally {
+    isSubmittingResponse.value = false
   }
 }
 </script>

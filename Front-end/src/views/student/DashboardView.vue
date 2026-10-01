@@ -275,7 +275,7 @@ const showCancelConfirm = ref(false)
 const isCancelling = ref(false)
 
 const handleCancelPermit = async () => {
-  if (!permitStore.activePermit) return
+  if (!permitStore.activePermit || isCancelling.value) return
   isCancelling.value = true
   try {
     await permitStore.cancelPermit(permitStore.activePermit.request_id)

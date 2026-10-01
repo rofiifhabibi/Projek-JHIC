@@ -160,7 +160,7 @@ const confirmApprove = (req) => {
 }
 
 const executeApprove = async () => {
-  if (!selectedReq.value) return
+  if (!selectedReq.value || isApproving.value) return
   isApproving.value = true
   try {
     await permitStore.approvePermit(selectedReq.value.request_id)
@@ -180,7 +180,7 @@ const confirmReject = (req) => {
 }
 
 const executeReject = async () => {
-  if (!selectedReq.value) return
+  if (!selectedReq.value || isRejecting.value) return
   isRejecting.value = true
   try {
     await permitStore.resolvePermit(selectedReq.value.request_id, 'REJECTED', rejectReason.value.trim() || null)

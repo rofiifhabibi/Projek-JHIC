@@ -67,7 +67,7 @@
               :key="role.id"
               type="button"
               @click="quickLogin(role)"
-              :disabled="authStore.loading"
+              :disabled="authStore.loading || isLoggingIn"
               class="flex flex-col items-center justify-center p-2.5 sm:p-3 rounded-2xl border border-slate-200 hover:border-[#355245] bg-slate-50/70 hover:bg-[#E8EFEA]/60 transition-all text-center group active:scale-95 disabled:opacity-50 shadow-xs cursor-pointer touch-manipulation"
             >
               <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-white border border-slate-200 flex items-center justify-center mb-1 text-[#355245] group-hover:bg-[#355245] group-hover:text-white transition-all shadow-xs">
@@ -111,7 +111,8 @@
             variant="primary"
             size="lg"
             block
-            :loading="authStore.loading"
+            :loading="authStore.loading || isLoggingIn"
+            :disabled="authStore.loading || isLoggingIn"
           >
             Masuk
           </BaseButton>
@@ -144,8 +145,11 @@ const presets = [
 
 const identity = ref(isDevMode ? 'siswa1' : '')
 const password = ref(isDevMode ? 'password' : '')
+const isLoggingIn = ref(false)
 
 const quickLogin = async (rolePreset) => {
+  if (isLoggingIn.value || authStore.loading) return
+  isLoggingIn.value = true
   identity.value = rolePreset.username
   password.value = rolePreset.password
   try {
@@ -153,15 +157,21 @@ const quickLogin = async (rolePreset) => {
     toast.success(`Berhasil masuk sebagai ${rolePreset.label}!`)
   } catch (err) {
     toast.error(err.response?.data?.message || 'Gagal masuk, periksa akun Anda.')
+  } finally {
+    isLoggingIn.value = false
   }
 }
 
 const handleLogin = async () => {
+  if (isLoggingIn.value || authStore.loading) return
+  isLoggingIn.value = true
   try {
     await authStore.login(identity.value, password.value)
     toast.success('Berhasil masuk!')
   } catch (err) {
     toast.error(err.response?.data?.message || 'Gagal masuk, periksa kembali username dan kata sandi.')
+  } finally {
+    isLoggingIn.value = false
   }
 }
 </script>

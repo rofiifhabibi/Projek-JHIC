@@ -256,7 +256,8 @@
               variant="primary"
               size="lg"
               block
-              :loading="permitStore.loading"
+              :loading="permitStore.loading || isSubmitting"
+              :disabled="permitStore.loading || isSubmitting"
             >
               Ajukan Izin
             </BaseButton>
@@ -367,7 +368,10 @@ const handleCancelActive = async () => {
   }
 }
 
+const isSubmitting = ref(false)
+
 const handleSubmit = async () => {
+  if (isSubmitting.value || permitStore.loading) return
   if (!form.value.teacher_id) {
     form.value.teacher_id = detectedTeacher.value?.user_id || 6
   }
@@ -388,12 +392,15 @@ const handleSubmit = async () => {
     delete payload.duration_minutes
   }
 
+  isSubmitting.value = true
   try {
     await permitStore.submitPermit(payload)
     toast.success('Pengajuan izin berhasil dibuat!')
     router.push('/student/permit/pass')
   } catch (err) {
     toast.error(err.response?.data?.message || 'Gagal mengajukan izin.')
+  } finally {
+    isSubmitting.value = false
   }
 }
 </script>

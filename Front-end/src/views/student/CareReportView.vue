@@ -146,7 +146,8 @@
               variant="primary"
               size="lg"
               block
-              :loading="reportStore.loading"
+              :loading="reportStore.loading || isSubmitting"
+              :disabled="reportStore.loading || isSubmitting"
             >
               Kirim Laporan BK
             </BaseButton>
@@ -191,18 +192,24 @@ onMounted(() => {
   }
 })
 
+const isSubmitting = ref(false)
+
 const handleSubmit = async () => {
+  if (isSubmitting.value || reportStore.loading) return
   if (!form.value.title.trim() || !form.value.description.trim()) {
     toast.warning('Judul dan isi cerita laporan wajib diisi!')
     return
   }
 
+  isSubmitting.value = true
   try {
     await reportStore.submitReport(form.value)
     toast.success('Laporan berhasil dikirim ke Guru BK!')
     router.push('/student/tracking')
   } catch (err) {
     toast.error(err.response?.data?.message || 'Gagal mengirim laporan.')
+  } finally {
+    isSubmitting.value = false
   }
 }
 </script>

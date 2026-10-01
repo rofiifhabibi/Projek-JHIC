@@ -28,8 +28,9 @@
           <button
             type="button"
             @click="handleReload"
+            :disabled="isReloading"
             title="Segarkan Halaman"
-            class="shrink-0 text-xs bg-white/10 hover:bg-white/20 active:scale-95 px-2.5 sm:px-3 py-1.5 rounded-xl font-bold border border-white/15 transition-all text-white flex items-center gap-1.5 shadow-xs cursor-pointer touch-manipulation"
+            class="shrink-0 text-xs bg-white/10 hover:bg-white/20 active:scale-95 px-2.5 sm:px-3 py-1.5 rounded-xl font-bold border border-white/15 transition-all text-white flex items-center gap-1.5 shadow-xs cursor-pointer touch-manipulation disabled:opacity-50"
           >
             <RefreshCw class="w-3.5 h-3.5" :class="{ 'animate-spin': isReloading }" />
             <span class="hidden sm:inline">Segarkan</span>
@@ -90,6 +91,7 @@ const isOnline = ref(typeof navigator !== 'undefined' ? navigator.onLine : true)
 const isReloading = ref(false)
 
 const handleReload = () => {
+  if (isReloading.value) return
   isReloading.value = true
   window.location.reload()
 }
