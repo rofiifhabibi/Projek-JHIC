@@ -89,9 +89,9 @@
             </span>
           </div>
           <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
-            <span class="text-xs font-semibold text-slate-500 block">Batas Waktu</span>
+            <span class="text-xs font-semibold text-slate-500 block">{{ permitStore.activePermit.type === 'EXIT_SCHOOL' ? 'Ketentuan' : 'Batas Waktu' }}</span>
             <span class="font-bold text-slate-800 mt-0.5 block truncate text-sm">
-              {{ permitStore.activePermit.duration_minutes || 30 }} Menit
+              {{ permitStore.activePermit.type === 'EXIT_SCHOOL' ? 'Pulang ke Rumah' : (permitStore.activePermit.duration_minutes || 30) + ' Menit' }}
             </span>
           </div>
         </div>

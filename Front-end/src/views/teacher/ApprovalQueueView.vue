@@ -35,8 +35,11 @@
           <p class="text-slate-700 font-medium">
             <strong>Jenis Izin:</strong> {{ req.type === 'TEMP' ? 'Keluar Kelas Sementara' : 'Izin Pulang Sekolah' }}
           </p>
-          <p class="text-slate-700 font-medium">
+          <p v-if="req.type === 'TEMP'" class="text-slate-700 font-medium">
             <strong>Batas Waktu:</strong> {{ req.duration_minutes || 30 }} Menit
+          </p>
+          <p v-else class="text-slate-700 font-medium">
+            <strong>Keterangan:</strong> Pulang ke rumah (tidak kembali ke kelas)
           </p>
           <p class="text-slate-600">
             <strong>Alasan:</strong> {{ req.reason || 'Tidak ada alasan khusus.' }}
@@ -79,7 +82,7 @@
     <ConfirmDialog
       :show="showApproveConfirm"
       title="Setujui Permohonan Izin"
-      :message="`Apakah Anda yakin ingin menyetujui izin dari ${selectedReq?.student?.name} (${selectedReq?.duration_minutes ? selectedReq.duration_minutes + ' menit' : 'Izin Pulang'})? Kode QR izin akan langsung dibuat untuk siswa.`"
+      :message="`Apakah Anda yakin ingin menyetujui izin dari ${selectedReq?.student?.name} (${selectedReq?.type === 'EXIT_SCHOOL' ? 'Izin Pulang ke Rumah' : (selectedReq?.duration_minutes || 30) + ' menit'})? Kode QR izin akan langsung dibuat untuk siswa.`"
       variant="warning"
       confirm-text="Ya, Setujui Izin"
       :loading="isApproving"

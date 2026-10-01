@@ -107,8 +107,11 @@
           <span class="font-bold text-xs text-slate-800 block">
             {{ row.type === 'TEMP' ? 'Keluar Sementara' : 'Izin Pulang' }}
           </span>
-          <span class="text-xs text-slate-500 font-medium block">
+          <span v-if="row.type === 'TEMP'" class="text-xs text-slate-500 font-medium block">
             Durasi: <strong class="text-slate-700">{{ row.duration_minutes || 30 }} menit</strong>
+          </span>
+          <span v-else class="text-xs text-slate-500 font-medium block">
+            Pulang ke Rumah
           </span>
         </div>
       </template>

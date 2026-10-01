@@ -37,6 +37,37 @@
       </div>
     </div>
 
+    <!-- Peringatan Pengajuan Menunggu Persetujuan -->
+    <div
+      v-if="pendingCount > 0"
+      class="bg-amber-50 border border-amber-200 rounded-2xl p-4 sm:p-5 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 transition-all"
+    >
+      <div class="flex items-start gap-3.5">
+        <div class="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center shrink-0 shadow-xs">
+          <Clock class="w-5 h-5" />
+        </div>
+        <div class="space-y-0.5">
+          <div class="flex items-center gap-2 flex-wrap">
+            <h3 class="text-sm font-extrabold text-amber-950">
+              Ada {{ pendingCount }} Pengajuan Izin Menunggu Persetujuan
+            </h3>
+            <span class="px-2 py-0.5 rounded-full bg-amber-200/80 text-amber-900 text-xs font-bold">
+              Antrean
+            </span>
+          </div>
+          <p class="text-xs text-amber-800 leading-relaxed">
+            Siswa menunggu persetujuan Anda di ruang antrean sebelum kode QR aktif atau diizinkan meninggalkan kelas.
+          </p>
+        </div>
+      </div>
+      <router-link to="/teacher/approvals" class="w-full sm:w-auto shrink-0">
+        <BaseButton variant="primary" size="sm" block class="gap-1.5">
+          <span>Buka Persetujuan Izin</span>
+          <ArrowRight class="w-4 h-4" />
+        </BaseButton>
+      </router-link>
+    </div>
+
     <!-- Peringatan Siswa Terlambat -->
     <div
       v-if="overdueCount > 0"
@@ -63,10 +94,10 @@
     <!-- Stat Widgets Grid -->
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
       <MetricCard
-        label="Sedang Izin"
+        label="Sedang di Luar Kelas"
         :value="activeCount"
         color="warning"
-        description="Siswa yang sedang di luar kelas"
+        description="Siswa izin sementara yang aktif"
       >
         <template #icon><Clock class="w-6 h-6 text-amber-600" /></template>
       </MetricCard>
@@ -84,7 +115,7 @@
         label="Total Izin Hari Ini"
         :value="totalMobilityCount"
         color="primary"
-        description="Total siswa yang berizin hari ini"
+        description="Total pengajuan izin di kelas ini"
       >
         <template #icon><Users class="w-6 h-6 text-[#355245]" /></template>
       </MetricCard>
@@ -109,14 +140,23 @@
             <span class="font-bold text-[#355245]">{{ row.student?.class_name }}</span>
           </p>
           <p class="text-slate-500 text-xs mt-0.5">
-            Batas Waktu: <strong>{{ row.duration_minutes || 30 }} menit</strong>
-            <span v-if="row.reason"> • {{ row.reason }}</span>
+            <template v-if="row.type === 'EXIT_SCHOOL'">
+              <span class="font-medium text-slate-700">Izin Pulang ke Rumah</span>
+              <span v-if="row.reason"> • Alasan: <strong class="text-slate-700 font-medium">"{{ row.reason }}"</strong></span>
+            </template>
+            <template v-else>
+              Batas Waktu: <strong>{{ row.duration_minutes || 30 }} menit</strong>
+              <span v-if="row.reason"> • {{ row.reason }}</span>
+            </template>
           </p>
         </div>
       </template>
 
       <template #cell-type="{ value }">
-        <span class="font-semibold text-xs text-slate-700">
+        <span
+          class="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-semibold"
+          :class="value === 'TEMP' ? 'bg-slate-100 text-slate-700 border border-slate-200' : 'bg-amber-50 text-amber-800 border border-amber-200'"
+        >
           {{ value === 'TEMP' ? 'Keluar Sementara' : 'Izin Pulang' }}
         </span>
       </template>
@@ -127,22 +167,101 @@
 
       <template #cell-actions="{ row }">
         <div class="flex items-center justify-end gap-2 whitespace-nowrap shrink-0">
-          <BaseButton
-            v-if="row.status !== 'COMPLETED' && row.status !== 'CLOSED'"
-            variant="primary"
-            size="sm"
-            @click="confirmAction(row, 'COMPLETED')"
-          >
-            Konfirmasi Kembali
-          </BaseButton>
-          <BaseButton
-            v-if="row.status !== 'ALPHA' && row.status !== 'CLOSED'"
-            :variant="row.status === 'OVERDUE' ? 'danger' : 'outline'"
-            size="sm"
-            @click="confirmAction(row, 'ALPHA')"
-          >
-            Tandai Alpha
-          </BaseButton>
+          <!-- 1. Kondisi PENDING: Masih menunggu persetujuan di ApprovalQueue -->
+          <template v-if="row.status === 'PENDING'">
+            <router-link to="/teacher/approvals">
+              <BaseButton variant="outline" size="sm" class="gap-1.5 text-amber-700 border-amber-300 hover:bg-amber-50">
+                <span>Tinjau Permohonan</span>
+                <ArrowRight class="w-3.5 h-3.5" />
+              </BaseButton>
+            </router-link>
+          </template>
+
+          <!-- 2. Kondisi Izin Pulang (EXIT_SCHOOL): Siswa pulang ke rumah, tidak ada konfirmasi kembali atau tandai alpha di kelas -->
+          <template v-else-if="row.type === 'EXIT_SCHOOL'">
+            <span
+              v-if="row.status === 'APPROVED'"
+              class="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200/80 px-2.5 py-1 rounded-lg"
+            >
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+              Menuju Gerbang (Pulang)
+            </span>
+            <span
+              v-else-if="row.status === 'CLOSED'"
+              class="inline-flex items-center gap-1.5 text-xs font-medium text-slate-600 bg-slate-100 px-2.5 py-1 rounded-lg"
+            >
+              <CheckCircle class="w-3.5 h-3.5 text-emerald-600" />
+              Sudah Pulang
+            </span>
+            <span
+              v-else-if="row.status === 'REJECTED'"
+              class="inline-flex items-center gap-1 text-xs font-medium text-rose-700 bg-rose-50 border border-rose-200 px-2.5 py-1 rounded-lg"
+            >
+              Ditolak
+            </span>
+            <span
+              v-else-if="row.status === 'CANCELLED'"
+              class="inline-flex items-center gap-1 text-xs font-medium text-slate-500 bg-slate-100 px-2.5 py-1 rounded-lg"
+            >
+              Dibatalkan
+            </span>
+            <span v-else class="text-xs text-slate-400">-</span>
+          </template>
+
+          <!-- 3. Kondisi Keluar Sementara (TEMP) Aktif atau Terlambat: Guru konfirmasi kembali atau tandai Alpha -->
+          <template v-else-if="row.status === 'ACTIVE' || row.status === 'OVERDUE'">
+            <BaseButton
+              variant="primary"
+              size="sm"
+              @click="confirmAction(row, 'COMPLETED')"
+            >
+              Konfirmasi Kembali
+            </BaseButton>
+            <BaseButton
+              :variant="row.status === 'OVERDUE' ? 'danger' : 'outline'"
+              size="sm"
+              @click="confirmAction(row, 'ALPHA')"
+            >
+              Tandai Alpha
+            </BaseButton>
+          </template>
+
+          <!-- 4. Kondisi Keluar Sementara yang sudah selesai / diproses -->
+          <template v-else>
+            <span
+              v-if="row.status === 'COMPLETED'"
+              class="inline-flex items-center gap-1 text-xs font-medium text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200/60"
+            >
+              <CheckCircle class="w-3.5 h-3.5 text-emerald-600" />
+              Sudah Kembali
+            </span>
+            <span
+              v-else-if="row.status === 'ALPHA'"
+              class="inline-flex items-center gap-1 text-xs font-bold text-rose-700 bg-rose-50 px-2.5 py-1 rounded-lg border border-rose-200"
+            >
+              Tercatat Alpha
+            </span>
+            <span
+              v-else-if="row.status === 'APPROVED'"
+              class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 bg-slate-100 px-2.5 py-1 rounded-lg"
+            >
+              <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping"></span>
+              Menuju Gerbang
+            </span>
+            <span
+              v-else-if="row.status === 'REJECTED'"
+              class="inline-flex items-center gap-1 text-xs font-medium text-rose-700 bg-rose-50 border border-rose-200 px-2.5 py-1 rounded-lg"
+            >
+              Ditolak
+            </span>
+            <span
+              v-else-if="row.status === 'CANCELLED'"
+              class="inline-flex items-center gap-1 text-xs font-medium text-slate-500 bg-slate-100 px-2.5 py-1 rounded-lg"
+            >
+              Dibatalkan
+            </span>
+            <span v-else class="text-xs text-slate-400">-</span>
+          </template>
         </div>
       </template>
     </DataTable>
@@ -151,9 +270,10 @@
     <ConfirmDialog
       :show="showConfirm"
       :title="selectedAction === 'COMPLETED' ? 'Konfirmasi Siswa Kembali' : 'Konfirmasi Status Alpha'"
-      :message="selectedAction === 'COMPLETED' ? `Konfirmasi bahwa ${selectedItem?.student?.name} sudah kembali ke ruang kelas?` : `Apakah Anda yakin ingin menandai ${selectedItem?.student?.name} sebagai Alpha (membolos)?`"
+      :message="selectedAction === 'COMPLETED' ? `Konfirmasi bahwa ${selectedItem?.student?.name} sudah kembali ke ruang kelas? Status izin akan diselesaikan.` : `Apakah Anda yakin ingin menandai ${selectedItem?.student?.name} sebagai Alpha (membolos)? Tindakan ini akan tercatat di sistem presensi dan diteruskan ke BK.`"
       :variant="selectedAction === 'ALPHA' ? 'danger' : 'primary'"
-      confirm-text="Ya, Ubah Status"
+      :confirm-text="selectedAction === 'ALPHA' ? 'Ya, Tandai Alpha' : 'Ya, Sudah Kembali'"
+      :loading="isResolving"
       @confirm="executeAction"
       @cancel="showConfirm = false"
     />
@@ -169,7 +289,7 @@ import DataTable from '@/components/ui/DataTable.vue'
 import BaseBadge from '@/components/ui/BaseBadge.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
 import ConfirmDialog from '@/components/ui/ConfirmDialog.vue'
-import { Clock, AlertCircle, Users, AlertTriangle, RefreshCw } from 'lucide-vue-next'
+import { Clock, AlertCircle, Users, AlertTriangle, RefreshCw, ArrowRight, CheckCircle } from 'lucide-vue-next'
 
 const permitStore = usePermitStore()
 const toast = useToast()
@@ -185,6 +305,7 @@ const showConfirm = ref(false)
 const selectedItem = ref(null)
 const selectedAction = ref('')
 const isRefreshing = ref(false)
+const isResolving = ref(false)
 
 const activeCount = computed(() => {
   return permitStore.monitoringData.active_permits?.filter(p => p.status === 'ACTIVE').length || 0
@@ -192,6 +313,10 @@ const activeCount = computed(() => {
 
 const overdueCount = computed(() => {
   return permitStore.monitoringData.active_permits?.filter(p => p.status === 'OVERDUE').length || 0
+})
+
+const pendingCount = computed(() => {
+  return permitStore.monitoringData.active_permits?.filter(p => p.status === 'PENDING').length || 0
 })
 
 const totalMobilityCount = computed(() => {
@@ -218,8 +343,6 @@ const confirmAction = (item, action) => {
   selectedAction.value = action
   showConfirm.value = true
 }
-
-const isResolving = ref(false)
 
 const executeAction = async () => {
   if (!selectedItem.value || isResolving.value) return

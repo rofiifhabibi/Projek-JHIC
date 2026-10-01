@@ -210,7 +210,10 @@
               <CheckCircle class="w-4 h-4 text-emerald-600" />
               Izin Disetujui! Siap Menuju Gerbang
             </div>
-            <p class="text-xs text-emerald-700 leading-relaxed">
+            <p v-if="activePermit.type === 'EXIT_SCHOOL'" class="text-xs text-emerald-700 leading-relaxed">
+              Tunjukkan kode QR ini ke Satpam di gerbang sekolah saat hendak meninggalkan sekolah untuk pulang ke rumah.
+            </p>
+            <p v-else class="text-xs text-emerald-700 leading-relaxed">
               Tunjukkan kode QR ini ke Satpam di gerbang sekolah saat hendak keluar. Batas waktu izin (<strong>{{ activePermit.duration_minutes || 30 }} Menit</strong>) akan mulai berjalan setelah di-scan oleh Satpam.
             </p>
             <div class="pt-1">
@@ -275,8 +278,8 @@
             <span class="font-bold text-slate-900 max-w-[200px] text-right">{{ activePermit.reason || '-' }}</span>
           </div>
           <div class="flex justify-between">
-            <span class="text-slate-500">Batas Waktu:</span>
-            <span class="font-bold text-slate-900">{{ activePermit.duration_minutes || 30 }} Menit</span>
+            <span class="text-slate-500">{{ activePermit.type === 'EXIT_SCHOOL' ? 'Ketentuan:' : 'Batas Waktu:' }}</span>
+            <span class="font-bold text-slate-900">{{ activePermit.type === 'EXIT_SCHOOL' ? 'Pulang ke Rumah' : (activePermit.duration_minutes || 30) + ' Menit' }}</span>
           </div>
         </div>
       </div>
