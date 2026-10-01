@@ -187,39 +187,52 @@
           </div>
 
           <!-- Card Otomatis Terdeteksi Sesuai Jadwal (Dummy/Live) -->
-          <div
-            v-if="!isManualSelect"
-            class="p-4 rounded-2xl bg-[#E8EFEA]/80 border border-[#355245]/25 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs"
-          >
-            <div class="flex items-center gap-3">
-              <div class="w-11 h-11 rounded-xl bg-[#355245] text-white flex items-center justify-center shrink-0 shadow-xs">
-                <UserCheck class="w-5 h-5 text-emerald-300" />
-              </div>
-              <div>
-                <div class="flex items-center gap-2 flex-wrap">
-                  <h4 class="font-extrabold text-sm sm:text-base text-slate-900 leading-tight">
-                    {{ detectedTeacher.name }}
-                  </h4>
-                  <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-extrabold uppercase border border-emerald-200">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                    Jadwal Aktif
-                  </span>
+          <div v-if="!isManualSelect" class="space-y-2">
+            <div
+              class="p-4 rounded-2xl bg-[#E8EFEA]/80 border border-[#355245]/25 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs"
+            >
+              <div class="flex items-center gap-3">
+                <div class="w-11 h-11 rounded-xl bg-[#355245] text-white flex items-center justify-center shrink-0 shadow-xs">
+                  <UserCheck class="w-5 h-5 text-emerald-300" />
                 </div>
-                <p class="text-xs text-slate-600 mt-0.5">
-                  <span class="font-semibold text-[#355245]">{{ detectedTeacher.subject }}</span>
-                  <span class="text-slate-400"> • </span>
-                  <span>{{ detectedTeacher.room || 'Lab Komputer RPL 1' }} (Jam Pelajaran Sekarang)</span>
-                </p>
+                <div>
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <h4 class="font-extrabold text-sm sm:text-base text-slate-900 leading-tight">
+                      {{ detectedTeacher.name }}
+                    </h4>
+                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-extrabold uppercase border border-emerald-200">
+                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                      Jadwal Aktif
+                    </span>
+                  </div>
+                  <p class="text-xs text-slate-600 mt-0.5">
+                    <span class="font-semibold text-[#355245]">{{ detectedTeacher.subject }}</span>
+                    <span class="text-slate-400"> • </span>
+                    <span>{{ detectedTeacher.room || 'Lab Komputer RPL 1' }} (Jam Pelajaran Sekarang)</span>
+                  </p>
+                </div>
               </div>
+
+              <button
+                type="button"
+                @click="isManualSelect = true"
+                class="text-xs font-bold px-3 py-1.5 rounded-xl border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 transition shrink-0 active:scale-95 shadow-xs cursor-pointer touch-manipulation"
+              >
+                Ganti Guru
+              </button>
             </div>
 
-            <button
-              type="button"
-              @click="isManualSelect = true"
-              class="text-xs font-bold px-3 py-1.5 rounded-xl border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 transition shrink-0 active:scale-95 shadow-xs cursor-pointer touch-manipulation"
-            >
-              Ganti Guru
-            </button>
+            <!-- Note Peringatan Ringkas Pergantian Jadwal -->
+            <div class="flex items-center gap-2 px-3 py-2 rounded-xl bg-amber-50/90 border border-amber-200/80 text-xs text-amber-900">
+              <AlertCircle class="w-4 h-4 text-amber-600 shrink-0" />
+              <p class="leading-relaxed">
+                <strong class="font-bold">Catatan:</strong> Jika jadwal berganti mendadak atau guru digantikan piket, klik 
+                <button type="button" @click="isManualSelect = true" class="font-bold underline text-amber-950 hover:text-[#355245] cursor-pointer">
+                  Ganti Guru
+                </button> 
+                untuk memilih guru secara manual.
+              </p>
+            </div>
           </div>
 
           <!-- Dropdown Pemilihan Guru Manual (Dummy List) -->
@@ -233,9 +246,15 @@
               label-key="display_name"
               required
             />
-            <p class="text-xs text-slate-500">
-              Gunakan opsi ini jika guru mata pelajaran utama berhalangan hadir dan digantikan oleh guru piket.
-            </p>
+            <div class="flex items-center gap-2 pt-0.5 text-xs text-slate-600">
+              <AlertCircle class="w-4 h-4 text-[#355245] shrink-0" />
+              <p class="leading-relaxed">
+                Mode manual aktif untuk jadwal berganti atau guru pengganti piket. 
+                <button type="button" @click="isManualSelect = false" class="font-bold text-[#355245] underline hover:text-emerald-900 cursor-pointer ml-1">
+                  Kembali ke jadwal otomatis
+                </button>
+              </p>
+            </div>
           </div>
         </div>
 
