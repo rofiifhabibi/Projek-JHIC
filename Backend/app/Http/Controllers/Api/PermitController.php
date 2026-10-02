@@ -51,13 +51,15 @@ class PermitController extends Controller
         $teachersData = $teachers->map(function ($t) use ($activeTeacherId) {
             $isAuto = $t->user_id == $activeTeacherId;
             $subject = $t->user_id == 6 ? 'Pemrograman Web (PWPB)' : ($t->user_id == 8 ? 'Pemrograman Berorientasi Objek (PBO)' : 'Fisika Terapan');
+            $periodLabel = $t->user_id == 6 ? 'Jadwal Jam Ke 1-2' : ($t->user_id == 8 ? 'Jadwal Jam Ke 3-4' : 'Guru Pengganti / Piket');
+            $statusText = $isAuto ? ' — [Jadwal Aktif]' : ' — [' . $periodLabel . ']';
             return [
                 'user_id' => $t->user_id,
                 'name' => $t->name,
                 'username' => $t->username,
                 'subject' => $subject,
                 'is_current_schedule' => $isAuto,
-                'display_label' => $t->name . ' (' . $subject . ')' . ($isAuto ? ' — [Jadwal Aktif]' : ''),
+                'display_label' => $t->name . ' (' . $subject . ')' . $statusText,
             ];
         });
 

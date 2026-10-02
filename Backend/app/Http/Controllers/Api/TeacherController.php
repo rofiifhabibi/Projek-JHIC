@@ -52,7 +52,10 @@ class TeacherController extends Controller
 
         // Siswa yang berizin aktif, disetujui, terlambat, alpha, atau sudah izin pulang
         $permits = PermitRequest::with(['student:user_id,name,username,class_name,email'])
-            ->whereIn('student_id', $studentIds)
+            ->where(function ($query) use ($studentIds, $teacher) {
+                $query->whereIn('student_id', $studentIds)
+                      ->orWhere('initial_teacher_id', $teacher->user_id);
+            })
             ->whereIn('status', ['PENDING', 'APPROVED', 'ACTIVE', 'OVERDUE', 'COMPLETED', 'CLOSED', 'ALPHA'])
             ->latest()
             ->get();
