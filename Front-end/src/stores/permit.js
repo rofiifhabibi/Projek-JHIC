@@ -56,10 +56,10 @@ export const usePermitStore = defineStore('permit', {
         ];
         this.currentSchedule = {
           teacher_id: 6,
-          teacher_name: 'Ahmad Dahlan, S.Pd.',
-          subject: 'Pemrograman Web & Perangkat Bergerak (PWPB)',
-          room: 'Lab Komputer RPL 1',
-          class_name: 'XII RPL 1',
+          teacher_name: 'Margaretha Endah Titisari, S.T.',
+          subject: 'MPP AWS Academy (Cloud SIJA)',
+          room: 'Lab LAN',
+          class_name: '12 SIJA B',
           period: 'Jam Pelajaran Aktif (Sedang Berlangsung)'
         };
       } finally {

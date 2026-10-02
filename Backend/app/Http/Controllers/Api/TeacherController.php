@@ -43,7 +43,7 @@ class TeacherController extends Controller
         }
 
         if ($activeClasses->isEmpty()) {
-            $activeClasses = collect(['XII RPL 1']);
+            $activeClasses = collect(['12 SIJA B']);
         }
 
         // Ambil user_id seluruh siswa di rombel tersebut

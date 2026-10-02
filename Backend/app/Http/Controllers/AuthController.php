@@ -12,14 +12,17 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'identity' => ['required', 'string'], // NIS murni atau Email sekolah
+            'identity' => ['required', 'string'], // NIS murni, username demo, atau Email sekolah
             'password' => ['required', 'string'],
         ]);
 
-        // Cek apakah identity berupa email atau username (NIS/NIP)
-        $field = filter_var($request->identity, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+        $identity = trim($request->identity);
 
-        $user = User::where($field, $request->identity)->first();
+        // Multi-identity lookup: email, username (demo), atau NIS murni
+        $user = User::where('email', $identity)
+            ->orWhere('username', $identity)
+            ->orWhere('email', $identity . '@student.stembayo.sch.id')
+            ->first();
 
         // Validasi kecocokan password hash
         if (!$user || !Hash::check($request->password, $user->password)) {
@@ -41,6 +44,7 @@ class AuthController extends Controller
                     'user_id' => $user->user_id,
                     'username' => $user->username,
                     'name' => $user->name,
+                    'email' => $user->email,
                     'role' => $user->role, // 'student', 'teacher', 'bk', 'satpam'
                     'class_name' => $user->class_name,
                 ],

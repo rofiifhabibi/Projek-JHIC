@@ -21,7 +21,7 @@
             </span>
           </div>
           <p class="text-xl sm:text-2xl font-black text-white tracking-tight mt-1.5">
-            {{ permitStore.monitoringData.classes?.join(', ') || 'XII RPL 1' }}
+            {{ permitStore.monitoringData.classes?.join(', ') || '12 SIJA B' }}
           </p>
         </div>
 

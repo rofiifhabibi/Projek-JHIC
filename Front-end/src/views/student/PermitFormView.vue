@@ -199,7 +199,7 @@
                   <p class="text-xs text-slate-600 mt-0.5">
                     <span class="font-semibold text-[#355245]">{{ detectedTeacher.subject }}</span>
                     <span class="text-slate-400"> • </span>
-                    <span>{{ detectedTeacher.room || 'Lab Komputer RPL 1' }} (Jam Pelajaran Sekarang)</span>
+                    <span>{{ detectedTeacher.room || 'Lab LAN' }} (Jam Pelajaran Sekarang)</span>
                   </p>
                 </div>
               </div>
@@ -304,23 +304,23 @@ const detectedTeacher = computed(() => {
     return {
       user_id: permitStore.currentSchedule.teacher_id,
       name: permitStore.currentSchedule.teacher_name,
-      subject: permitStore.currentSchedule.subject || 'Pemrograman Web (PWPB)',
-      room: permitStore.currentSchedule.room || 'Lab Komputer RPL 1'
+      subject: permitStore.currentSchedule.subject || 'MPP AWS Academy (Cloud SIJA)',
+      room: permitStore.currentSchedule.room || 'Lab LAN'
     }
   }
   return {
     user_id: 6,
-    name: 'Ahmad Dahlan, S.Pd.',
-    subject: 'Pemrograman Web (PWPB)',
-    room: 'Lab Komputer RPL 1'
+    name: 'Margaretha Endah Titisari, S.T.',
+    subject: 'MPP AWS Academy (Cloud SIJA)',
+    room: 'Lab LAN'
   }
 })
 
 const allTeachers = computed(() => {
   const list = permitStore.teachersList?.length > 0 ? permitStore.teachersList : [
-    { user_id: 6, name: 'Ahmad Dahlan, S.Pd.', subject: 'Pemrograman Web (PWPB)' },
-    { user_id: 8, name: 'Bambang Pamungkas, S.Kom', subject: 'Pemrograman Berorientasi Objek (PBO)' },
-    { user_id: 7, name: 'Ratna Dewi, M.Pd.', subject: 'Fisika Terapan Kejuruan' }
+    { user_id: 6, name: 'Margaretha Endah Titisari, S.T.', subject: 'MPP AWS Academy (Cloud SIJA)' },
+    { user_id: 7, name: 'Eka Nur Ahmad Romadhoni, S.Pd.', subject: 'MPP Koding & AI (SIJA)' },
+    { user_id: 8, name: 'Sri Wahjuni Pudjiastuti, S.Pd.', subject: 'Bahasa Indonesia' }
   ]
   return list.map(t => ({
     ...t,

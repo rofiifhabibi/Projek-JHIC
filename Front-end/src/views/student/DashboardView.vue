@@ -11,7 +11,7 @@
           Selamat datang, {{ authStore.userName }}!
         </h2>
         <p class="text-xs sm:text-sm text-slate-200">
-          Kelas: <span class="font-bold text-white">{{ authStore.userClass || 'XII RPL 1' }}</span> • SMKN 2 Depok Sleman
+          Kelas: <span class="font-bold text-white">{{ authStore.userClass || '12 SIJA B' }}</span> • SMKN 2 Depok Sleman
         </p>
       </div>
     </div>

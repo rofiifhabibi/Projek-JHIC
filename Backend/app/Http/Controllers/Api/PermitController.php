@@ -25,7 +25,7 @@ class PermitController extends Controller
     public function getTeachers(Request $request)
     {
         $student = $request->user();
-        $studentClass = $student?->class_name ?? 'XII RPL 1';
+        $studentClass = $student?->class_name ?? '12 SIJA B';
 
         $teachers = User::where('role', 'teacher')
             ->select('user_id', 'name', 'username')
@@ -33,31 +33,75 @@ class PermitController extends Controller
 
         if ($teachers->isEmpty()) {
             $teachers = collect([
-                (object)['user_id' => 6, 'name' => 'Ahmad Dahlan, S.Pd.', 'username' => 'guru1'],
-                (object)['user_id' => 7, 'name' => 'Ratna Dewi, M.Pd.', 'username' => 'guru2'],
-                (object)['user_id' => 8, 'name' => 'Bambang Pamungkas, S.Kom', 'username' => 'guru3'],
+                (object)['user_id' => 6, 'name' => 'Margaretha Endah Titisari, S.T.', 'username' => 'guru1'],
+                (object)['user_id' => 7, 'name' => 'Eka Nur Ahmad Romadhoni, S.Pd.', 'username' => 'guru2'],
+                (object)['user_id' => 8, 'name' => 'Sri Wahjuni Pudjiastuti, S.Pd.', 'username' => 'guru3'],
             ]);
         }
 
-        // Cari jadwal aktif untuk kelas siswa
+        // Hari ini
+        $dayMap = [
+            1 => 'Senin',
+            2 => 'Selasa',
+            3 => 'Rabu',
+            4 => 'Kamis',
+            5 => 'Jumat',
+            6 => 'Sabtu',
+            7 => 'Minggu'
+        ];
+        $currentDay = $dayMap[Carbon::now()->dayOfWeekIso] ?? 'Senin';
+
+        // Cari jadwal hari ini untuk kelas siswa
         $schedule = Schedule::with(['teacher:user_id,name', 'subject'])
-            ->where('class_name', $studentClass)
+            ->where(function ($q) use ($studentClass) {
+                $q->where('class_name', $studentClass)
+                  ->orWhere('class_name', '12 SIJA B')
+                  ->orWhere('class_name', 'XII SIJA B');
+            })
+            ->where('day', $currentDay)
             ->first();
 
-        $activeTeacherId = $schedule?->teacher_id ?? ($teachers->first()?->user_id ?? 6);
-        $activeSubject = $schedule?->subject?->name ?? 'Pemrograman Web & Perangkat Bergerak (PWPB)';
-        $activeRoom = $schedule?->room ?? 'Lab Komputer RPL 1';
+        // Fallback jika di luar jam/akhir pekan: ambil jadwal Selasa (Lab LAN - AWS Cloud)
+        if (!$schedule) {
+            $schedule = Schedule::with(['teacher:user_id,name', 'subject'])
+                ->where(function ($q) use ($studentClass) {
+                    $q->where('class_name', $studentClass)
+                      ->orWhere('class_name', '12 SIJA B')
+                      ->orWhere('class_name', 'XII SIJA B');
+                })
+                ->where('day', 'Selasa')
+                ->first();
+        }
 
-        $teachersData = $teachers->map(function ($t) use ($activeTeacherId) {
+        if (!$schedule) {
+            $schedule = Schedule::with(['teacher:user_id,name', 'subject'])->first();
+        }
+
+        $activeTeacherId = $schedule?->teacher_id ?? ($teachers->first()?->user_id ?? 6);
+        $activeSubject = $schedule?->subject?->name ?? 'MPP AWS Academy (Cloud SIJA)';
+        $activeRoom = $schedule?->room ?? 'Lab LAN';
+
+        // Ambil pemetaan mata pelajaran & ruangan tiap guru di kelas ini
+        $classSchedules = Schedule::with('subject')
+            ->where(function ($q) use ($studentClass) {
+                $q->where('class_name', $studentClass)
+                  ->orWhere('class_name', '12 SIJA B')
+                  ->orWhere('class_name', 'XII SIJA B');
+            })
+            ->get();
+
+        $teachersData = $teachers->map(function ($t) use ($activeTeacherId, $classSchedules) {
             $isAuto = $t->user_id == $activeTeacherId;
-            $subject = $t->user_id == 6 ? 'Pemrograman Web (PWPB)' : ($t->user_id == 8 ? 'Pemrograman Berorientasi Objek (PBO)' : 'Fisika Terapan');
-            $periodLabel = $t->user_id == 6 ? 'Jadwal Jam Ke 1-2' : ($t->user_id == 8 ? 'Jadwal Jam Ke 3-4' : 'Guru Pengganti / Piket');
-            $statusText = $isAuto ? ' — [Jadwal Aktif]' : ' — [' . $periodLabel . ']';
+            $sched = $classSchedules->firstWhere('teacher_id', $t->user_id);
+            $subject = $sched?->subject?->name ?? 'Guru Pengampu / Piket';
+            $room = $sched?->room ?? 'Ruang Teori 7';
+            $statusText = $isAuto ? ' — [Jadwal Aktif Sekarang]' : ' — [' . $room . ']';
             return [
                 'user_id' => $t->user_id,
                 'name' => $t->name,
                 'username' => $t->username,
                 'subject' => $subject,
+                'room' => $room,
                 'is_current_schedule' => $isAuto,
                 'display_label' => $t->name . ' (' . $subject . ')' . $statusText,
             ];
