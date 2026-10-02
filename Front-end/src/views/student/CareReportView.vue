@@ -62,7 +62,7 @@
         <BaseInput
           id="report-title"
           label="2. Judul Laporan Singkat"
-          placeholder="Misal: Ada yang memalak di area kantin belakang..."
+          :placeholder="categoryPlaceholder"
           v-model="form.title"
           required
         />
@@ -75,7 +75,7 @@
             v-model="form.description"
             rows="4"
             required
-            placeholder="Ceritakan waktu, tempat, atau apa yang kamu alami secara jelas..."
+            :placeholder="descriptionPlaceholder"
             class="w-full rounded-xl border border-slate-200 bg-white p-3.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#355245] focus:ring-2 focus:ring-[#355245] focus:outline-none transition"
           ></textarea>
         </div>
@@ -159,7 +159,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useReportStore } from '@/stores/report'
 import { useToast } from '@/composables/useToast'
@@ -179,6 +179,32 @@ const form = ref({
   title: '',
   description: '',
   request_id: null
+})
+
+const categoryPlaceholder = computed(() => {
+  switch (form.value.category) {
+    case 'ACADEMIC':
+      return 'Misal: Kesulitan memahami materi koding kejuruan...'
+    case 'PERSONAL':
+      return 'Misal: Merasa cemas dan butuh arahan persiapan magang...'
+    case 'BULLYING':
+      return 'Misal: Ada intimidasi atau pemalakan di area sekolah...'
+    default:
+      return 'Misal: Penjelasan klarifikasi izin atau kendala khusus...'
+  }
+})
+
+const descriptionPlaceholder = computed(() => {
+  switch (form.value.category) {
+    case 'ACADEMIC':
+      return 'Ceritakan materi pelajaran yang dirasa sulit, kendala tugas, atau bantuan bimbingan belajar yang kamu butuhkan...'
+    case 'PERSONAL':
+      return 'Ceritakan hal yang sedang membebani pikiranmu atau hal yang ingin kamu konsultasikan secara rahasia...'
+    case 'BULLYING':
+      return 'Ceritakan waktu, tempat, atau apa yang kamu alami secara jelas...'
+    default:
+      return 'Tuliskan penjelasan atau klarifikasi secara rinci...'
+  }
 })
 
 onMounted(() => {

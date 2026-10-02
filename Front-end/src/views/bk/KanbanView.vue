@@ -489,7 +489,7 @@ const activeColumnTab = ref('OPEN')
 const categoryFilters = [
   { label: 'Semua Kategori', value: 'ALL' },
   { label: 'Perundungan', value: 'BULLYING' },
-  { label: 'Akademik', value: 'ACADEMIC' },
+  { label: 'Masalah Belajar', value: 'ACADEMIC' },
   { label: 'Konseling Pribadi', value: 'PERSONAL' },
   { label: 'Klarifikasi & Lainnya', value: 'OTHERS' }
 ]
@@ -497,7 +497,7 @@ const categoryFilters = [
 const formatCategory = (cat) => {
   switch (cat) {
     case 'BULLYING': return 'Perundungan'
-    case 'ACADEMIC': return 'Akademik'
+    case 'ACADEMIC': return 'Masalah Belajar'
     case 'PERSONAL': return 'Konseling Pribadi'
     case 'OTHERS': return 'Klarifikasi & Lainnya'
     default: return cat

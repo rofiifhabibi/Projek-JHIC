@@ -348,32 +348,39 @@ class DatabaseSeeder extends Seeder
         Report::create([
             'student_id' => $student1->user_id,
             'category' => 'ACADEMIC',
-            'title' => 'Gangguan Switch Hub & Port LAN di Meja Praktikum 3 Lab LAN',
-            'description' => 'Switch sering restart sendiri saat beban komputasi cloud meningkat sehingga sesi praktikum deployment AWS terhenti.',
+            'follow_up_preference' => 'WEB_MESSAGE',
+            'title' => 'Kesulitan Memahami Logika Algoritma Praktikum Koding AI',
+            'description' => 'Saya merasa tertinggal dan kesulitan memahami implementasi logika Python pada modul machine learning Koding AI. Ingin berkonsultasi mengenai strategi belajar atau referensi tambahan.',
             'status' => 'OPEN',
         ]);
 
         Report::create([
             'student_id' => $student2->user_id,
             'category' => 'ACADEMIC',
-            'title' => 'Usulan Penambahan Bandwidth untuk Praktikum Sertifikasi Cloud AWS',
-            'description' => 'Koneksi gateway cloud sering mengalami bottleneck saat 36 siswa serentak melakukan deployment VPC di Lab LAN.',
+            'follow_up_preference' => 'WEB_MESSAGE',
+            'title' => 'Tertinggal Materi Konfigurasi Cloud AWS Setelah Izin Sakit',
+            'description' => 'Setelah izin sakit selama 3 hari minggu lalu, saya tertinggal materi implementasi VPC dan arsitektur cloud. Saya membutuhkan konsultasi pendampingan belajar dengan guru pengampu.',
             'status' => 'IN_PROGRESS',
         ]);
 
         Report::create([
             'student_id' => $student3->user_id,
             'category' => 'PERSONAL',
-            'title' => 'Sesi Konseling Karir: Persiapan Magang Industri Cloud & AI',
-            'description' => 'Siswa membutuhkan konsultasi penempatan industri magang program 4 tahun SIJA untuk peminatan Cloud Architect & AI Engineer.',
+            'follow_up_preference' => 'NEUTRAL_MEET',
+            'title' => 'Sesi Konseling Karir: Persiapan Magang Industri Program 4 Tahun SIJA',
+            'description' => 'Siswa membutuhkan konsultasi dan bimbingan penempatan industri magang program 4 tahun SIJA untuk peminatan Cloud Infrastructure vs AI Engineer.',
             'status' => 'IN_PROGRESS',
         ]);
 
         Report::create([
             'student_id' => $student4->user_id,
             'category' => 'PERSONAL',
-            'title' => 'Klarifikasi Keterlambatan Masuk Sesi Praktikum Pagi',
+            'follow_up_preference' => 'WEB_MESSAGE',
+            'title' => 'Klarifikasi Keterlambatan Masuk Kelas & Pendampingan Kedisiplinan',
             'description' => 'Siswa telah melakukan klarifikasi dan pendampingan bersama guru BK terkait kendala transportasi dan telah kembali beraktivitas normal.',
+            'counselor_response' => 'Siswa telah berkonsultasi dengan guru BK, kendala transportasi telah dicarikan solusi, dan siswa berkomitmen untuk hadir tepat waktu.',
+            'responded_at' => Carbon::now()->subDays(1),
+            'counselor_id' => $bk1->user_id,
             'status' => 'RESOLVED',
         ]);
 
