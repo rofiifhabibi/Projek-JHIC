@@ -16,10 +16,10 @@ return new class extends Migration
         Schema::disableForeignKeyConstraints();
 
         // Bersihkan data perizinan, laporan, jadwal, mapel lama agar data bersih
-        DB::table('requests')->truncate();
-        DB::table('reports')->truncate();
-        DB::table('schedules')->truncate();
-        DB::table('subjects')->truncate();
+        DB::table('reports')->delete();
+        DB::table('requests')->delete();
+        DB::table('schedules')->delete();
+        DB::table('subjects')->delete();
 
         // Jalankan Seeder baru untuk 12 SIJA B
         Artisan::call('db:seed', [

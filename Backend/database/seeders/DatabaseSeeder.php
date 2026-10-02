@@ -283,7 +283,8 @@ class DatabaseSeeder extends Seeder
         }
 
         // 6. PERMIT REQUESTS (Simulasi Siap Uji)
-        PermitRequest::truncate();
+        Report::query()->delete();
+        PermitRequest::query()->delete();
 
         // Siswa 1 (Muhammad Hafidin): Status KOSONG (Siap dites buat izin baru oleh juri)
         PermitRequest::create([
@@ -343,7 +344,6 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // 7. CARE REPORTS (BK)
-        Report::truncate();
 
         Report::create([
             'student_id' => $student1->user_id,
