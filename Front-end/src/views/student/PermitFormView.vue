@@ -191,15 +191,28 @@
                     <h4 class="font-extrabold text-sm sm:text-base text-slate-900 leading-tight">
                       {{ detectedTeacher.name }}
                     </h4>
-                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-extrabold uppercase border border-emerald-200">
+                    <!-- Badge Status Jadwal: Mode Evaluasi 24 Jam vs Jadwal Aktif -->
+                    <span
+                      v-if="detectedTeacher.period?.includes('Evaluasi 24 Jam')"
+                      class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-800 text-[10px] font-extrabold uppercase border border-blue-200 tracking-wide"
+                    >
+                      <span class="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse"></span>
+                      Mode Evaluasi 24 Jam
+                    </span>
+                    <span
+                      v-else
+                      class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-extrabold uppercase border border-emerald-200 tracking-wide"
+                    >
                       <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
                       Jadwal Aktif
                     </span>
                   </div>
-                  <p class="text-xs text-slate-600 mt-0.5">
+                  <p class="text-xs text-slate-600 mt-1 flex items-center gap-1.5 flex-wrap">
                     <span class="font-semibold text-[#355245]">{{ detectedTeacher.subject }}</span>
-                    <span class="text-slate-400"> • </span>
-                    <span>{{ detectedTeacher.room || 'Lab LAN' }} (Jam Pelajaran Sekarang)</span>
+                    <span class="text-slate-400">•</span>
+                    <span class="font-medium text-slate-700">{{ detectedTeacher.room || 'Lab LAN' }}</span>
+                    <span class="text-slate-400">•</span>
+                    <span class="font-medium text-slate-600">({{ detectedTeacher.period || 'Jam Pelajaran Sekarang' }})</span>
                   </p>
                 </div>
               </div>
@@ -213,8 +226,23 @@
               </button>
             </div>
 
-            <!-- Note Ringkas Pergantian Jadwal -->
-            <div class="flex items-center gap-2 px-3 py-2 rounded-xl bg-amber-50/90 border border-amber-200/80 text-xs text-amber-900">
+            <!-- Banner Info Penguji jika Di Luar Jam KBM / Mode Evaluasi 24 Jam -->
+            <div
+              v-if="detectedTeacher.period?.includes('Evaluasi 24 Jam')"
+              class="flex items-start gap-2.5 px-3.5 py-2.5 rounded-xl bg-blue-50/90 border border-blue-200 text-xs text-blue-900 leading-relaxed"
+            >
+              <Info class="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
+              <div>
+                <strong class="font-bold text-blue-950">Catatan Penguji:</strong>
+                Sistem mendeteksi <strong>[{{ detectedTeacher.period }}]</strong>. Sistem menyimulasikan guru pengampu kejuruan aktif agar alur pengajuan izin, persetujuan guru, dan validasi QR Satpam dapat dievaluasi kapan saja selama 24 jam nonstop tanpa terkendala jam operasional sekolah. Klik <strong>Ganti Guru</strong> jika ingin mencoba memilih guru lain.
+              </div>
+            </div>
+
+            <!-- Note Ringkas Pergantian Jadwal jika KBM Normal -->
+            <div
+              v-else
+              class="flex items-center gap-2 px-3 py-2 rounded-xl bg-amber-50/90 border border-amber-200/80 text-xs text-amber-900"
+            >
               <AlertCircle class="w-4 h-4 text-amber-600 shrink-0" />
               <p class="leading-relaxed">
                 <strong class="font-bold">Catatan:</strong> Jika jadwal berganti mendadak, gunakan tombol <strong>Ganti Guru</strong> di atas.
@@ -286,7 +314,7 @@ import { useToast } from '@/composables/useToast'
 import RadioCard from '@/components/ui/RadioCard.vue'
 import BaseSelect from '@/components/ui/BaseSelect.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
-import { AlertCircle, UserCheck } from 'lucide-vue-next'
+import { AlertCircle, UserCheck, Info } from 'lucide-vue-next'
 
 const router = useRouter()
 const permitStore = usePermitStore()
@@ -305,14 +333,16 @@ const detectedTeacher = computed(() => {
       user_id: permitStore.currentSchedule.teacher_id,
       name: permitStore.currentSchedule.teacher_name,
       subject: permitStore.currentSchedule.subject || 'MPP AWS Academy (Cloud SIJA)',
-      room: permitStore.currentSchedule.room || 'Lab LAN'
+      room: permitStore.currentSchedule.room || 'Lab LAN',
+      period: permitStore.currentSchedule.period || 'Jam Pelajaran Sekarang'
     }
   }
   return {
     user_id: 6,
     name: 'Margaretha Endah Titisari, S.T.',
     subject: 'MPP AWS Academy (Cloud SIJA)',
-    room: 'Lab LAN'
+    room: 'Lab LAN',
+    period: 'Di Luar Jam KBM (Mode Evaluasi 24 Jam)'
   }
 })
 
@@ -324,7 +354,7 @@ const allTeachers = computed(() => {
   ]
   return list.map(t => ({
     ...t,
-    display_name: `${t.name} (${t.subject || 'Guru Pengajar'})${t.user_id === detectedTeacher.value.user_id ? ' — [Jadwal Aktif]' : ''}`
+    display_name: t.display_label || `${t.name} (${t.subject || 'Guru Pengajar'})${t.user_id === detectedTeacher.value.user_id ? ' — [' + (detectedTeacher.value.period || 'Jadwal Aktif') + ']' : ''}`
   }))
 })
 

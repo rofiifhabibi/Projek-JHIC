@@ -27,31 +27,34 @@ export const usePermitStore = defineStore('permit', {
         this.currentSchedule = res.data.current_schedule || null;
       } catch (err) {
         console.warn('API /student/teachers offline / error, using dummy fallback:', err);
-        // Fallback data dummy agar testing izin selalu lancar
+        // Fallback data demo 12 SIJA B SMKN 2 Depok Sleman agar testing izin selalu lancar
         this.teachersList = [
           {
             user_id: 6,
-            name: 'Ahmad Dahlan, S.Pd.',
+            name: 'Margaretha Endah Titisari, S.T.',
             username: 'guru1',
-            subject: 'Pemrograman Web & Perangkat Bergerak (PWPB)',
+            subject: 'MPP AWS Academy (Cloud SIJA)',
+            room: 'Lab LAN',
             is_current_schedule: true,
-            display_label: 'Ahmad Dahlan, S.Pd. (Pemrograman Web) — [Jadwal Aktif]'
-          },
-          {
-            user_id: 8,
-            name: 'Bambang Pamungkas, S.Kom',
-            username: 'guru3',
-            subject: 'Pemrograman Berorientasi Objek (PBO)',
-            is_current_schedule: false,
-            display_label: 'Bambang Pamungkas, S.Kom (PBO)'
+            display_label: 'Margaretha Endah Titisari, S.T. (MPP AWS Academy) — [Di Luar Jam KBM (Mode Evaluasi 24 Jam)]'
           },
           {
             user_id: 7,
-            name: 'Ratna Dewi, M.Pd.',
+            name: 'Eka Nur Ahmad Romadhoni, S.Pd.',
             username: 'guru2',
-            subject: 'Fisika Terapan Kejuruan',
+            subject: 'MPP Koding & AI (SIJA)',
+            room: 'Lab LAN',
             is_current_schedule: false,
-            display_label: 'Ratna Dewi, M.Pd. (Fisika Terapan)'
+            display_label: 'Eka Nur Ahmad Romadhoni, S.Pd. (MPP Koding & AI) — [Lab LAN]'
+          },
+          {
+            user_id: 8,
+            name: 'Sri Wahjuni Pudjiastuti, S.Pd.',
+            username: 'guru3',
+            subject: 'Bahasa Indonesia',
+            room: 'Ruang Teori 7',
+            is_current_schedule: false,
+            display_label: 'Sri Wahjuni Pudjiastuti, S.Pd. (Bahasa Indonesia) — [Ruang Teori 7]'
           }
         ];
         this.currentSchedule = {
@@ -60,7 +63,7 @@ export const usePermitStore = defineStore('permit', {
           subject: 'MPP AWS Academy (Cloud SIJA)',
           room: 'Lab LAN',
           class_name: '12 SIJA B',
-          period: 'Jam Pelajaran Aktif (Sedang Berlangsung)'
+          period: 'Di Luar Jam KBM (Mode Evaluasi 24 Jam)'
         };
       } finally {
         this.loading = false;
