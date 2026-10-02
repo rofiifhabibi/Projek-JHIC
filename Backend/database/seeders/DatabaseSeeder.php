@@ -282,107 +282,11 @@ class DatabaseSeeder extends Seeder
             }
         }
 
-        // 6. PERMIT REQUESTS (Simulasi Siap Uji)
+        // 6. PERMIT REQUESTS & CARE REPORTS (Default Bersih)
         Report::query()->delete();
         PermitRequest::query()->delete();
-
-        // Siswa 1 (Muhammad Hafidin): Status KOSONG (Siap dites buat izin baru oleh juri)
-        PermitRequest::create([
-            'student_id' => $student1->user_id,
-            'initial_teacher_id' => $guru1->user_id,
-            'type' => 'TEMP',
-            'reason' => 'Izin mengambil modul praktikum AWS di Lab LAN',
-            'duration_minutes' => 15,
-            'status' => 'COMPLETED',
-            'expiry_time' => Carbon::now()->subHours(3),
-        ]);
-
-        // Siswa 2 (Muhammad Rofiif Arifian): Sedang izin aktif
-        PermitRequest::create([
-            'student_id' => $student2->user_id,
-            'initial_teacher_id' => $guru1->user_id,
-            'type' => 'TEMP',
-            'reason' => 'Izin ke Ruang Server mengambil kabel patch cord dan console switch',
-            'duration_minutes' => 30,
-            'status' => 'ACTIVE',
-            'qr_token' => 'QR-ACTIVE-12SIJAB-002',
-            'expiry_time' => Carbon::now()->addMinutes(20),
-        ]);
-
-        // Siswa 3 (Mahesa Gita Dharma): Terlambat (OVERDUE)
-        PermitRequest::create([
-            'student_id' => $student3->user_id,
-            'initial_teacher_id' => $guru1->user_id,
-            'type' => 'TEMP',
-            'reason' => 'Izin membeli konektor RJ-45 dan tang crimping di toko dekat gerbang',
-            'duration_minutes' => 15,
-            'status' => 'OVERDUE',
-            'qr_token' => 'QR-OVERDUE-12SIJAB-003',
-            'expiry_time' => Carbon::now()->subMinutes(10),
-        ]);
-
-        // Siswa 4 (Vincentius Rafa Christa P): Selesai UKS
-        PermitRequest::create([
-            'student_id' => $student4->user_id,
-            'initial_teacher_id' => $guru3->user_id,
-            'type' => 'TEMP',
-            'reason' => 'Izin ke ruang UKS istirahat karena sakit pusing',
-            'duration_minutes' => 20,
-            'status' => 'COMPLETED',
-            'expiry_time' => Carbon::now()->subHours(2),
-        ]);
-
-        // Siswa 5 (Yusuf Miftahul Rizqi): Izin Pulang Awal (EXIT_SCHOOL) Disetujui Guru
-        PermitRequest::create([
-            'student_id' => $student5->user_id,
-            'initial_teacher_id' => $guru1->user_id,
-            'type' => 'EXIT_SCHOOL',
-            'reason' => 'Izin pulang awal karena demam tinggi (ada surat dokter & konfirmasi ortu)',
-            'duration_minutes' => 0,
-            'status' => 'APPROVED',
-            'qr_token' => 'QR-EXIT-12SIJAB-005',
-        ]);
-
-        // 7. CARE REPORTS (BK)
-
-        Report::create([
-            'student_id' => $student1->user_id,
-            'category' => 'ACADEMIC',
-            'follow_up_preference' => 'WEB_MESSAGE',
-            'title' => 'Kesulitan Memahami Logika Algoritma Praktikum Koding AI',
-            'description' => 'Saya merasa tertinggal dan kesulitan memahami implementasi logika Python pada modul machine learning Koding AI. Ingin berkonsultasi mengenai strategi belajar atau referensi tambahan.',
-            'status' => 'OPEN',
-        ]);
-
-        Report::create([
-            'student_id' => $student2->user_id,
-            'category' => 'ACADEMIC',
-            'follow_up_preference' => 'WEB_MESSAGE',
-            'title' => 'Tertinggal Materi Konfigurasi Cloud AWS Setelah Izin Sakit',
-            'description' => 'Setelah izin sakit selama 3 hari minggu lalu, saya tertinggal materi implementasi VPC dan arsitektur cloud. Saya membutuhkan konsultasi pendampingan belajar dengan guru pengampu.',
-            'status' => 'IN_PROGRESS',
-        ]);
-
-        Report::create([
-            'student_id' => $student3->user_id,
-            'category' => 'PERSONAL',
-            'follow_up_preference' => 'NEUTRAL_MEET',
-            'title' => 'Sesi Konseling Karir: Persiapan Magang Industri Program 4 Tahun SIJA',
-            'description' => 'Siswa membutuhkan konsultasi dan bimbingan penempatan industri magang program 4 tahun SIJA untuk peminatan Cloud Infrastructure vs AI Engineer.',
-            'status' => 'IN_PROGRESS',
-        ]);
-
-        Report::create([
-            'student_id' => $student4->user_id,
-            'category' => 'PERSONAL',
-            'follow_up_preference' => 'WEB_MESSAGE',
-            'title' => 'Klarifikasi Keterlambatan Masuk Kelas & Pendampingan Kedisiplinan',
-            'description' => 'Siswa telah melakukan klarifikasi dan pendampingan bersama guru BK terkait kendala transportasi dan telah kembali beraktivitas normal.',
-            'counselor_response' => 'Siswa telah berkonsultasi dengan guru BK, kendala transportasi telah dicarikan solusi, dan siswa berkomitmen untuk hadir tepat waktu.',
-            'responded_at' => Carbon::now()->subDays(1),
-            'counselor_id' => $bk1->user_id,
-            'status' => 'RESOLVED',
-        ]);
+        // Dikosongkan secara default agar riwayat perizinan dan konseling BK bersih.
+        // Data hanya tercatat saat penguji/pengguna membuat izin atau aduan nyata saat evaluasi.
 
         Schema::enableForeignKeyConstraints();
     }
