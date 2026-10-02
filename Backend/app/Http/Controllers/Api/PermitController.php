@@ -39,7 +39,7 @@ class PermitController extends Controller
             ]);
         }
 
-        // Hari ini
+        // Hari ini (WIB)
         $dayMap = [
             1 => 'Senin',
             2 => 'Selasa',
@@ -49,19 +49,25 @@ class PermitController extends Controller
             6 => 'Sabtu',
             7 => 'Minggu'
         ];
-        $currentDay = $dayMap[Carbon::now()->dayOfWeekIso] ?? 'Senin';
+        $now = Carbon::now('Asia/Jakarta');
+        $currentDay = $dayMap[$now->dayOfWeekIso] ?? 'Senin';
+        $periodInfo = self::getCurrentPeriod($currentDay, $now);
 
-        // Cari jadwal hari ini untuk kelas siswa
-        $schedule = Schedule::with(['teacher:user_id,name', 'subject'])
-            ->where(function ($q) use ($studentClass) {
-                $q->where('class_name', $studentClass)
-                  ->orWhere('class_name', '12 SIJA B')
-                  ->orWhere('class_name', 'XII SIJA B');
-            })
-            ->where('day', $currentDay)
-            ->first();
+        // Cari jadwal aktif sesuai jam pelajaran saat ini
+        $schedule = null;
+        if ($periodInfo['is_school_hours']) {
+            $schedule = Schedule::with(['teacher:user_id,name', 'subject'])
+                ->where(function ($q) use ($studentClass) {
+                    $q->where('class_name', $studentClass)
+                      ->orWhere('class_name', '12 SIJA B')
+                      ->orWhere('class_name', 'XII SIJA B');
+                })
+                ->where('day', $currentDay)
+                ->where('period_number', $periodInfo['period'])
+                ->first();
+        }
 
-        // Fallback jika di luar jam/akhir pekan: ambil jadwal Selasa (Lab LAN - AWS Cloud)
+        // Fallback jika di luar jam KBM atau akhir pekan: aktifkan KBM utama (Selasa Lab LAN - AWS Cloud)
         if (!$schedule) {
             $schedule = Schedule::with(['teacher:user_id,name', 'subject'])
                 ->where(function ($q) use ($studentClass) {
@@ -70,6 +76,7 @@ class PermitController extends Controller
                       ->orWhere('class_name', 'XII SIJA B');
                 })
                 ->where('day', 'Selasa')
+                ->where('period_number', 1)
                 ->first();
         }
 
@@ -80,6 +87,7 @@ class PermitController extends Controller
         $activeTeacherId = $schedule?->teacher_id ?? ($teachers->first()?->user_id ?? 6);
         $activeSubject = $schedule?->subject?->name ?? 'MPP AWS Academy (Cloud SIJA)';
         $activeRoom = $schedule?->room ?? 'Lab LAN';
+        $periodLabel = $periodInfo['label'];
 
         // Ambil pemetaan mata pelajaran & ruangan tiap guru di kelas ini
         $classSchedules = Schedule::with('subject')
@@ -90,12 +98,12 @@ class PermitController extends Controller
             })
             ->get();
 
-        $teachersData = $teachers->map(function ($t) use ($activeTeacherId, $classSchedules) {
+        $teachersData = $teachers->map(function ($t) use ($activeTeacherId, $classSchedules, $periodLabel) {
             $isAuto = $t->user_id == $activeTeacherId;
             $sched = $classSchedules->firstWhere('teacher_id', $t->user_id);
             $subject = $sched?->subject?->name ?? 'Guru Pengampu / Piket';
             $room = $sched?->room ?? 'Ruang Teori 7';
-            $statusText = $isAuto ? ' — [Jadwal Aktif Sekarang]' : ' — [' . $room . ']';
+            $statusText = $isAuto ? ' — [' . $periodLabel . ']' : ' — [' . $room . ']';
             return [
                 'user_id' => $t->user_id,
                 'name' => $t->name,
@@ -118,9 +126,75 @@ class PermitController extends Controller
                 'subject' => $activeSubject,
                 'room' => $activeRoom,
                 'class_name' => $studentClass,
-                'period' => 'Jam Pelajaran Aktif (Sedang Berlangsung)',
+                'period' => $periodLabel,
             ]
         ]);
+    }
+
+    /**
+     * Menghitung jam pelajaran (JP) aktif berdasarkan jam nyata saat ini di SMKN 2 Depok Sleman
+     */
+    public static function getCurrentPeriod(string $day, Carbon $now): array
+    {
+        $time = $now->format('H:i');
+
+        if ($day === 'Senin') {
+            if ($time < '08:00') return ['period' => 1, 'label' => 'Persiapan KBM (Menuju Jam Ke-1 08.00 WIB)', 'is_school_hours' => true];
+            if ($time < '08:35') return ['period' => 1, 'label' => 'Jam Ke-1 (08.00 - 08.35 WIB)', 'is_school_hours' => true];
+            if ($time < '09:10') return ['period' => 2, 'label' => 'Jam Ke-2 (08.35 - 09.10 WIB)', 'is_school_hours' => true];
+            if ($time < '09:45') return ['period' => 3, 'label' => 'Jam Ke-3 (09.10 - 09.45 WIB)', 'is_school_hours' => true];
+            if ($time < '10:20') return ['period' => 4, 'label' => 'Jam Ke-4 (09.45 - 10.20 WIB)', 'is_school_hours' => true];
+            if ($time < '10:35') return ['period' => 5, 'label' => 'Istirahat KBM (Menuju Jam Ke-5)', 'is_school_hours' => true];
+            if ($time < '11:10') return ['period' => 5, 'label' => 'Jam Ke-5 (10.35 - 11.10 WIB)', 'is_school_hours' => true];
+            if ($time < '11:45') return ['period' => 6, 'label' => 'Jam Ke-6 (11.10 - 11.45 WIB)', 'is_school_hours' => true];
+            if ($time < '12:45') return ['period' => 7, 'label' => 'Ishoma (Menuju Jam Ke-7)', 'is_school_hours' => true];
+            if ($time < '13:20') return ['period' => 7, 'label' => 'Jam Ke-7 (12.45 - 13.20 WIB)', 'is_school_hours' => true];
+            if ($time < '13:55') return ['period' => 8, 'label' => 'Jam Ke-8 (13.20 - 13.55 WIB)', 'is_school_hours' => true];
+            if ($time < '14:30') return ['period' => 9, 'label' => 'Jam Ke-9 (13.55 - 14.30 WIB)', 'is_school_hours' => true];
+            if ($time < '15:05') return ['period' => 10, 'label' => 'Jam Ke-10 (14.30 - 15.05 WIB)', 'is_school_hours' => true];
+            if ($time < '15:20') return ['period' => 11, 'label' => 'Istirahat Sore (Menuju Jam Ke-11)', 'is_school_hours' => true];
+            if ($time <= '15:55') return ['period' => 11, 'label' => 'Jam Ke-11 (15.20 - 15.55 WIB)', 'is_school_hours' => true];
+            return ['period' => 1, 'label' => 'Di Luar Jam KBM (Mode Evaluasi 24 Jam)', 'is_school_hours' => false];
+        }
+
+        if (in_array($day, ['Selasa', 'Rabu', 'Kamis'])) {
+            if ($time < '07:00') return ['period' => 1, 'label' => 'Persiapan KBM (Menuju Jam Ke-1 07.00 WIB)', 'is_school_hours' => true];
+            if ($time < '07:40') return ['period' => 1, 'label' => 'Jam Ke-1 (07.00 - 07.40 WIB)', 'is_school_hours' => true];
+            if ($time < '08:20') return ['period' => 2, 'label' => 'Jam Ke-2 (07.40 - 08.20 WIB)', 'is_school_hours' => true];
+            if ($time < '09:00') return ['period' => 3, 'label' => 'Jam Ke-3 (08.20 - 09.00 WIB)', 'is_school_hours' => true];
+            if ($time < '09:40') return ['period' => 4, 'label' => 'Jam Ke-4 (09.00 - 09.40 WIB)', 'is_school_hours' => true];
+            if ($time < '10:00') return ['period' => 5, 'label' => 'Istirahat KBM (Menuju Jam Ke-5)', 'is_school_hours' => true];
+            if ($time < '10:40') return ['period' => 5, 'label' => 'Jam Ke-5 (10.00 - 10.40 WIB)', 'is_school_hours' => true];
+            if ($time < '11:20') return ['period' => 6, 'label' => 'Jam Ke-6 (10.40 - 11.20 WIB)', 'is_school_hours' => true];
+            if ($time < '12:20') return ['period' => 7, 'label' => 'Ishoma (Menuju Jam Ke-7)', 'is_school_hours' => true];
+            if ($time < '13:00') return ['period' => 7, 'label' => 'Jam Ke-7 (12.20 - 13.00 WIB)', 'is_school_hours' => true];
+            if ($time < '13:40') return ['period' => 8, 'label' => 'Jam Ke-8 (13.00 - 13.40 WIB)', 'is_school_hours' => true];
+            if ($time < '14:20') return ['period' => 9, 'label' => 'Jam Ke-9 (13.40 - 14.20 WIB)', 'is_school_hours' => true];
+            if ($day === 'Selasa') {
+                if ($time < '15:00') return ['period' => 10, 'label' => 'Jam Ke-10 (14.20 - 15.00 WIB)', 'is_school_hours' => true];
+                if ($time < '15:15') return ['period' => 11, 'label' => 'Istirahat Sore (Menuju Jam Ke-11)', 'is_school_hours' => true];
+                if ($time <= '15:55') return ['period' => 11, 'label' => 'Jam Ke-11 (15.15 - 15.55 WIB)', 'is_school_hours' => true];
+            }
+            return ['period' => 1, 'label' => 'Di Luar Jam KBM (Mode Evaluasi 24 Jam)', 'is_school_hours' => false];
+        }
+
+        if ($day === 'Jumat') {
+            if ($time < '08:00') return ['period' => 1, 'label' => 'Persiapan KBM (Menuju Jam Ke-1 08.00 WIB)', 'is_school_hours' => true];
+            if ($time < '08:30') return ['period' => 1, 'label' => 'Jam Ke-1 (08.00 - 08.30 WIB)', 'is_school_hours' => true];
+            if ($time < '09:00') return ['period' => 2, 'label' => 'Jam Ke-2 (08.30 - 09.00 WIB)', 'is_school_hours' => true];
+            if ($time < '09:30') return ['period' => 3, 'label' => 'Jam Ke-3 (09.00 - 09.30 WIB)', 'is_school_hours' => true];
+            if ($time < '10:00') return ['period' => 4, 'label' => 'Jam Ke-4 (09.30 - 10.00 WIB)', 'is_school_hours' => true];
+            if ($time < '10:15') return ['period' => 5, 'label' => 'Istirahat KBM (Menuju Jam Ke-5)', 'is_school_hours' => true];
+            if ($time < '10:45') return ['period' => 5, 'label' => 'Jam Ke-5 (10.15 - 10.45 WIB)', 'is_school_hours' => true];
+            if ($time < '11:15') return ['period' => 6, 'label' => 'Jam Ke-6 (10.45 - 11.15 WIB)', 'is_school_hours' => true];
+            if ($time < '12:45') return ['period' => 7, 'label' => 'Sholat Jum\'at (Menuju Jam Ke-7)', 'is_school_hours' => true];
+            if ($time < '13:15') return ['period' => 7, 'label' => 'Jam Ke-7 (12.45 - 13.15 WIB)', 'is_school_hours' => true];
+            if ($time <= '13:45') return ['period' => 8, 'label' => 'Jam Ke-8 (13.15 - 13.45 WIB)', 'is_school_hours' => true];
+            return ['period' => 1, 'label' => 'Di Luar Jam KBM (Mode Evaluasi 24 Jam)', 'is_school_hours' => false];
+        }
+
+        // Sabtu & Minggu
+        return ['period' => 1, 'label' => 'Akhir Pekan (Mode Evaluasi 24 Jam)', 'is_school_hours' => false];
     }
 
     /**
