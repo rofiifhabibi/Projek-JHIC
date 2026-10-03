@@ -168,7 +168,7 @@ class DatabaseSeeder extends Seeder
             [
                 'password' => Hash::make('password'),
                 'role' => 'satpam',
-                'name' => 'Joko Widodo (Gerbang Utama)',
+                'name' => 'Satpam',
                 'email' => 'satpam1@stembayo.sch.id'
             ]
         );
@@ -177,7 +177,7 @@ class DatabaseSeeder extends Seeder
             [
                 'password' => Hash::make('password'),
                 'role' => 'satpam',
-                'name' => 'Sutarman (Pos II)',
+                'name' => 'Satpam Pos II',
                 'email' => 'satpam2@stembayo.sch.id'
             ]
         );
