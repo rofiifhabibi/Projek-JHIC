@@ -6,13 +6,13 @@ const routes = [
     path: '/',
     name: 'landing',
     component: () => import('@/views/public/LandingPage.vue'),
-    meta: { layout: 'BlankLayout' }
+    meta: { layout: 'BlankLayout', title: 'Beranda' }
   },
   {
     path: '/login',
     name: 'login',
     component: () => import('@/views/auth/LoginView.vue'),
-    meta: { layout: 'BlankLayout', requiresGuest: true }
+    meta: { layout: 'BlankLayout', requiresGuest: true, title: 'Masuk Akun' }
   },
   // 1. RUTE SISWA (PWA)
   {
@@ -21,11 +21,11 @@ const routes = [
     redirect: { name: 'student-dashboard' },
     meta: { requiresAuth: true, roles: ['student'] },
     children: [
-      { path: 'dashboard', name: 'student-dashboard', component: () => import('@/views/student/DashboardView.vue') },
-      { path: 'permit/create', name: 'student-permit-create', component: () => import('@/views/student/PermitFormView.vue') },
-      { path: 'permit/pass', name: 'student-permit-pass', component: () => import('@/views/student/QrPassView.vue') },
-      { path: 'report/create', name: 'student-report-create', component: () => import('@/views/student/CareReportView.vue') },
-      { path: 'tracking', name: 'student-tracking', component: () => import('@/views/student/TrackingView.vue') }
+      { path: 'dashboard', name: 'student-dashboard', component: () => import('@/views/student/DashboardView.vue'), meta: { title: 'Dashboard Siswa' } },
+      { path: 'permit/create', name: 'student-permit-create', component: () => import('@/views/student/PermitFormView.vue'), meta: { title: 'Pengajuan Surat Izin' } },
+      { path: 'permit/pass', name: 'student-permit-pass', component: () => import('@/views/student/QrPassView.vue'), meta: { title: 'Surat Izin & QR Pass' } },
+      { path: 'report/create', name: 'student-report-create', component: () => import('@/views/student/CareReportView.vue'), meta: { title: 'Layanan Konseling BK' } },
+      { path: 'tracking', name: 'student-tracking', component: () => import('@/views/student/TrackingView.vue'), meta: { title: 'Riwayat & Pelacakan' } }
     ]
   },
   // 2. RUTE DASBOR GURU
@@ -35,8 +35,8 @@ const routes = [
     redirect: { name: 'teacher-monitoring' },
     meta: { requiresAuth: true, roles: ['teacher'] },
     children: [
-      { path: 'monitoring', name: 'teacher-monitoring', component: () => import('@/views/teacher/DynamicMonitoringView.vue') },
-      { path: 'approvals', name: 'teacher-approvals', component: () => import('@/views/teacher/ApprovalQueueView.vue') }
+      { path: 'monitoring', name: 'teacher-monitoring', component: () => import('@/views/teacher/DynamicMonitoringView.vue'), meta: { title: 'Monitoring Siswa' } },
+      { path: 'approvals', name: 'teacher-approvals', component: () => import('@/views/teacher/ApprovalQueueView.vue'), meta: { title: 'Antrean Persetujuan Izin' } }
     ]
   },
   // 3. RUTE SATPAM
@@ -46,7 +46,7 @@ const routes = [
     redirect: { name: 'satpam-scanner' },
     meta: { requiresAuth: true, roles: ['satpam'] },
     children: [
-      { path: 'scanner', name: 'satpam-scanner', component: () => import('@/views/satpam/WebScannerView.vue') }
+      { path: 'scanner', name: 'satpam-scanner', component: () => import('@/views/satpam/WebScannerView.vue'), meta: { title: 'Pemindai Gerbang Satpam' } }
     ]
   },
   // 4. RUTE PUSAT DATA BK
@@ -56,8 +56,8 @@ const routes = [
     redirect: { name: 'bk-kanban' },
     meta: { requiresAuth: true, roles: ['bk'] },
     children: [
-      { path: 'kanban', name: 'bk-kanban', component: () => import('@/views/bk/KanbanView.vue') },
-      { path: 'global-monitor', name: 'bk-global-monitor', component: () => import('@/views/bk/GlobalMonitorView.vue') }
+      { path: 'kanban', name: 'bk-kanban', component: () => import('@/views/bk/KanbanView.vue'), meta: { title: 'Papan Konseling BK' } },
+      { path: 'global-monitor', name: 'bk-global-monitor', component: () => import('@/views/bk/GlobalMonitorView.vue'), meta: { title: 'Pusat Monitoring Global' } }
     ]
   },
   // 5. RUTE 404 CATCH-ALL
@@ -65,7 +65,7 @@ const routes = [
     path: '/:pathMatch(.*)*',
     name: 'not-found',
     component: () => import('@/views/public/NotFoundView.vue'),
-    meta: { layout: 'BlankLayout' }
+    meta: { layout: 'BlankLayout', title: 'Halaman Tidak Ditemukan' }
   }
 ]
 
@@ -95,6 +95,12 @@ router.beforeEach((to, from, next) => {
   }
 
   next()
+})
+
+// Dynamic title updater
+router.afterEach((to) => {
+  const pageTitle = to.meta.title
+  document.title = pageTitle ? `${pageTitle} — StudentCare` : 'StudentCare — SMKN 2 Depok Sleman'
 })
 
 export default router

@@ -16,6 +16,7 @@ const getBaseUrl = () => {
 
 const api = axios.create({
   baseURL: getBaseUrl(),
+  timeout: 15000,
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json'
@@ -36,7 +37,9 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     const authStore = useAuthStore()
-    if (error.response?.status === 401) {
+    const requestUrl = error.config?.url || ''
+    // Jangan trigger logout otomatis jika error 401 berasal dari percobaan gagal submit /login
+    if (error.response?.status === 401 && !requestUrl.includes('/login')) {
       authStore.logout()
     }
     return Promise.reject(error)

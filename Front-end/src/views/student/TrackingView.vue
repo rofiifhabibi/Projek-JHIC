@@ -287,6 +287,34 @@
             </div>
           </div>
         </div>
+
+        <!-- Pagination Controls -->
+        <div
+          v-if="permitStore.permitPagination && permitStore.permitPagination.last_page > 1"
+          class="flex items-center justify-between pt-3 border-t border-slate-100 text-xs"
+        >
+          <span class="text-slate-500 font-medium">
+            Halaman <strong>{{ permitStore.permitPagination.current_page }}</strong> dari <strong>{{ permitStore.permitPagination.last_page }}</strong> (Total: {{ permitStore.permitPagination.total }} izin)
+          </span>
+          <div class="flex items-center gap-1.5">
+            <button
+              type="button"
+              :disabled="permitStore.permitPagination.current_page <= 1 || isChangingPage"
+              @click="handlePageChange(permitStore.permitPagination.current_page - 1)"
+              class="px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed font-medium text-slate-700 transition"
+            >
+              Sebelumnya
+            </button>
+            <button
+              type="button"
+              :disabled="permitStore.permitPagination.current_page >= permitStore.permitPagination.last_page || isChangingPage"
+              @click="handlePageChange(permitStore.permitPagination.current_page + 1)"
+              class="px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed font-medium text-slate-700 transition"
+            >
+              Selanjutnya
+            </button>
+          </div>
+        </div>
       </div>
 
       <EmptyState
@@ -310,6 +338,17 @@ import { RefreshCw, ShieldAlert, QrCode, AlertTriangle, AlertOctagon, HeartHands
 const reportStore = useReportStore()
 const permitStore = usePermitStore()
 const isRefreshing = ref(false)
+const isChangingPage = ref(false)
+
+const handlePageChange = async (newPage) => {
+  if (newPage < 1 || isChangingPage.value) return
+  isChangingPage.value = true
+  try {
+    await permitStore.fetchPermitHistory(newPage)
+  } finally {
+    isChangingPage.value = false
+  }
+}
 
 const formatCategory = (cat) => {
   switch (cat) {

@@ -5,6 +5,7 @@ export const usePermitStore = defineStore('permit', {
   state: () => ({
     activePermit: null,
     permitHistory: [],
+    permitPagination: null,
     teachersList: [],
     currentSchedule: null,
     pendingApprovals: [],
@@ -118,10 +119,17 @@ export const usePermitStore = defineStore('permit', {
       try {
         const res = await api.get(`/student/permits/history?page=${page}`);
         this.permitHistory = res.data.data?.data || res.data.data || [];
+        this.permitPagination = res.data.data?.current_page ? {
+          current_page: res.data.data.current_page,
+          last_page: res.data.data.last_page,
+          total: res.data.data.total,
+          per_page: res.data.data.per_page,
+        } : null;
         return res.data;
       } catch (err) {
         console.error('Failed to fetch permit history:', err);
         this.permitHistory = [];
+        this.permitPagination = null;
       }
     },
     async fetchPendingApprovals() {

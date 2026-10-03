@@ -50,7 +50,7 @@
             <img src="/logos/studentcare-logo.png" alt="StudentCare" class="h-7 object-contain" />
           </div>
 
-          <h2 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">Masuk ke Akun Anda</h2>
+          <h1 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">Masuk ke Akun Anda</h1>
           <p class="text-xs text-slate-600 font-medium mt-1">Masukkan NIS, NIP, atau username beserta kata sandi Anda.</p>
         </div>
 

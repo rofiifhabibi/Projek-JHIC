@@ -7,18 +7,31 @@
           <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
           {{ greetingText }}
         </div>
-        <h2 class="text-2xl sm:text-3xl font-black tracking-tight">
+        <h1 class="text-2xl sm:text-3xl font-black tracking-tight">
           Selamat datang, {{ authStore.userName }}!
-        </h2>
+        </h1>
         <p class="text-xs sm:text-sm text-slate-200">
           Kelas: <span class="font-bold text-white">{{ authStore.userClass || '12 SIJA B' }}</span> • SMKN 2 Depok Sleman
         </p>
       </div>
     </div>
 
+    <!-- Skeleton Loading Placeholder saat initial load -->
+    <div
+      v-if="isLoadingInitial"
+      class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm animate-pulse space-y-3"
+    >
+      <div class="flex items-center justify-between">
+        <div class="h-4 bg-slate-200 rounded w-28"></div>
+        <div class="h-5 bg-slate-200 rounded-full w-20"></div>
+      </div>
+      <div class="h-6 bg-slate-200 rounded w-2/3"></div>
+      <div class="h-4 bg-slate-200 rounded w-1/2"></div>
+    </div>
+
     <!-- Active Permit / Disciplinary Card -->
     <div
-      v-if="permitStore.activePermit"
+      v-else-if="permitStore.activePermit"
       class="bg-white rounded-2xl border shadow-sm overflow-hidden transition-all"
       :class="permitStore.activePermit.status === 'ALPHA' || permitStore.activePermit.status === 'REJECTED' ? 'border-rose-300 ring-2 ring-rose-200' : (permitStore.activePermit.status === 'OVERDUE' ? 'border-rose-200 ring-1 ring-rose-200' : 'border-slate-200')"
     >
@@ -303,8 +316,16 @@ const greetingText = computed(() => {
   return 'Selamat Malam'
 })
 
-onMounted(() => {
-  permitStore.fetchActivePermit()
-  reportStore.fetchMyReports()
+const isLoadingInitial = ref(true)
+
+onMounted(async () => {
+  try {
+    await Promise.allSettled([
+      permitStore.fetchActivePermit(),
+      reportStore.fetchMyReports()
+    ])
+  } finally {
+    isLoadingInitial.value = false
+  }
 })
 </script>

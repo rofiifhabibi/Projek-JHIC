@@ -76,9 +76,9 @@
           <span class="truncate">Sistem Izin Keluar & Konseling Siswa</span>
         </div>
 
-        <h2 class="text-2xl sm:text-4xl lg:text-5xl font-black text-slate-900 leading-[1.25] sm:leading-[1.2] tracking-tight">
+        <h1 class="text-2xl sm:text-4xl lg:text-5xl font-black text-slate-900 leading-[1.25] sm:leading-[1.2] tracking-tight">
           Kelola Izin Siswa dan Layanan Konseling dalam Satu Sistem
-        </h2>
+        </h1>
 
         <p class="text-xs sm:text-base text-slate-600 leading-relaxed max-w-2xl mx-auto px-1 sm:px-0">
           Menghubungkan siswa, guru pengajar, satpam gerbang, dan guru BK agar alur perizinan tercatat jelas dan tertib.

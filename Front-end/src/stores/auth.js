@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia'
 import api from '@/api/axios'
 import router from '@/router'
+import { usePermitStore } from '@/stores/permit'
+import { useReportStore } from '@/stores/report'
 
 // Safe storage wrapper to prevent crashes in private browsing or restrictive WebViews
 const safeStorage = {
@@ -93,6 +95,15 @@ export const useAuthStore = defineStore('auth', {
       this.user = null;
       safeStorage.remove('token');
       safeStorage.remove('user');
+
+      // Bersihkan seluruh store Pinia agar data akun sebelumnya tidak tersisa di memori
+      try {
+        const permitStore = usePermitStore();
+        permitStore.$reset?.();
+        const reportStore = useReportStore();
+        reportStore.$reset?.();
+      } catch (e) {}
+
       router.push({ name: 'login' });
     }
   }
