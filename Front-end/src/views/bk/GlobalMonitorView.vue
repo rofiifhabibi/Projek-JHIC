@@ -35,35 +35,46 @@
       </div>
     </div>
 
-    <!-- Stat Widgets Grid for BK -->
+    <!-- Stat Widgets Grid for BK (Fully Symmetrical & Harmonized) -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs flex items-center justify-between">
         <div>
           <p class="text-xs font-semibold text-slate-500">Total Izin Hari Ini</p>
           <p class="text-2xl font-black text-slate-900 mt-1">{{ todayPermitsCount }}</p>
-          <p class="text-[10px] text-slate-400 mt-0.5 font-medium">{{ allPermits.length }} total riwayat</p>
         </div>
         <div class="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center font-bold">
           <Users class="w-5 h-5" />
         </div>
       </div>
 
-      <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs flex items-center justify-between">
+      <div
+        class="bg-white p-4 rounded-2xl border transition-all shadow-xs flex items-center justify-between"
+        :class="activeCount > 0 ? 'border-emerald-200 bg-emerald-50/20' : 'border-slate-200'"
+      >
         <div>
-          <p class="text-xs font-semibold text-slate-500">Sedang Di Luar (Aktif)</p>
-          <p class="text-2xl font-black text-emerald-600 mt-1">{{ activeCount }}</p>
+          <p class="text-xs font-semibold" :class="activeCount > 0 ? 'text-emerald-800' : 'text-slate-500'">Sedang Di Luar (Aktif)</p>
+          <p class="text-2xl font-black mt-1" :class="activeCount > 0 ? 'text-emerald-600' : 'text-slate-900'">{{ activeCount }}</p>
         </div>
-        <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold">
+        <div
+          class="w-10 h-10 rounded-xl flex items-center justify-center font-bold transition-colors"
+          :class="activeCount > 0 ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'"
+        >
           <Clock class="w-5 h-5" />
         </div>
       </div>
 
-      <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs flex items-center justify-between" :class="{ 'border-rose-300 bg-rose-50/40': overdueList.length > 0 }">
+      <div
+        class="bg-white p-4 rounded-2xl border transition-all shadow-xs flex items-center justify-between"
+        :class="overdueList.length > 0 ? 'border-rose-300 bg-rose-50/40' : 'border-slate-200'"
+      >
         <div>
           <p class="text-xs font-semibold" :class="overdueList.length > 0 ? 'text-rose-700' : 'text-slate-500'">Terlambat Kembali</p>
           <p class="text-2xl font-black mt-1" :class="overdueList.length > 0 ? 'text-rose-600' : 'text-slate-900'">{{ overdueList.length }}</p>
         </div>
-        <div class="w-10 h-10 rounded-xl flex items-center justify-center font-bold" :class="overdueList.length > 0 ? 'bg-rose-100 text-rose-700' : 'bg-slate-100 text-slate-500'">
+        <div
+          class="w-10 h-10 rounded-xl flex items-center justify-center font-bold transition-colors"
+          :class="overdueList.length > 0 ? 'bg-rose-100 text-rose-700' : 'bg-slate-100 text-slate-500'"
+        >
           <AlertTriangle class="w-5 h-5" />
         </div>
       </div>
@@ -71,9 +82,9 @@
       <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs flex items-center justify-between">
         <div>
           <p class="text-xs font-semibold text-slate-500">Selesai / Sudah Kembali</p>
-          <p class="text-2xl font-black text-slate-700 mt-1">{{ closedOrCompletedCount }}</p>
+          <p class="text-2xl font-black text-slate-900 mt-1">{{ closedOrCompletedCount }}</p>
         </div>
-        <div class="w-10 h-10 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center font-bold">
+        <div class="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center font-bold">
           <CheckCircle class="w-5 h-5" />
         </div>
       </div>
