@@ -9,7 +9,7 @@ use App\Http\Controllers\Api\TeacherController;
 use App\Http\Controllers\Api\BkController;
 
 // 1. Endpoint Publik
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:20,1');
 
 // 2. Endpoint Terproteksi Token (Sanctum)
 Route::middleware('auth:sanctum')->group(function () {

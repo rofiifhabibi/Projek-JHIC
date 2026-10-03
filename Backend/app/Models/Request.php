@@ -60,6 +60,11 @@ class Request extends Model
         static::whereIn('status', ['PENDING', 'APPROVED'])
             ->whereDate('created_at', '<', Carbon::today())
             ->update(['status' => 'CANCELLED']);
+
+        // 3. Tutup izin ACTIVE dan OVERDUE dari hari sebelumnya yang menggantung agar tidak mengunci akun siswa
+        static::whereIn('status', ['ACTIVE', 'OVERDUE'])
+            ->whereDate('created_at', '<', Carbon::today())
+            ->update(['status' => 'CLOSED']);
     }
 
     /**

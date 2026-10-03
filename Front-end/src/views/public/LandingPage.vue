@@ -34,6 +34,8 @@
             @click="isMobileMenuOpen = !isMobileMenuOpen"
             class="md:hidden p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition cursor-pointer touch-manipulation"
             aria-label="Buka menu navigasi"
+            :aria-expanded="isMobileMenuOpen"
+            aria-controls="mobile-nav"
           >
             <Menu v-if="!isMobileMenuOpen" class="w-5 h-5" />
             <X v-else class="w-5 h-5" />
@@ -43,6 +45,7 @@
 
       <!-- Mobile Dropdown Menu -->
       <div
+        id="mobile-nav"
         v-if="isMobileMenuOpen"
         class="md:hidden border-t border-slate-100 bg-white px-4 py-3 space-y-2 shadow-lg animate-fadeIn"
       >
@@ -168,7 +171,7 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-6">
           <router-link
-            to="/login"
+            :to="{ path: '/login', query: { role: 'student' } }"
             class="bg-white p-5 sm:p-6 rounded-2xl border border-slate-200/90 space-y-3 shadow-xs hover:shadow-md hover:border-[#355245]/40 transition group flex flex-col justify-between"
           >
             <div class="space-y-3">
@@ -185,7 +188,7 @@
           </router-link>
 
           <router-link
-            to="/login"
+            :to="{ path: '/login', query: { role: 'teacher' } }"
             class="bg-white p-5 sm:p-6 rounded-2xl border border-slate-200/90 space-y-3 shadow-xs hover:shadow-md hover:border-[#355245]/40 transition group flex flex-col justify-between"
           >
             <div class="space-y-3">
@@ -202,7 +205,7 @@
           </router-link>
 
           <router-link
-            to="/login"
+            :to="{ path: '/login', query: { role: 'satpam' } }"
             class="bg-white p-5 sm:p-6 rounded-2xl border border-slate-200/90 space-y-3 shadow-xs hover:shadow-md hover:border-[#355245]/40 transition group flex flex-col justify-between"
           >
             <div class="space-y-3">
@@ -219,7 +222,7 @@
           </router-link>
 
           <router-link
-            to="/login"
+            :to="{ path: '/login', query: { role: 'bk' } }"
             class="bg-white p-5 sm:p-6 rounded-2xl border border-slate-200/90 space-y-3 shadow-xs hover:shadow-md hover:border-[#355245]/40 transition group flex flex-col justify-between"
           >
             <div class="space-y-3">

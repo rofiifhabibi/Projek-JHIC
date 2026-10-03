@@ -68,7 +68,10 @@
               type="button"
               @click="quickLogin(role)"
               :disabled="authStore.loading || isLoggingIn"
-              class="flex flex-col items-center justify-center p-2.5 sm:p-3 rounded-2xl border border-slate-200 hover:border-[#355245] bg-slate-50/70 hover:bg-[#E8EFEA]/60 transition-all text-center group active:scale-95 disabled:opacity-50 shadow-xs cursor-pointer touch-manipulation"
+              class="flex flex-col items-center justify-center p-2.5 sm:p-3 rounded-2xl border transition-all text-center group active:scale-95 disabled:opacity-50 shadow-xs cursor-pointer touch-manipulation"
+              :class="identity === role.username
+                ? 'border-[#355245] bg-[#E8EFEA] ring-2 ring-[#355245]/20'
+                : 'border-slate-200 hover:border-[#355245] bg-slate-50/70 hover:bg-[#E8EFEA]/60'"
             >
               <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-white border border-slate-200 flex items-center justify-center mb-1 text-[#355245] group-hover:bg-[#355245] group-hover:text-white transition-all shadow-xs">
                 <component :is="role.icon" class="w-3.5 h-3.5 sm:w-4 sm:h-4" />
@@ -142,7 +145,12 @@ import { User, Lock, ArrowLeft, ShieldCheck, GraduationCap, UserCheck, Shield, H
 const authStore = useAuthStore()
 const toast = useToast()
 
-const isDevMode = import.meta.env.DEV
+import { useRoute } from 'vue-router'
+import { onMounted } from 'vue'
+
+const route = useRoute()
+// Akun demo penguji selalu aktif agar juri lomba JHIC dapat menguji keempat peran secara instan
+const isDevMode = true
 
 const presets = [
   { id: 'student', label: 'Siswa', icon: GraduationCap, username: 'siswa1', password: 'password' },
@@ -151,8 +159,19 @@ const presets = [
   { id: 'bk', label: 'Guru BK', icon: HeartHandshake, username: 'bk1', password: 'password' }
 ]
 
-const identity = ref(isDevMode ? 'siswa1' : '')
-const password = ref(isDevMode ? 'password' : '')
+const identity = ref('siswa1')
+const password = ref('password')
+
+onMounted(() => {
+  const queryRole = route.query.role
+  if (queryRole) {
+    const matched = presets.find(p => p.id === queryRole)
+    if (matched) {
+      identity.value = matched.username
+      password.value = matched.password
+    }
+  }
+})
 const isLoggingIn = ref(false)
 
 const errors = ref({

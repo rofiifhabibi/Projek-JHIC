@@ -1,6 +1,10 @@
 <template>
   <Teleport to="body">
     <div
+      role="region"
+      aria-label="Pemberitahuan Sistem"
+      aria-live="polite"
+      aria-atomic="true"
       class="fixed top-4 inset-x-0 z-50 flex flex-col items-center gap-2.5 px-4 pointer-events-none sm:top-5 sm:right-6 sm:left-auto sm:px-0 sm:items-end"
     >
       <TransitionGroup
@@ -15,6 +19,7 @@
           v-for="toast in toasts"
           :key="toast.id"
           @click="removeToast(toast.id)"
+          :role="toast.type === 'error' ? 'alert' : 'status'"
           class="pointer-events-auto cursor-pointer select-none flex items-start gap-3 p-3.5 sm:p-4 rounded-2xl shadow-xl border backdrop-blur-md transition-all w-full max-w-sm active:scale-[0.99]"
           :class="getToastClass(toast.type)"
         >

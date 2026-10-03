@@ -1,7 +1,18 @@
 <template>
   <div class="space-y-6">
+    <!-- Skeleton Loading Placeholder saat initial load -->
+    <div
+      v-if="isLoadingInitial"
+      class="bg-white rounded-2xl sm:rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 animate-pulse space-y-4 max-w-sm mx-auto text-center"
+    >
+      <div class="h-6 bg-slate-200 rounded-full w-48 mx-auto"></div>
+      <div class="w-48 h-48 bg-slate-100 rounded-2xl mx-auto border border-slate-200"></div>
+      <div class="h-4 bg-slate-200 rounded w-32 mx-auto"></div>
+      <div class="h-4 bg-slate-200 rounded w-24 mx-auto"></div>
+    </div>
+
     <!-- Active Ticket Card -->
-    <div v-if="activePermit" class="bg-white rounded-2xl sm:rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+    <div v-else-if="activePermit" class="bg-white rounded-2xl sm:rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
       <!-- Header -->
       <div class="bg-gradient-to-r from-[#355245] to-[#273e34] text-white p-4 sm:p-6 relative">
         <div class="flex items-center justify-between mb-3">
@@ -287,7 +298,7 @@
 
     <!-- Empty State -->
     <EmptyState
-      v-else
+      v-else-if="!isLoadingInitial && !activePermit"
       title="Tidak Ada Izin Aktif"
       description="Anda tidak memiliki surat izin aktif atau dalam proses pengajuan saat ini."
     >
@@ -450,9 +461,15 @@ const handleVisibilityChange = async () => {
   }
 }
 
+const isLoadingInitial = ref(true)
+
 onMounted(async () => {
-  await permitStore.fetchActivePermit()
-  updateCountdown()
+  try {
+    await permitStore.fetchActivePermit()
+    updateCountdown()
+  } finally {
+    isLoadingInitial.value = false
+  }
 
   timerInterval = setInterval(updateCountdown, 1000)
   startPolling()
