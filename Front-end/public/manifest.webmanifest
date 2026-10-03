@@ -1,4 +1,5 @@
 {
+  "id": "/login",
   "name": "StudentCare — SMKN 2 Depok Sleman",
   "short_name": "StudentCare",
   "description": "Platform Manajemen Perizinan Siswa dan Layanan Konseling Siswa (BK) SMKN 2 Depok Sleman.",
@@ -8,18 +9,31 @@
   "background_color": "#F8FAFC",
   "theme_color": "#355245",
   "orientation": "portrait-primary",
+  "categories": ["education"],
   "icons": [
     {
-      "src": "/favicon.png",
+      "src": "/logos/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
-      "src": "/logos/studentcare-icon.png",
+      "src": "/logos/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/logos/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "/logos/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }
