@@ -194,11 +194,11 @@ const form = ref({
 const categoryPlaceholder = computed(() => {
   switch (form.value.category) {
     case 'ACADEMIC':
-      return 'Misal: Kesulitan memahami materi koding kejuruan...'
+      return 'Misal: Kendala motivasi belajar, penurunan nilai, atau konsentrasi di kelas...'
     case 'PERSONAL':
-      return 'Misal: Merasa cemas dan butuh arahan persiapan magang...'
+      return 'Misal: Kebingungan menentukan arah karir/kuliah atau masalah pribadi...'
     case 'BULLYING':
-      return 'Misal: Ada intimidasi atau pemalakan di area sekolah...'
+      return 'Misal: Laporan intimidasi, pemalakan, atau perlakuan tidak menyenangkan...'
     default:
       return 'Misal: Penjelasan klarifikasi izin atau kendala khusus...'
   }
@@ -207,11 +207,11 @@ const categoryPlaceholder = computed(() => {
 const descriptionPlaceholder = computed(() => {
   switch (form.value.category) {
     case 'ACADEMIC':
-      return 'Ceritakan materi pelajaran yang dirasa sulit, kendala tugas, atau bantuan bimbingan belajar yang kamu butuhkan...'
+      return 'Ceritakan kendala belajar yang sedang kamu alami (misal: sulit fokus, sering terlambat mengumpulkan tugas, atau penurunan motivasi sekolah)...'
     case 'PERSONAL':
       return 'Ceritakan hal yang sedang membebani pikiranmu atau hal yang ingin kamu konsultasikan secara rahasia...'
     case 'BULLYING':
-      return 'Ceritakan waktu, tempat, atau apa yang kamu alami secara jelas...'
+      return 'Ceritakan waktu, tempat, atau perlakuan tidak menyenangkan yang kamu alami secara jelas...'
     default:
       return 'Tuliskan penjelasan atau klarifikasi secara rinci...'
   }
