@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /student/
+Disallow: /teacher/
+Disallow: /bk/
+Disallow: /satpam/
+
+Sitemap: https://studentcare.my.id/sitemap.xml

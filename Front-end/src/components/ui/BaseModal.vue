@@ -12,7 +12,7 @@
         v-if="show"
         class="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-6"
         @click.self="handleBackdropClick"
-        @keydown.escape="handleEscape"
+        @keydown="handleKeyDown"
         tabindex="-1"
         ref="modalRef"
       >
@@ -65,7 +65,7 @@
 </template>
 
 <script setup>
-import { computed, watch, ref, nextTick } from 'vue'
+import { computed, watch, ref, nextTick, onBeforeUnmount } from 'vue'
 import { X } from 'lucide-vue-next'
 
 const props = defineProps({
@@ -96,11 +96,60 @@ const handleBackdropClick = () => {
 }
 const handleEscape = () => close()
 
+const handleKeyDown = (e) => {
+  if (e.key === 'Escape') {
+    handleEscape()
+    return
+  }
+
+  // Focus Trapping: Tab & Shift+Tab lock inside modal
+  if (e.key === 'Tab') {
+    if (!modalRef.value) return
+    const focusable = modalRef.value.querySelectorAll(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    )
+    if (focusable.length === 0) return
+
+    const firstElement = focusable[0]
+    const lastElement = focusable[focusable.length - 1]
+
+    if (e.shiftKey) {
+      if (document.activeElement === firstElement || document.activeElement === modalRef.value) {
+        lastElement.focus()
+        e.preventDefault()
+      }
+    } else {
+      if (document.activeElement === lastElement) {
+        firstElement.focus()
+        e.preventDefault()
+      }
+    }
+  }
+}
+
 watch(() => props.show, (val) => {
-  if (val) {
-    nextTick(() => {
-      modalRef.value?.focus()
-    })
+  if (typeof document !== 'undefined') {
+    if (val) {
+      document.body.style.overflow = 'hidden'
+      nextTick(() => {
+        const focusable = modalRef.value?.querySelectorAll(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        )
+        if (focusable && focusable.length > 0) {
+          focusable[0].focus()
+        } else {
+          modalRef.value?.focus()
+        }
+      })
+    } else {
+      document.body.style.overflow = ''
+    }
+  }
+})
+
+onBeforeUnmount(() => {
+  if (typeof document !== 'undefined') {
+    document.body.style.overflow = ''
   }
 })
 </script>

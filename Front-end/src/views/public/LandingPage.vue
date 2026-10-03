@@ -299,11 +299,11 @@
 
         <!-- Footer Partner Logos -->
         <div class="border-t border-slate-800 pt-5 flex flex-wrap items-center justify-center gap-4 sm:gap-8">
-          <img src="/logos/jhic-white.png" alt="JHIC" class="h-5 sm:h-6 max-w-[90px] object-contain opacity-40 hover:opacity-90 transition" />
-          <img src="/logos/jagoan-hosting-white.png" alt="Jagoan Hosting" class="h-4 sm:h-5 max-w-[95px] object-contain opacity-40 hover:opacity-90 transition" />
-          <img src="/logos/komdigi-white.png" alt="Komdigi" class="h-5 sm:h-6 max-w-[85px] object-contain opacity-40 hover:opacity-90 transition" />
-          <img src="/logos/garuda-spark-white.png" alt="Garuda Spark" class="h-4 sm:h-5 max-w-[95px] object-contain opacity-40 hover:opacity-90 transition" />
-          <img src="/logos/ngalup-white.png" alt="Ngalup" class="h-3.5 sm:h-4.5 max-w-[95px] object-contain opacity-40 hover:opacity-90 transition" />
+          <img src="/logos/jhic-white.png" alt="JHIC" width="90" height="24" loading="lazy" class="h-5 sm:h-6 max-w-[90px] object-contain opacity-75 hover:opacity-100 transition-opacity" />
+          <img src="/logos/jagoan-hosting-white.png" alt="Jagoan Hosting" width="95" height="20" loading="lazy" class="h-4 sm:h-5 max-w-[95px] object-contain opacity-75 hover:opacity-100 transition-opacity" />
+          <img src="/logos/komdigi-white.png" alt="Komdigi" width="85" height="24" loading="lazy" class="h-5 sm:h-6 max-w-[85px] object-contain opacity-75 hover:opacity-100 transition-opacity" />
+          <img src="/logos/garuda-spark-white.png" alt="Garuda Spark" width="95" height="20" loading="lazy" class="h-4 sm:h-5 max-w-[95px] object-contain opacity-75 hover:opacity-100 transition-opacity" />
+          <img src="/logos/ngalup-white.png" alt="Ngalup" width="95" height="18" loading="lazy" class="h-3.5 sm:h-4.5 max-w-[95px] object-contain opacity-75 hover:opacity-100 transition-opacity" />
         </div>
       </div>
     </footer>
