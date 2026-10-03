@@ -166,9 +166,16 @@
             v-model="form.reason"
             rows="3"
             required
+            @input="errors.reason = ''"
+            :aria-invalid="errors.reason ? 'true' : undefined"
+            :aria-describedby="errors.reason ? 'permit-reason-error' : undefined"
             placeholder="Tuliskan keperluan izin kamu (misal: Mengambil buku di loker / ke ruang UKS)..."
-            class="w-full rounded-xl border border-slate-200 bg-white p-3.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#355245] focus:ring-2 focus:ring-[#355245] focus:outline-none transition"
+            class="w-full rounded-xl border bg-white p-3.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none transition"
+            :class="errors.reason ? 'border-rose-400 focus:border-rose-500 focus:ring-2 focus:ring-rose-500/20' : 'border-slate-200 focus:border-[#355245] focus:ring-2 focus:ring-[#355245]'"
           ></textarea>
+          <p v-if="errors.reason" id="permit-reason-error" role="alert" class="text-xs text-rose-600 font-medium mt-0.5">
+            {{ errors.reason }}
+          </p>
         </div>
 
         <!-- Step 4: Pilih Guru yang Mengajar (Otomatis Jadwal / Manual Fallback) -->
@@ -322,6 +329,9 @@ const toast = useToast()
 
 const isManualSelect = ref(false)
 const isCancelling = ref(false)
+const errors = ref({
+  reason: ''
+})
 
 const hasActivePermit = computed(() => {
   return permitStore.activePermit && ['PENDING', 'APPROVED', 'ACTIVE', 'OVERDUE'].includes(permitStore.activePermit.status)
@@ -415,7 +425,9 @@ const handleSubmit = async () => {
   if (!form.value.teacher_id) {
     form.value.teacher_id = detectedTeacher.value?.user_id || 6
   }
+  errors.value.reason = ''
   if (!form.value.reason.trim()) {
+    errors.value.reason = 'Alasan izin wajib diisi secara jelas.'
     toast.warning('Alasan izin tidak boleh kosong!')
     return
   }

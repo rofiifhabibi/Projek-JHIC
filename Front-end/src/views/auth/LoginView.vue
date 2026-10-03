@@ -85,12 +85,14 @@
         </div>
 
         <!-- Form -->
-        <form @submit.prevent="handleLogin" class="space-y-4">
+        <form @submit.prevent="handleLogin" class="space-y-4" novalidate>
           <BaseInput
             id="identity"
             label="NIS / NIP / Username"
             placeholder="Masukkan NIS, NIP, atau username..."
             v-model="identity"
+            :error="errors.identity"
+            @update:model-value="errors.identity = ''; errors.general = ''"
             required
           >
             <template #icon-left><User class="w-4 h-4" /></template>
@@ -101,10 +103,16 @@
             label="Kata Sandi"
             placeholder="••••••••"
             v-model="password"
+            :error="errors.password"
+            @update:model-value="errors.password = ''; errors.general = ''"
             required
           >
             <template #icon-left><Lock class="w-4 h-4" /></template>
           </PasswordInput>
+
+          <div v-if="errors.general" class="p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-700 font-medium leading-relaxed">
+            {{ errors.general }}
+          </div>
 
           <BaseButton
             type="submit"
@@ -147,11 +155,32 @@ const identity = ref(isDevMode ? 'siswa1' : '')
 const password = ref(isDevMode ? 'password' : '')
 const isLoggingIn = ref(false)
 
+const errors = ref({
+  identity: '',
+  password: '',
+  general: ''
+})
+
+const validate = () => {
+  let valid = true
+  errors.value = { identity: '', password: '', general: '' }
+  if (!identity.value?.trim()) {
+    errors.value.identity = 'NIS, NIP, atau username wajib diisi.'
+    valid = false
+  }
+  if (!password.value) {
+    errors.value.password = 'Kata sandi wajib diisi.'
+    valid = false
+  }
+  return valid
+}
+
 const quickLogin = async (rolePreset) => {
   if (isLoggingIn.value || authStore.loading) return
   isLoggingIn.value = true
   identity.value = rolePreset.username
   password.value = rolePreset.password
+  errors.value = { identity: '', password: '', general: '' }
   try {
     await authStore.login(identity.value, password.value)
     toast.success(`Berhasil masuk sebagai ${rolePreset.label}!`)
@@ -163,13 +192,18 @@ const quickLogin = async (rolePreset) => {
 }
 
 const handleLogin = async () => {
+  if (!validate()) return
   if (isLoggingIn.value || authStore.loading) return
   isLoggingIn.value = true
+  errors.value = { identity: '', password: '', general: '' }
   try {
     await authStore.login(identity.value, password.value)
     toast.success('Berhasil masuk!')
   } catch (err) {
-    toast.error(err.response?.data?.message || 'Gagal masuk, periksa kembali username dan kata sandi.')
+    const msg = err.response?.data?.message || 'Identitas atau kata sandi tidak cocok. Silakan periksa kembali.'
+    errors.value.general = msg
+    errors.value.password = 'Periksa kembali kata sandi akun Anda.'
+    toast.error(msg)
   } finally {
     isLoggingIn.value = false
   }

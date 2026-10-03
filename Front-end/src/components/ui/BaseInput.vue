@@ -21,10 +21,12 @@
         :placeholder="placeholder"
         :disabled="disabled"
         :readonly="readonly"
+        :aria-invalid="error ? 'true' : undefined"
+        :aria-describedby="error ? `${inputId}-error` : undefined"
         @input="$emit('update:modelValue', $event.target.value)"
         class="w-full rounded-xl border bg-white px-3.5 py-2.5 text-sm font-medium text-slate-900 placeholder:text-slate-400 transition-all focus:outline-none focus:ring-2 focus:ring-[#355245] disabled:bg-slate-50 disabled:text-slate-400 disabled:cursor-not-allowed"
         :class="[
-          error ? 'border-rose-300 focus:border-rose-500 focus:ring-rose-500/20' : 'border-slate-200 focus:border-[#355245]',
+          error ? 'border-rose-400 focus:border-rose-500 focus:ring-rose-500/20' : 'border-slate-200 focus:border-[#355245]',
           $slots['icon-left'] ? 'pl-10' : '',
           $slots['icon-right'] ? 'pr-10' : ''
         ]"
@@ -35,7 +37,12 @@
       </div>
     </div>
 
-    <p v-if="error" class="text-xs text-rose-600 font-medium flex items-center gap-1 mt-0.5">
+    <p
+      v-if="error"
+      :id="`${inputId}-error`"
+      role="alert"
+      class="text-xs text-rose-600 font-medium flex items-center gap-1 mt-0.5"
+    >
       {{ error }}
     </p>
   </div>

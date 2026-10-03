@@ -72,12 +72,29 @@
       </button>
     </div>
 
+    <!-- Drag & Drop Interactive Tip -->
+    <div class="hidden xl:flex items-center justify-between px-4 py-2.5 rounded-2xl bg-emerald-50/70 border border-emerald-200/80 text-xs text-emerald-900 shadow-2xs">
+      <div class="flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span><strong>Papan Konseling Interaktif:</strong> Anda dapat menggeser (drag & drop) kartu aduan antar-kolom status, atau menggunakan tombol aksi di dalam kartu.</span>
+      </div>
+      <span class="text-[11px] font-medium text-emerald-700 bg-white/80 px-2 py-0.5 rounded-md border border-emerald-200">
+        Tarik kartu untuk memindahkan
+      </span>
+    </div>
+
     <!-- Kanban Board Columns -->
     <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
       <!-- COLUMN 1: OPEN -->
       <div
-        class="bg-slate-100/70 p-4 rounded-3xl border border-slate-200/80 space-y-4 flex-col"
-        :class="activeColumnTab === 'OPEN' ? 'flex' : 'hidden xl:flex'"
+        class="bg-slate-100/70 p-4 rounded-3xl border space-y-4 flex-col transition-all duration-200"
+        :class="[
+          activeColumnTab === 'OPEN' ? 'flex' : 'hidden xl:flex',
+          dragOverColumn === 'OPEN' ? 'border-amber-400 ring-2 ring-amber-300 bg-amber-50/60' : 'border-slate-200/80'
+        ]"
+        @dragover="onDragOver($event, 'OPEN')"
+        @dragleave="onDragLeave($event, 'OPEN')"
+        @drop="onDrop($event, 'OPEN')"
       >
         <div class="flex items-center justify-between px-2 shrink-0">
           <div class="flex items-center gap-2">
@@ -89,11 +106,15 @@
           </span>
         </div>
 
-        <div class="space-y-3 overflow-y-auto max-h-[calc(100vh-270px)] pr-1">
+        <div class="space-y-3 overflow-y-auto max-h-[calc(100vh-270px)] pr-1 min-h-[120px]">
           <div
             v-for="rep in filteredOpen"
             :key="rep.report_id"
-            class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3 hover:border-amber-400 transition"
+            draggable="true"
+            @dragstart="onDragStart($event, rep)"
+            @dragend="onDragEnd"
+            class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3 hover:border-amber-400 transition cursor-grab active:cursor-grabbing select-none"
+            :class="{ 'opacity-40 ring-2 ring-amber-400 scale-[0.98]': draggedReport?.report_id === rep.report_id }"
           >
             <div class="flex items-start justify-between gap-2">
               <span class="px-2.5 py-0.5 rounded-md text-xs font-bold bg-amber-50 text-amber-800 uppercase border border-amber-200">
@@ -162,8 +183,14 @@
 
       <!-- COLUMN 2: IN_PROGRESS -->
       <div
-        class="bg-slate-100/70 p-4 rounded-3xl border border-slate-200/80 space-y-4 flex-col"
-        :class="activeColumnTab === 'IN_PROGRESS' ? 'flex' : 'hidden xl:flex'"
+        class="bg-slate-100/70 p-4 rounded-3xl border space-y-4 flex-col transition-all duration-200"
+        :class="[
+          activeColumnTab === 'IN_PROGRESS' ? 'flex' : 'hidden xl:flex',
+          dragOverColumn === 'IN_PROGRESS' ? 'border-emerald-400 ring-2 ring-emerald-300 bg-emerald-50/60' : 'border-slate-200/80'
+        ]"
+        @dragover="onDragOver($event, 'IN_PROGRESS')"
+        @dragleave="onDragLeave($event, 'IN_PROGRESS')"
+        @drop="onDrop($event, 'IN_PROGRESS')"
       >
         <div class="flex items-center justify-between px-2 shrink-0">
           <div class="flex items-center gap-2">
@@ -175,11 +202,15 @@
           </span>
         </div>
 
-        <div class="space-y-3 overflow-y-auto max-h-[calc(100vh-270px)] pr-1">
+        <div class="space-y-3 overflow-y-auto max-h-[calc(100vh-270px)] pr-1 min-h-[120px]">
           <div
             v-for="rep in filteredInProgress"
             :key="rep.report_id"
-            class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3 hover:border-emerald-400 transition"
+            draggable="true"
+            @dragstart="onDragStart($event, rep)"
+            @dragend="onDragEnd"
+            class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3 hover:border-emerald-400 transition cursor-grab active:cursor-grabbing select-none"
+            :class="{ 'opacity-40 ring-2 ring-emerald-400 scale-[0.98]': draggedReport?.report_id === rep.report_id }"
           >
             <div class="flex items-start justify-between gap-2">
               <span class="px-2.5 py-0.5 rounded-md text-xs font-bold bg-emerald-50 text-emerald-800 uppercase border border-emerald-200">
@@ -261,8 +292,14 @@
 
       <!-- COLUMN 3: RESOLVED -->
       <div
-        class="bg-slate-100/70 p-4 rounded-3xl border border-slate-200/80 space-y-4 flex-col"
-        :class="activeColumnTab === 'RESOLVED' ? 'flex' : 'hidden xl:flex'"
+        class="bg-slate-100/70 p-4 rounded-3xl border space-y-4 flex-col transition-all duration-200"
+        :class="[
+          activeColumnTab === 'RESOLVED' ? 'flex' : 'hidden xl:flex',
+          dragOverColumn === 'RESOLVED' ? 'border-slate-400 ring-2 ring-slate-300 bg-slate-200/60' : 'border-slate-200/80'
+        ]"
+        @dragover="onDragOver($event, 'RESOLVED')"
+        @dragleave="onDragLeave($event, 'RESOLVED')"
+        @drop="onDrop($event, 'RESOLVED')"
       >
         <div class="flex items-center justify-between px-2 shrink-0">
           <div class="flex items-center gap-2">
@@ -274,11 +311,15 @@
           </span>
         </div>
 
-        <div class="space-y-3 overflow-y-auto max-h-[calc(100vh-270px)] pr-1">
+        <div class="space-y-3 overflow-y-auto max-h-[calc(100vh-270px)] pr-1 min-h-[120px]">
           <div
             v-for="rep in filteredResolved"
             :key="rep.report_id"
-            class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3 opacity-90"
+            draggable="true"
+            @dragstart="onDragStart($event, rep)"
+            @dragend="onDragEnd"
+            class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3 opacity-90 hover:border-slate-400 transition cursor-grab active:cursor-grabbing select-none"
+            :class="{ 'opacity-40 ring-2 ring-slate-400 scale-[0.98]': draggedReport?.report_id === rep.report_id }"
           >
             <div class="flex items-start justify-between gap-2">
               <span class="px-2.5 py-0.5 rounded-md text-xs font-bold bg-slate-100 text-slate-700 uppercase">
@@ -485,6 +526,54 @@ const reportToResolve = ref(null)
 const searchQuery = ref('')
 const selectedCategory = ref('ALL')
 const activeColumnTab = ref('OPEN')
+
+// Drag & Drop State
+const draggedReport = ref(null)
+const dragOverColumn = ref(null)
+
+const onDragStart = (event, rep) => {
+  draggedReport.value = rep
+  if (event.dataTransfer) {
+    event.dataTransfer.effectAllowed = 'move'
+    event.dataTransfer.setData('text/plain', String(rep.report_id))
+  }
+}
+
+const onDragEnd = () => {
+  draggedReport.value = null
+  dragOverColumn.value = null
+}
+
+const onDragOver = (event, colKey) => {
+  event.preventDefault()
+  if (event.dataTransfer) {
+    event.dataTransfer.dropEffect = 'move'
+  }
+  dragOverColumn.value = colKey
+}
+
+const onDragLeave = (event, colKey) => {
+  if (event.currentTarget && !event.currentTarget.contains(event.relatedTarget)) {
+    if (dragOverColumn.value === colKey) {
+      dragOverColumn.value = null
+    }
+  }
+}
+
+const onDrop = async (event, targetStatus) => {
+  event.preventDefault()
+  dragOverColumn.value = null
+  const rep = draggedReport.value
+  draggedReport.value = null
+
+  if (!rep || rep.status === targetStatus) return
+
+  if (targetStatus === 'RESOLVED') {
+    requestResolve(rep)
+  } else {
+    await moveStatus(rep.report_id, targetStatus)
+  }
+}
 
 const categoryFilters = [
   { label: 'Semua Kategori', value: 'ALL' },

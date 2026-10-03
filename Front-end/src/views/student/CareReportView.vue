@@ -64,20 +64,30 @@
           label="2. Judul Laporan Singkat"
           :placeholder="categoryPlaceholder"
           v-model="form.title"
+          :error="errors.title"
+          @update:model-value="errors.title = ''"
           required
         />
 
         <div class="space-y-1.5">
-          <label class="text-xs font-semibold uppercase tracking-wider text-slate-700">
+          <label for="report-description" class="text-xs font-semibold uppercase tracking-wider text-slate-700">
             3. Ceritakan Masalah / Kejadiannya <span class="text-rose-500">*</span>
           </label>
           <textarea
+            id="report-description"
             v-model="form.description"
             rows="4"
             required
             :placeholder="descriptionPlaceholder"
-            class="w-full rounded-xl border border-slate-200 bg-white p-3.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#355245] focus:ring-2 focus:ring-[#355245] focus:outline-none transition"
+            @input="errors.description = ''"
+            :aria-invalid="errors.description ? 'true' : undefined"
+            :aria-describedby="errors.description ? 'report-desc-error' : undefined"
+            class="w-full rounded-xl border bg-white p-3.5 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none transition"
+            :class="errors.description ? 'border-rose-400 focus:border-rose-500 focus:ring-2 focus:ring-rose-500/20' : 'border-slate-200 focus:border-[#355245] focus:ring-2 focus:ring-[#355245]'"
           ></textarea>
+          <p v-if="errors.description" id="report-desc-error" role="alert" class="text-xs text-rose-600 font-medium mt-0.5">
+            {{ errors.description }}
+          </p>
         </div>
 
         <!-- Pilihan Cara Bimbingan yang Membuat Siswa Nyaman -->
@@ -220,12 +230,34 @@ onMounted(() => {
 
 const isSubmitting = ref(false)
 
-const handleSubmit = async () => {
-  if (isSubmitting.value || reportStore.loading) return
-  if (!form.value.title.trim() || !form.value.description.trim()) {
-    toast.warning('Judul dan isi cerita laporan wajib diisi!')
-    return
+const errors = ref({
+  title: '',
+  description: ''
+})
+
+const validate = () => {
+  let valid = true
+  errors.value = { title: '', description: '' }
+  if (!form.value.title.trim()) {
+    errors.value.title = 'Judul laporan wajib diisi.'
+    valid = false
+  } else if (form.value.title.trim().length < 5) {
+    errors.value.title = 'Judul laporan minimal 5 karakter.'
+    valid = false
   }
+  if (!form.value.description.trim()) {
+    errors.value.description = 'Isi cerita masalah wajib diisi.'
+    valid = false
+  } else if (form.value.description.trim().length < 10) {
+    errors.value.description = 'Ceritakan masalah secara lebih detail (minimal 10 karakter).'
+    valid = false
+  }
+  return valid
+}
+
+const handleSubmit = async () => {
+  if (!validate()) return
+  if (isSubmitting.value || reportStore.loading) return
 
   isSubmitting.value = true
   try {
