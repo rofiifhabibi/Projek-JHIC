@@ -187,8 +187,8 @@ class DatabaseSeeder extends Seeder
             [
                 'password' => Hash::make('password'),
                 'role' => 'bk',
-                'name' => 'Hani Saraswati, S.Psi (Koordinator BK)',
-                'email' => 'hani.bk@stembayo.sch.id'
+                'name' => 'Tim Bimbingan Konseling (BK)',
+                'email' => 'bk@student.stembayo.sch.id'
             ]
         );
         $bk2 = User::updateOrCreate(
@@ -196,8 +196,8 @@ class DatabaseSeeder extends Seeder
             [
                 'password' => Hash::make('password'),
                 'role' => 'bk',
-                'name' => 'Drs. Edi Suwarno',
-                'email' => 'edi.bk@stembayo.sch.id'
+                'name' => 'Konselor BK SMKN 2 Depok',
+                'email' => 'bk2@student.stembayo.sch.id'
             ]
         );
 
