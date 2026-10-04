@@ -21,7 +21,7 @@
             </span>
           </div>
           <p class="text-xl sm:text-2xl font-black text-white tracking-tight mt-1.5">
-            {{ permitStore.monitoringData.classes?.join(', ') || '12 SIJA B' }}
+            {{ displayClasses }}
           </p>
         </div>
 
@@ -306,6 +306,14 @@ const selectedItem = ref(null)
 const selectedAction = ref('')
 const isRefreshing = ref(false)
 const isResolving = ref(false)
+
+const displayClasses = computed(() => {
+  const classes = permitStore.monitoringData.classes || []
+  // Normalisasi agar variasi format 'XII SIJA B' dan '12 SIJA B' tidak tampil duplikat
+  const normalized = classes.map(c => (c === 'XII SIJA B' ? '12 SIJA B' : c))
+  const unique = [...new Set(normalized)]
+  return unique.join(', ') || '12 SIJA B'
+})
 
 const activeCount = computed(() => {
   return permitStore.monitoringData.active_permits?.filter(p => p.status === 'ACTIVE').length || 0

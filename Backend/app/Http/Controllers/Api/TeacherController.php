@@ -34,11 +34,17 @@ class TeacherController extends Controller
         $activeClasses = Schedule::where('teacher_id', $teacher->user_id)
             ->where('day', $currentDay)
             ->pluck('class_name')
+            ->map(function ($cls) {
+                return $cls === 'XII SIJA B' ? '12 SIJA B' : $cls;
+            })
             ->unique();
 
         if ($activeClasses->isEmpty()) {
             $activeClasses = Schedule::where('teacher_id', $teacher->user_id)
                 ->pluck('class_name')
+                ->map(function ($cls) {
+                    return $cls === 'XII SIJA B' ? '12 SIJA B' : $cls;
+                })
                 ->unique();
         }
 
@@ -46,8 +52,12 @@ class TeacherController extends Controller
             $activeClasses = collect(['12 SIJA B']);
         }
 
-        // Ambil user_id seluruh siswa di rombel tersebut
-        $studentIds = User::whereIn('class_name', $activeClasses->toArray())
+        // Ambil user_id seluruh siswa di rombel tersebut (support format 12 SIJA B & XII SIJA B)
+        $targetClasses = $activeClasses->flatMap(function ($cls) {
+            return $cls === '12 SIJA B' ? ['12 SIJA B', 'XII SIJA B'] : [$cls];
+        })->unique()->toArray();
+
+        $studentIds = User::whereIn('class_name', $targetClasses)
             ->pluck('user_id');
 
         // Siswa yang berizin aktif, disetujui, terlambat, alpha, atau sudah izin pulang

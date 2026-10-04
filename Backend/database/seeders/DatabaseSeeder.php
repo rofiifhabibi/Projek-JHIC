@@ -214,7 +214,7 @@ class DatabaseSeeder extends Seeder
         $subjPanc = Subject::updateOrCreate(['code' => 'PANC'],    ['name' => 'Pendidikan Pancasila']);
 
         // 5. SCHEDULES (Senin - Jumat 12 SIJA B)
-        $classes = ['12 SIJA B', 'XII SIJA B'];
+        $classes = ['12 SIJA B'];
 
         foreach ($classes as $cls) {
             // SENIN
