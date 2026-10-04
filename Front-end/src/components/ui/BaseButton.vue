@@ -1,10 +1,10 @@
 <template>
   <component
     :is="componentTag"
-    :to="to"
-    :href="href"
+    :to="to || undefined"
+    :href="componentTag === 'a' ? (href || undefined) : undefined"
     :type="componentTag === 'button' ? type : undefined"
-    :disabled="disabled || loading"
+    :disabled="componentTag === 'button' ? (disabled || loading) : undefined"
     class="inline-flex items-center justify-center font-semibold rounded-xl transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#355245] focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed select-none active:scale-[0.98] cursor-pointer touch-manipulation text-center leading-none"
     :class="[variantClasses, sizeClasses, block ? 'w-full !inline-flex !items-center !justify-center' : '']"
   >
