@@ -45,11 +45,12 @@
           </div>
 
           <!-- User Info & Logout -->
-          <div class="flex items-center gap-2.5 sm:gap-4 shrink-0">
+          <div class="flex items-center gap-2 sm:gap-3 shrink-0">
             <div class="hidden lg:block text-right">
               <p class="text-xs font-bold text-white leading-none truncate max-w-[150px]">{{ authStore.userName }}</p>
               <p class="text-xs text-[#E8EFEA]/80 mt-1">Guru Pengajar</p>
             </div>
+            <NotificationToggle variant="dark" />
             <button
               type="button"
               @click="showLogoutConfirm = true"
@@ -121,6 +122,7 @@ import { useAuthStore } from '@/stores/auth'
 import { usePermitStore } from '@/stores/permit'
 import ConfirmDialog from '@/components/ui/ConfirmDialog.vue'
 import AppLogo from '@/components/ui/AppLogo.vue'
+import NotificationToggle from '@/components/ui/NotificationToggle.vue'
 import { LogOut } from 'lucide-vue-next'
 
 const authStore = useAuthStore()

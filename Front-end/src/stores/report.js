@@ -1,5 +1,20 @@
 import { defineStore } from 'pinia'
 import api from '@/api/axios'
+import { useWebNotification } from '@/composables/useWebNotification'
+
+let previousOpenReportIds = null
+let isKanbanInitialized = false
+
+// Map report id -> { status, responsesCount }
+const previousReportSnapshots = new Map()
+let isMyReportsInitialized = false
+
+export const resetReportNotificationState = () => {
+  previousOpenReportIds = null
+  isKanbanInitialized = false
+  previousReportSnapshots.clear()
+  isMyReportsInitialized = false
+}
 
 export const useReportStore = defineStore('report', {
   state: () => ({
@@ -29,7 +44,40 @@ export const useReportStore = defineStore('report', {
       this.error = null;
       try {
         const res = await api.get('/student/reports/my');
-        this.myReports = res.data.data;
+        const reports = res.data.data || [];
+
+        if (isMyReportsInitialized) {
+          let hasUpdate = false;
+          for (const r of reports) {
+            const prev = previousReportSnapshots.get(r.id);
+            if (prev) {
+              const currentResponsesCount = Array.isArray(r.responses) ? r.responses.length : 0;
+              if (prev.status !== r.status || currentResponsesCount > prev.responsesCount) {
+                hasUpdate = true;
+                break;
+              }
+            }
+          }
+
+          if (hasUpdate) {
+            const { showSystemNotification } = useWebNotification();
+            showSystemNotification('Pembaruan Laporan Konseling', {
+              body: 'Guru BK telah memberikan tanggapan atau pembaruan status pada laporan Anda.',
+              url: '/student/tracking'
+            });
+          }
+        }
+
+        previousReportSnapshots.clear();
+        for (const r of reports) {
+          previousReportSnapshots.set(r.id, {
+            status: r.status,
+            responsesCount: Array.isArray(r.responses) ? r.responses.length : 0
+          });
+        }
+        isMyReportsInitialized = true;
+
+        this.myReports = reports;
       } catch (err) {
         this.error = 'Gagal memuat riwayat pengaduan.';
         console.error(err);
@@ -50,7 +98,30 @@ export const useReportStore = defineStore('report', {
       this.error = null;
       try {
         const res = await api.get('/bk/kanban');
-        this.kanban = res.data.data;
+        const currentKanban = res.data.data;
+        const openReports = currentKanban?.OPEN || [];
+        const currentOpenIds = openReports.map(r => r.id);
+
+        if (isKanbanInitialized && Array.isArray(previousOpenReportIds)) {
+          const newOpen = openReports.filter(r => !previousOpenReportIds.includes(r.id));
+          if (newOpen.length > 0) {
+            const { showSystemNotification } = useWebNotification();
+            const bodyText = newOpen.length === 1
+              ? 'Terdapat 1 laporan konseling siswa baru yang perlu ditinjau.'
+              : `Terdapat ${newOpen.length} laporan konseling siswa baru yang perlu ditinjau.`;
+
+            showSystemNotification('Laporan Konseling Siswa Baru', {
+              body: bodyText,
+              url: '/bk/kanban'
+            });
+          }
+          previousOpenReportIds = currentOpenIds;
+        } else {
+          previousOpenReportIds = currentOpenIds;
+          isKanbanInitialized = true;
+        }
+
+        this.kanban = currentKanban;
       } catch (err) {
         this.error = 'Gagal memuat papan kerja konseling.';
         console.error(err);

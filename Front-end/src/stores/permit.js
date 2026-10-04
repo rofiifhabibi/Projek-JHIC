@@ -1,5 +1,27 @@
 import { defineStore } from 'pinia'
 import api from '@/api/axios'
+import { useWebNotification } from '@/composables/useWebNotification'
+
+// Tracker internal untuk mendeteksi perubahan status secara otomatis
+let previousPermitId = null
+let previousPermitStatus = null
+let isPermitInitialized = false
+
+let previousPendingIds = null
+let isPendingInitialized = false
+
+let previousOverduePermitIds = null
+let isMonitoringInitialized = false
+
+export const resetPermitNotificationState = () => {
+  previousPermitId = null
+  previousPermitStatus = null
+  isPermitInitialized = false
+  previousPendingIds = null
+  isPendingInitialized = false
+  previousOverduePermitIds = null
+  isMonitoringInitialized = false
+}
 
 export const usePermitStore = defineStore('permit', {
   state: () => ({
@@ -75,6 +97,12 @@ export const usePermitStore = defineStore('permit', {
       this.error = null;
       try {
         const res = await api.post('/student/permits', payload);
+        const createdPermit = res.data?.data;
+        if (createdPermit?.id) {
+          previousPermitId = createdPermit.id;
+          previousPermitStatus = createdPermit.status || 'PENDING';
+          isPermitInitialized = true;
+        }
         await this.fetchActivePermit();
         return res.data;
       } catch (err) {
@@ -90,7 +118,64 @@ export const usePermitStore = defineStore('permit', {
       this._fetchingActive = true;
       try {
         const res = await api.get('/student/permits/active');
-        this.activePermit = res.data.data;
+        const newPermit = res.data.data;
+
+        if (newPermit) {
+          if (isPermitInitialized && previousPermitId === newPermit.id) {
+            const oldStatus = previousPermitStatus;
+            const newStatus = newPermit.status;
+
+            if (oldStatus && oldStatus !== newStatus) {
+              const { showSystemNotification } = useWebNotification();
+
+              if (oldStatus === 'PENDING' && (newStatus === 'APPROVED' || newStatus === 'ACTIVE')) {
+                showSystemNotification('Izin Disetujui', {
+                  body: 'Pengajuan izin telah disetujui oleh guru pengajar. QR Pass siap digunakan.',
+                  url: '/student/pass'
+                });
+              } else if (newStatus === 'REJECTED') {
+                const reason = newPermit.reject_reason ? `: ${newPermit.reject_reason}` : '';
+                showSystemNotification('Izin Tidak Disetujui', {
+                  body: `Pengajuan izin tidak disetujui${reason}`,
+                  url: '/student/tracking'
+                });
+              } else if (newStatus === 'OVERDUE') {
+                showSystemNotification('Batas Waktu Izin Berakhir', {
+                  body: 'Masa berlaku izin Anda telah habis. Harap segera kembali ke area kelas.',
+                  url: '/student/tracking'
+                });
+              } else if (newStatus === 'ALPHA') {
+                showSystemNotification('Peringatan Disiplin Siswa', {
+                  body: 'Status izin ditandai Tidak Kembali (Alpha). Segera melapor ke Guru atau BK.',
+                  url: '/student/tracking'
+                });
+              } else if (newStatus === 'COMPLETED') {
+                showSystemNotification('Izin Selesai', {
+                  body: 'Presensi kepulangan atau kembali telah divalidasi oleh petugas keamanan.',
+                  url: '/student/tracking'
+                });
+              }
+            }
+          }
+
+          previousPermitId = newPermit.id;
+          previousPermitStatus = newPermit.status;
+          isPermitInitialized = true;
+        } else {
+          // Jika sebelumnya berstatus ACTIVE atau OVERDUE lalu izin selesai (activePermit menjadi null)
+          if (isPermitInitialized && previousPermitId && (previousPermitStatus === 'ACTIVE' || previousPermitStatus === 'OVERDUE')) {
+            const { showSystemNotification } = useWebNotification();
+            showSystemNotification('Izin Selesai', {
+              body: 'Presensi kepulangan atau kembali telah divalidasi oleh petugas keamanan.',
+              url: '/student/tracking'
+            });
+          }
+          previousPermitId = null;
+          previousPermitStatus = null;
+          isPermitInitialized = true;
+        }
+
+        this.activePermit = newPermit;
         this.error = null;
       } catch (err) {
         this.activePermit = null;
@@ -137,7 +222,29 @@ export const usePermitStore = defineStore('permit', {
       this.error = null;
       try {
         const res = await api.get('/teacher/permits/pending');
-        this.pendingApprovals = res.data.data;
+        const currentList = res.data.data || [];
+
+        if (isPendingInitialized && Array.isArray(previousPendingIds)) {
+          const newItems = currentList.filter(p => !previousPendingIds.includes(p.id));
+          if (newItems.length > 0) {
+            const { showSystemNotification } = useWebNotification();
+            const firstStudent = newItems[0]?.student?.name || 'Siswa';
+            const bodyText = newItems.length === 1
+              ? `${firstStudent} mengajukan izin keluar kelas.`
+              : `${newItems.length} siswa mengajukan izin keluar kelas.`;
+
+            showSystemNotification('Pengajuan Izin Siswa Baru', {
+              body: `${bodyText} Silakan tinjau antrean persetujuan.`,
+              url: '/teacher/approvals'
+            });
+          }
+          previousPendingIds = currentList.map(p => p.id);
+        } else {
+          previousPendingIds = currentList.map(p => p.id);
+          isPendingInitialized = true;
+        }
+
+        this.pendingApprovals = currentList;
       } catch (err) {
         this.error = 'Gagal memuat antrean persetujuan izin.';
         console.error('Failed to fetch pending approvals:', err);
@@ -150,7 +257,32 @@ export const usePermitStore = defineStore('permit', {
       this.error = null;
       try {
         const res = await api.get('/teacher/monitoring');
-        this.monitoringData = res.data.data;
+        const monitoring = res.data.data || {};
+        const activeList = monitoring?.active_permits || [];
+        const currentOverdue = activeList.filter(p => p.status === 'OVERDUE');
+        const currentOverdueIds = currentOverdue.map(p => p.id);
+
+        if (isMonitoringInitialized && Array.isArray(previousOverduePermitIds)) {
+          const newlyOverdue = currentOverdue.filter(p => !previousOverduePermitIds.includes(p.id));
+          if (newlyOverdue.length > 0) {
+            const { showSystemNotification } = useWebNotification();
+            const studentName = newlyOverdue[0]?.student_name || newlyOverdue[0]?.student?.name || 'Siswa';
+            const bodyText = newlyOverdue.length === 1
+              ? `${studentName} belum kembali melewati batas waktu izin.`
+              : `${newlyOverdue.length} siswa belum kembali melewati batas waktu izin.`;
+
+            showSystemNotification('Peringatan Siswa Terlambat', {
+              body: bodyText,
+              url: '/teacher/monitoring'
+            });
+          }
+          previousOverduePermitIds = currentOverdueIds;
+        } else {
+          previousOverduePermitIds = currentOverdueIds;
+          isMonitoringInitialized = true;
+        }
+
+        this.monitoringData = monitoring;
       } catch (err) {
         this.error = 'Gagal memuat data monitoring.';
         console.error('Failed to fetch monitoring:', err);

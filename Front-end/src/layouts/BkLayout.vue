@@ -77,13 +77,16 @@
               <p class="text-[11px] text-[#E8EFEA]/80 font-medium">SMKN 2 Depok Sleman</p>
             </div>
           </router-link>
-          <button
-            type="button"
-            @click="showLogoutConfirm = true"
-            class="text-xs bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-lg border border-white/15 font-semibold cursor-pointer touch-manipulation transition"
-          >
-            Keluar
-          </button>
+          <div class="flex items-center gap-2">
+            <NotificationToggle variant="dark" />
+            <button
+              type="button"
+              @click="showLogoutConfirm = true"
+              class="text-xs bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-xl border border-white/15 font-semibold cursor-pointer touch-manipulation transition"
+            >
+              Keluar
+            </button>
+          </div>
         </div>
 
         <div class="bg-black/25 border-t border-white/10 px-3 py-2 flex items-center justify-center gap-2">
@@ -126,6 +129,7 @@
           <span class="text-[#355245] font-bold">SMKN 2 Depok Sleman</span>
         </div>
         <div class="flex items-center gap-3">
+          <NotificationToggle variant="light" />
           <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200">
             <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
             Panel Petugas BK
@@ -161,6 +165,7 @@ import { useAuthStore } from '@/stores/auth'
 import { useReportStore } from '@/stores/report'
 import ConfirmDialog from '@/components/ui/ConfirmDialog.vue'
 import AppLogo from '@/components/ui/AppLogo.vue'
+import NotificationToggle from '@/components/ui/NotificationToggle.vue'
 import { Kanban, Globe, LogOut } from 'lucide-vue-next'
 
 const authStore = useAuthStore()

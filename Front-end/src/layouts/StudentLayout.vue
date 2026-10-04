@@ -49,11 +49,13 @@
           </nav>
         </div>
 
-        <div class="flex items-center gap-2.5 sm:gap-3 shrink-0">
+        <div class="flex items-center gap-2 sm:gap-2.5 shrink-0">
           <div class="hidden sm:flex flex-col text-right">
             <span class="text-xs font-bold text-white leading-tight truncate max-w-[140px]">{{ authStore.userName }}</span>
             <span class="text-xs text-[#E8EFEA]/80">{{ authStore.userClass || 'Siswa' }}</span>
           </div>
+
+          <NotificationToggle variant="dark" />
 
           <button
             type="button"
@@ -139,14 +141,60 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { useAuthStore } from '@/stores/auth'
+import { usePermitStore } from '@/stores/permit'
+import { useReportStore } from '@/stores/report'
 import ConfirmDialog from '@/components/ui/ConfirmDialog.vue'
 import AppLogo from '@/components/ui/AppLogo.vue'
+import NotificationToggle from '@/components/ui/NotificationToggle.vue'
 import { Home, FilePlus, ShieldAlert, Clock, LogOut } from 'lucide-vue-next'
 
 const authStore = useAuthStore()
+const permitStore = usePermitStore()
+const reportStore = useReportStore()
 const showLogoutConfirm = ref(false)
+let pollTimer = null
+
+const syncStudentData = async () => {
+  await Promise.allSettled([
+    permitStore.fetchActivePermit(),
+    reportStore.fetchMyReports()
+  ])
+}
+
+const startPolling = () => {
+  stopPolling()
+  const jitter = Math.floor(Math.random() * 4000)
+  pollTimer = setInterval(syncStudentData, 20000 + jitter)
+}
+
+const stopPolling = () => {
+  if (pollTimer) {
+    clearInterval(pollTimer)
+    pollTimer = null
+  }
+}
+
+const handleVisibilityChange = async () => {
+  if (document.hidden) {
+    stopPolling()
+  } else {
+    await syncStudentData()
+    startPolling()
+  }
+}
+
+onMounted(() => {
+  syncStudentData()
+  startPolling()
+  document.addEventListener('visibilitychange', handleVisibilityChange)
+})
+
+onUnmounted(() => {
+  stopPolling()
+  document.removeEventListener('visibilitychange', handleVisibilityChange)
+})
 
 const handleLogout = () => {
   showLogoutConfirm.value = false

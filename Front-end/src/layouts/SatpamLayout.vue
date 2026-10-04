@@ -22,11 +22,13 @@
           </div>
         </router-link>
 
-        <div class="flex items-center gap-2.5 sm:gap-3 shrink-0">
+        <div class="flex items-center gap-2 sm:gap-2.5 shrink-0">
           <div class="hidden sm:block text-right">
             <p class="text-xs font-bold text-white leading-none truncate max-w-[150px]">{{ authStore.userName }}</p>
             <p class="text-xs text-[#E8EFEA]/80 mt-0.5">Petugas Keamanan</p>
           </div>
+
+          <NotificationToggle variant="dark" />
 
           <button
             type="button"
@@ -86,6 +88,7 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import ConfirmDialog from '@/components/ui/ConfirmDialog.vue'
 import AppLogo from '@/components/ui/AppLogo.vue'
+import NotificationToggle from '@/components/ui/NotificationToggle.vue'
 import { LogOut, WifiOff, RefreshCw } from 'lucide-vue-next'
 
 const authStore = useAuthStore()
