@@ -374,13 +374,15 @@ const formatDate = (dateStr) => {
   if (!dateStr) return '-'
   try {
     const d = new Date(dateStr)
-    return d.toLocaleDateString('id-ID', {
+    const formatted = d.toLocaleDateString('id-ID', {
       day: 'numeric',
       month: 'short',
       year: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
+      timeZone: 'Asia/Jakarta'
     })
+    return `${formatted} WIB`
   } catch (e) {
     return dateStr
   }

@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
 use App\Models\Schedule;
@@ -211,53 +212,69 @@ class PermitController extends Controller
 
         $student = $request->user();
 
-        PermitRequest::syncOverdueStatuses();
-
-        // Cegah siswa mengajukan izin baru jika masih punya izin PENDING, APPROVED, ACTIVE, atau OVERDUE
-        $hasActivePermit = PermitRequest::where('student_id', $student->user_id)
-            ->whereIn('status', ['PENDING', 'APPROVED', 'ACTIVE', 'OVERDUE'])
-            ->exists();
-
-        if ($hasActivePermit) {
+        // Atomic lock 5 detik per siswa untuk mencegah double-submit / race condition
+        $lock = Cache::lock('permit_store_' . $student->user_id, 5);
+        if (!$lock->get()) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Anda masih memiliki izin aktif atau sedang menunggu persetujuan.',
-            ], 422);
+                'message' => 'Permintaan perizinan sedang diproses. Mohon tunggu sejenak.',
+            ], 429);
         }
 
-        // Cegah siswa jika tercatat ALPHA pada hari ini sebelum klarifikasi ke guru/BK
-        $hasAlphaToday = PermitRequest::where('student_id', $student->user_id)
-            ->where('status', 'ALPHA')
-            ->where(function ($query) {
-                $query->whereDate('alpha_at', Carbon::today())
-                      ->orWhere(function ($q) {
-                          $q->whereNull('alpha_at')
-                            ->whereDate('updated_at', Carbon::today());
-                      });
-            })
-            ->exists();
+        try {
+            return DB::transaction(function () use ($request, $student) {
+                PermitRequest::syncOverdueStatuses();
 
-        if ($hasAlphaToday) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Anda tidak dapat mengajukan izin baru karena tercatat ALPHA pada perizinan hari ini. Harap temui Guru Pengampu atau Guru BK.',
-            ], 422);
+                // Cegah siswa mengajukan izin baru jika masih punya izin PENDING, APPROVED, ACTIVE, atau OVERDUE (Pessimistic Locking)
+                $hasActivePermit = PermitRequest::where('student_id', $student->user_id)
+                    ->whereIn('status', ['PENDING', 'APPROVED', 'ACTIVE', 'OVERDUE'])
+                    ->lockForUpdate()
+                    ->exists();
+
+                if ($hasActivePermit) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'Anda masih memiliki izin aktif atau sedang menunggu persetujuan.',
+                    ], 422);
+                }
+
+                // Cegah siswa jika tercatat ALPHA pada hari ini sebelum klarifikasi ke guru/BK
+                $hasAlphaToday = PermitRequest::where('student_id', $student->user_id)
+                    ->where('status', 'ALPHA')
+                    ->where(function ($query) {
+                        $query->whereDate('alpha_at', Carbon::today())
+                              ->orWhere(function ($q) {
+                                  $q->whereNull('alpha_at')
+                                    ->whereDate('updated_at', Carbon::today());
+                              });
+                    })
+                    ->exists();
+
+                if ($hasAlphaToday) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'Anda tidak dapat mengajukan izin baru karena tercatat ALPHA pada perizinan hari ini. Harap temui Guru Pengampu atau Guru BK.',
+                    ], 422);
+                }
+
+                $permit = PermitRequest::create([
+                    'student_id' => $student->user_id,
+                    'initial_teacher_id' => $request->teacher_id,
+                    'type' => $request->type,
+                    'reason' => $request->reason,
+                    'duration_minutes' => $request->duration_minutes ?? 30,
+                    'status' => 'PENDING',
+                ]);
+
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Pengajuan izin berhasil dibuat. Menunggu persetujuan guru pengampu.',
+                    'data' => $permit,
+                ], 201);
+            });
+        } finally {
+            $lock->release();
         }
-
-        $permit = PermitRequest::create([
-            'student_id' => $student->user_id,
-            'initial_teacher_id' => $request->teacher_id,
-            'type' => $request->type,
-            'reason' => $request->reason,
-            'duration_minutes' => $request->duration_minutes ?? 30,
-            'status' => 'PENDING',
-        ]);
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Pengajuan izin berhasil dibuat. Menunggu persetujuan guru pengampu.',
-            'data' => $permit,
-        ], 201);
     }
 
     /**
