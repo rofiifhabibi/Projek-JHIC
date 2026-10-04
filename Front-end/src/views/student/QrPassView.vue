@@ -32,6 +32,9 @@
         </h2>
         <p class="text-xs text-[#E8EFEA]/80 mt-0.5">
           Guru yang Mengajar: <strong class="text-white">{{ activePermit.teacher?.name || 'Guru Pengajar' }}</strong>
+          <span v-if="activePermit.teacher?.username" class="ml-1.5 px-2 py-0.5 bg-black/25 text-emerald-200 rounded text-[11px] font-mono border border-emerald-400/30">
+            Akun: {{ activePermit.teacher.username }}
+          </span>
         </p>
       </div>
 
@@ -130,8 +133,8 @@
             <Clock class="w-7 h-7 sm:w-8 sm:h-8" :stroke-width="1.75" />
           </div>
           <h3 class="text-base sm:text-lg font-bold text-slate-900">Menunggu Persetujuan Guru</h3>
-          <p class="text-xs text-slate-600 max-w-xs mx-auto">
-            Permohonan izin kamu sedang menunggu konfirmasi guru di kelas. Kode QR akan langsung muncul setelah disetujui.
+          <p class="text-xs text-slate-600 max-w-sm mx-auto">
+            Permohonan izin sedang menunggu konfirmasi dari <strong>{{ activePermit.teacher?.name }}</strong> (Akun: <code class="bg-slate-100 text-[#355245] px-1.5 py-0.5 rounded font-mono font-bold">{{ activePermit.teacher?.username || 'guru1' }}</code> atau cukup klik tombol preset <strong>Guru</strong>). Kode QR akan langsung muncul setelah disetujui.
           </p>
           <div class="inline-flex items-center gap-2 text-xs text-amber-700 bg-amber-50 px-3 py-1.5 rounded-full">
             <RefreshCw class="w-3.5 h-3.5 animate-spin" />

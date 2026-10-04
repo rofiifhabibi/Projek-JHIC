@@ -195,8 +195,11 @@
                 </div>
                 <div>
                   <div class="flex items-center gap-2 flex-wrap">
-                    <h4 class="font-extrabold text-sm sm:text-base text-slate-900 leading-tight">
-                      {{ detectedTeacher.name }}
+                    <h4 class="font-extrabold text-sm sm:text-base text-slate-900 leading-tight flex items-center gap-2 flex-wrap">
+                      <span>{{ detectedTeacher.name }}</span>
+                      <span class="text-[11px] font-bold text-emerald-800 bg-emerald-100/90 px-2 py-0.5 rounded-md border border-emerald-300 font-mono">
+                        Akun: {{ detectedTeacher.username || 'guru1' }}
+                      </span>
                     </h4>
                     <!-- Badge Status Jadwal: Mode Evaluasi 24 Jam vs Jadwal Aktif -->
                     <span
@@ -342,6 +345,7 @@ const detectedTeacher = computed(() => {
     return {
       user_id: permitStore.currentSchedule.teacher_id,
       name: permitStore.currentSchedule.teacher_name,
+      username: permitStore.currentSchedule.teacher_username || 'guru1',
       subject: permitStore.currentSchedule.subject || 'MPP AWS Academy (Cloud SIJA)',
       room: permitStore.currentSchedule.room || 'Lab LAN',
       period: permitStore.currentSchedule.period || 'Jam Pelajaran Sekarang'
@@ -350,6 +354,7 @@ const detectedTeacher = computed(() => {
   return {
     user_id: 6,
     name: 'Margaretha Endah Titisari, S.T.',
+    username: 'guru1',
     subject: 'MPP AWS Academy (Cloud SIJA)',
     room: 'Lab LAN',
     period: 'Di Luar Jam KBM (Mode Evaluasi 24 Jam)'
