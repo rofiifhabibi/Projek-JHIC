@@ -161,7 +161,7 @@
             Lihat Detail Izin
           </BaseButton>
         </div>
-        <BaseButton v-else to="/student/permit/pass" variant="primary" size="md" block class="block pt-0.5">
+        <BaseButton v-else to="/student/permit/pass" variant="primary" size="md" block class="mt-1">
           <template #icon-left><QrCode class="w-4 h-4" /></template>
           Tampilkan Kode QR Izin
         </BaseButton>
@@ -302,7 +302,7 @@
               type="button"
               :disabled="permitStore.permitPagination.current_page <= 1 || isChangingPage"
               @click="handlePageChange(permitStore.permitPagination.current_page - 1)"
-              class="px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed font-medium text-slate-700 transition"
+              class="px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed font-medium text-slate-700 transition inline-flex items-center justify-center leading-none cursor-pointer"
             >
               Sebelumnya
             </button>
@@ -310,7 +310,7 @@
               type="button"
               :disabled="permitStore.permitPagination.current_page >= permitStore.permitPagination.last_page || isChangingPage"
               @click="handlePageChange(permitStore.permitPagination.current_page + 1)"
-              class="px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed font-medium text-slate-700 transition"
+              class="px-2.5 py-1 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed font-medium text-slate-700 transition inline-flex items-center justify-center leading-none cursor-pointer"
             >
               Selanjutnya
             </button>

@@ -35,18 +35,18 @@
             @click="handleReload"
             :disabled="isReloading"
             title="Segarkan Halaman"
-            class="shrink-0 text-xs bg-white/10 hover:bg-white/20 active:scale-95 px-2.5 sm:px-3 py-1.5 rounded-xl font-bold border border-white/15 transition-all text-white flex items-center gap-1.5 shadow-xs cursor-pointer touch-manipulation disabled:opacity-50"
+            class="shrink-0 text-xs bg-white/10 hover:bg-white/20 active:scale-95 px-2.5 sm:px-3 py-1.5 rounded-xl font-bold border border-white/15 transition-all text-white inline-flex items-center justify-center gap-1.5 shadow-xs cursor-pointer touch-manipulation disabled:opacity-50 leading-none"
           >
-            <RefreshCw class="w-3.5 h-3.5" :class="{ 'animate-spin': isReloading }" />
+            <RefreshCw class="w-3.5 h-3.5 shrink-0" :class="{ 'animate-spin': isReloading }" />
             <span class="hidden sm:inline">Segarkan</span>
           </button>
 
           <button
             type="button"
             @click="showLogoutConfirm = true"
-            class="shrink-0 text-xs bg-white/10 hover:bg-white/20 active:scale-95 px-3 py-1.5 rounded-xl font-bold border border-white/15 transition-all text-white flex items-center gap-1.5 shadow-xs cursor-pointer touch-manipulation"
+            class="shrink-0 text-xs bg-white/10 hover:bg-white/20 active:scale-95 px-3 py-1.5 rounded-xl font-bold border border-white/15 transition-all text-white inline-flex items-center justify-center gap-1.5 shadow-xs cursor-pointer touch-manipulation leading-none"
           >
-            <LogOut class="w-3.5 h-3.5" />
+            <LogOut class="w-3.5 h-3.5 shrink-0" />
             <span class="hidden sm:inline">Keluar</span>
           </button>
         </div>

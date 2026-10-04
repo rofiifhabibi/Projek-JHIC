@@ -57,9 +57,9 @@
         <button
           type="button"
           @click="showLogoutConfirm = true"
-          class="w-full bg-white/10 hover:bg-white/20 active:scale-95 text-white py-2.5 rounded-xl text-xs font-bold transition-all border border-white/15 flex items-center justify-center gap-2 cursor-pointer touch-manipulation"
+          class="w-full bg-white/10 hover:bg-white/20 active:scale-95 text-white py-2.5 rounded-xl text-xs font-bold transition-all border border-white/15 inline-flex items-center justify-center gap-2 cursor-pointer touch-manipulation leading-none"
         >
-          <LogOut class="w-3.5 h-3.5" />
+          <LogOut class="w-3.5 h-3.5 shrink-0" />
           <span>Keluar</span>
         </button>
       </div>
@@ -82,7 +82,7 @@
             <button
               type="button"
               @click="showLogoutConfirm = true"
-              class="text-xs bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-xl border border-white/15 font-semibold cursor-pointer touch-manipulation transition"
+              class="text-xs bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-xl border border-white/15 font-semibold cursor-pointer touch-manipulation transition inline-flex items-center justify-center leading-none"
             >
               Keluar
             </button>

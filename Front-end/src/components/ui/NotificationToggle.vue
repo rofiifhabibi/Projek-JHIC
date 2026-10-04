@@ -5,11 +5,11 @@
     @click="handleToggle"
     :title="buttonTitle"
     :aria-label="buttonTitle"
-    class="relative transition-all duration-150 flex items-center gap-1.5 cursor-pointer touch-manipulation select-none"
+    class="relative transition-all duration-150 inline-flex items-center justify-center gap-1.5 cursor-pointer touch-manipulation select-none leading-none"
     :class="buttonClass"
   >
     <component :is="iconComponent" class="w-3.5 h-3.5 shrink-0" :class="iconClass" />
-    <span v-if="showLabel" class="hidden sm:inline text-xs font-semibold">
+    <span v-if="showLabel" class="hidden sm:inline-flex items-center text-xs font-semibold leading-none">
       {{ labelText }}
     </span>
     <!-- Indikator titik hijau jika notifikasi aktif -->

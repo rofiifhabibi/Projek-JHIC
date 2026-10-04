@@ -205,7 +205,7 @@
             </BaseButton>
           </div>
         </div>
-        <BaseButton v-else to="/student/permit/pass" variant="primary" size="md" block class="block pt-0.5">
+        <BaseButton v-else to="/student/permit/pass" variant="primary" size="md" block class="mt-1">
           <template #icon-left><QrCode class="w-4 h-4" /></template>
           Tampilkan Kode QR Izin
         </BaseButton>

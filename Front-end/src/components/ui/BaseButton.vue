@@ -5,13 +5,19 @@
     :href="href"
     :type="componentTag === 'button' ? type : undefined"
     :disabled="disabled || loading"
-    class="inline-flex items-center justify-center font-semibold rounded-xl transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#355245] focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed select-none active:scale-[0.98] cursor-pointer touch-manipulation"
-    :class="[variantClasses, sizeClasses, block ? 'w-full' : '']"
+    class="inline-flex items-center justify-center font-semibold rounded-xl transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#355245] focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed select-none active:scale-[0.98] cursor-pointer touch-manipulation text-center leading-none"
+    :class="[variantClasses, sizeClasses, block ? 'w-full !inline-flex !items-center !justify-center' : '']"
   >
     <Loader2 v-if="loading" class="w-4 h-4 animate-spin shrink-0" />
-    <slot name="icon-left" />
-    <slot />
-    <slot name="icon-right" />
+    <span v-if="$slots['icon-left']" class="inline-flex items-center justify-center shrink-0">
+      <slot name="icon-left" />
+    </span>
+    <span class="inline-flex items-center justify-center leading-none">
+      <slot />
+    </span>
+    <span v-if="$slots['icon-right']" class="inline-flex items-center justify-center shrink-0">
+      <slot name="icon-right" />
+    </span>
   </component>
 </template>
 
