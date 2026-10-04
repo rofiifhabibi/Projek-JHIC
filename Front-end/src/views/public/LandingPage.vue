@@ -254,30 +254,37 @@
             </p>
           </div>
 
-          <div class="flex flex-wrap items-center justify-center gap-6 sm:gap-8 md:gap-12 lg:gap-14">
-            <!-- JHIC 2026 -->
-            <div class="flex items-center justify-center transition-opacity hover:opacity-80">
-              <img src="/logos/jhic.png" alt="JHIC 2026" width="120" height="40" loading="lazy" decoding="async" class="h-8 sm:h-9 md:h-10 w-auto max-w-[120px] sm:max-w-[135px] object-contain" />
+          <!-- Partner Logos: Mobile 3 di atas & 2 di bawah, Desktop 1 baris harmonis -->
+          <div class="flex flex-col md:flex-row items-center justify-center gap-5 sm:gap-6 md:gap-10 lg:gap-12">
+            <!-- Baris 1 di mobile (3 Logo: JHIC, Jagoan Hosting, Komdigi) -->
+            <div class="flex items-center justify-center gap-5 sm:gap-7 md:gap-10 lg:gap-12">
+              <!-- JHIC 2026 -->
+              <div class="flex items-center justify-center transition-opacity hover:opacity-80">
+                <img src="/logos/jhic.png" alt="JHIC 2026" width="120" height="40" loading="lazy" decoding="async" class="h-8 sm:h-9 md:h-10 w-auto max-w-[105px] sm:max-w-[135px] object-contain" />
+              </div>
+
+              <!-- Jagoan Hosting -->
+              <div class="flex items-center justify-center transition-opacity hover:opacity-80">
+                <img src="/logos/jagoan-hosting.png" alt="Jagoan Hosting" width="140" height="32" loading="lazy" decoding="async" class="h-6 sm:h-7 md:h-8 w-auto max-w-[110px] sm:max-w-[155px] object-contain" />
+              </div>
+
+              <!-- Komdigi -->
+              <div class="flex items-center justify-center transition-opacity hover:opacity-80">
+                <img src="/logos/komdigi.png" alt="Komdigi" width="110" height="40" loading="lazy" decoding="async" class="h-8 sm:h-9 md:h-10 w-auto max-w-[95px] sm:max-w-[120px] object-contain" />
+              </div>
             </div>
 
-            <!-- Jagoan Hosting -->
-            <div class="flex items-center justify-center transition-opacity hover:opacity-80">
-              <img src="/logos/jagoan-hosting.png" alt="Jagoan Hosting" width="140" height="32" loading="lazy" decoding="async" class="h-6 sm:h-7 md:h-8 w-auto max-w-[130px] sm:max-w-[155px] object-contain" />
-            </div>
+            <!-- Baris 2 di mobile (2 Logo: Garuda Spark, Ngalup.co) -->
+            <div class="flex items-center justify-center gap-6 sm:gap-8 md:gap-10 lg:gap-12">
+              <!-- Garuda Spark -->
+              <div class="flex items-center justify-center transition-opacity hover:opacity-80">
+                <img src="/logos/garuda-spark.png" alt="Garuda Spark" width="130" height="34" loading="lazy" decoding="async" class="h-6.5 sm:h-7.5 md:h-8.5 w-auto max-w-[110px] sm:max-w-[140px] object-contain" />
+              </div>
 
-            <!-- Komdigi -->
-            <div class="flex items-center justify-center transition-opacity hover:opacity-80">
-              <img src="/logos/komdigi.png" alt="Komdigi" width="110" height="40" loading="lazy" decoding="async" class="h-8 sm:h-9 md:h-10 w-auto max-w-[105px] sm:max-w-[120px] object-contain" />
-            </div>
-
-            <!-- Garuda Spark -->
-            <div class="flex items-center justify-center transition-opacity hover:opacity-80">
-              <img src="/logos/garuda-spark.png" alt="Garuda Spark" width="130" height="34" loading="lazy" decoding="async" class="h-6.5 sm:h-7.5 md:h-8.5 w-auto max-w-[120px] sm:max-w-[140px] object-contain" />
-            </div>
-
-            <!-- Ngalup.co -->
-            <div class="flex items-center justify-center transition-opacity hover:opacity-80">
-              <img src="/logos/ngalup.png" alt="Ngalup.co" width="140" height="28" loading="lazy" decoding="async" class="h-5 sm:h-6 md:h-7 w-auto max-w-[130px] sm:max-w-[150px] object-contain" />
+              <!-- Ngalup.co -->
+              <div class="flex items-center justify-center transition-opacity hover:opacity-80">
+                <img src="/logos/ngalup.png" alt="Ngalup.co" width="140" height="28" loading="lazy" decoding="async" class="h-5 sm:h-6 md:h-7 w-auto max-w-[115px] sm:max-w-[150px] object-contain" />
+              </div>
             </div>
           </div>
 
