@@ -15,7 +15,10 @@
                 Online
               </span>
             </div>
-            <p class="text-xs text-[#E8EFEA]/80 font-medium truncate mt-0.5">Pemeriksaan Gerbang • SMKN 2 Depok Sleman</p>
+            <p class="text-xs text-[#E8EFEA]/80 font-medium truncate mt-0.5">
+              <span class="sm:hidden">Pemeriksaan Gerbang</span>
+              <span class="hidden sm:inline">Pemeriksaan Gerbang • SMKN 2 Depok Sleman</span>
+            </p>
           </div>
         </router-link>
 

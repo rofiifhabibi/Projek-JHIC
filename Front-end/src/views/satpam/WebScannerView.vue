@@ -17,14 +17,14 @@
                 <CameraOff v-else class="w-5 h-5" />
               </div>
               <div class="min-w-0">
-                <p class="text-xs font-bold text-slate-900 leading-tight truncate">Kamera Pemindai</p>
+                <p class="text-xs sm:text-sm font-bold text-slate-900 leading-tight whitespace-nowrap">Kamera Pemindai</p>
                 <div class="flex items-center gap-1.5 mt-0.5">
                   <span
                     class="w-2 h-2 rounded-full shrink-0"
                     :class="isCameraActive ? 'bg-emerald-500 animate-pulse' : 'bg-slate-400'"
                   ></span>
                   <span
-                    class="text-[11px] sm:text-xs font-black tracking-wide"
+                    class="text-[11px] sm:text-xs font-black tracking-wide whitespace-nowrap"
                     :class="isCameraActive ? 'text-emerald-700' : 'text-slate-500'"
                   >
                     {{ isCameraActive ? 'MENYALA (ON)' : 'MATI (OFF)' }}
@@ -33,21 +33,8 @@
               </div>
             </div>
 
-            <!-- Right: Action Switch & Reset -->
-            <div class="flex items-center gap-2 shrink-0">
-              <!-- Reset Button (When Active) -->
-              <button
-                v-if="isCameraActive"
-                type="button"
-                @click="restartCamera"
-                :disabled="isRestarting || isTogglingCamera"
-                title="Segarkan Aliran Kamera"
-                class="h-9 px-2.5 rounded-lg bg-white hover:bg-slate-100 active:scale-95 text-slate-700 border border-slate-200 flex items-center justify-center gap-1.5 transition shadow-2xs cursor-pointer touch-manipulation disabled:opacity-50 text-xs font-bold"
-              >
-                <RefreshCw class="w-3.5 h-3.5" :class="{ 'animate-spin': isRestarting }" />
-                <span class="hidden sm:inline">Reset</span>
-              </button>
-
+            <!-- Right: Action Switch OFF | ON -->
+            <div class="flex items-center shrink-0">
               <!-- Segmented Pill Switch: OFF | ON -->
               <div class="inline-flex h-9 p-0.5 bg-slate-200/80 rounded-lg border border-slate-300/80 items-center">
                 <button
