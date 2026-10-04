@@ -20,14 +20,14 @@
           :key="toast.id"
           @click="removeToast(toast.id)"
           :role="toast.type === 'error' ? 'alert' : 'status'"
-          class="pointer-events-auto cursor-pointer select-none flex items-start gap-3 p-3.5 sm:p-4 rounded-2xl shadow-xl border backdrop-blur-md transition-all w-full max-w-sm active:scale-[0.99]"
+          class="pointer-events-auto cursor-pointer select-none flex items-center gap-3 px-4 py-3 sm:py-3.5 rounded-2xl shadow-lg border backdrop-blur-md transition-all w-full max-w-sm active:scale-[0.99]"
           :class="getToastClass(toast.type)"
         >
           <!-- Icon -->
-          <component :is="getToastIcon(toast.type)" class="w-5 h-5 shrink-0 mt-0.5" />
+          <component :is="getToastIcon(toast.type)" class="w-5 h-5 shrink-0" />
 
           <!-- Message -->
-          <div class="flex-1 text-xs sm:text-sm font-semibold leading-relaxed">
+          <div class="flex-1 text-xs sm:text-sm font-semibold leading-snug min-w-0">
             {{ toast.message }}
           </div>
 
@@ -35,7 +35,7 @@
           <button
             type="button"
             @click.stop="removeToast(toast.id)"
-            class="shrink-0 p-1.5 -mr-1 rounded-lg opacity-70 hover:opacity-100 hover:bg-black/5 transition cursor-pointer touch-manipulation"
+            class="shrink-0 p-1.5 rounded-lg opacity-60 hover:opacity-100 hover:bg-black/5 active:scale-95 transition flex items-center justify-center cursor-pointer touch-manipulation"
             aria-label="Tutup notifikasi"
           >
             <X class="w-4 h-4" />
