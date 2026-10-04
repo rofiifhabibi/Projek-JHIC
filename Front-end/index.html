@@ -13,6 +13,11 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="StudentCare">
     
+    <!-- Canonical & Robots for 100 SEO Score -->
+    <link rel="canonical" href="https://studentcare.my.id/">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="author" content="SMKN 2 Depok Sleman">
+
     <!-- Primary Meta Tags -->
     <title>StudentCare — SMKN 2 Depok Sleman</title>
     <meta name="title" content="StudentCare — SMKN 2 Depok Sleman">
@@ -31,6 +36,46 @@
     <meta property="twitter:title" content="StudentCare — SMKN 2 Depok Sleman">
     <meta property="twitter:description" content="Platform Manajemen Perizinan Siswa dan Layanan Konseling Bimbingan Siswa (BK) Terintegrasi.">
     <meta property="twitter:image" content="https://studentcare.my.id/logos/studentcare-logo.png">
+
+    <!-- Structured Data (JSON-LD) for Rich Search Results & Agentic Browsing -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebApplication",
+          "@id": "https://studentcare.my.id/#app",
+          "name": "StudentCare",
+          "url": "https://studentcare.my.id/",
+          "description": "Platform Manajemen Perizinan Siswa dan Layanan Konseling Bimbingan Siswa (BK) SMKN 2 Depok Sleman Terintegrasi.",
+          "applicationCategory": "EducationalApplication",
+          "operatingSystem": "All",
+          "browserRequirements": "Requires JavaScript. Requires HTML5.",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "IDR"
+          }
+        },
+        {
+          "@type": "EducationalOrganization",
+          "@id": "https://studentcare.my.id/#school",
+          "name": "SMKN 2 Depok Sleman",
+          "alternateName": "Stembayo",
+          "url": "https://studentcare.my.id/",
+          "logo": "https://studentcare.my.id/logos/studentcare-logo.png",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Jl. Mrican, Caturtunggal",
+            "addressLocality": "Depok",
+            "addressRegion": "Sleman, D.I. Yogyakarta",
+            "postalCode": "55281",
+            "addressCountry": "ID"
+          }
+        }
+      ]
+    }
+    </script>
   </head>
   <body>
     <div id="app"></div>
