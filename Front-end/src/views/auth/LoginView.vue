@@ -159,8 +159,8 @@ const presets = [
   { id: 'bk', label: 'Guru BK', icon: HeartHandshake, username: 'bk1', password: 'password' }
 ]
 
-const identity = ref('siswa1')
-const password = ref('password')
+const identity = ref('')
+const password = ref('')
 
 onMounted(() => {
   const queryRole = route.query.role
