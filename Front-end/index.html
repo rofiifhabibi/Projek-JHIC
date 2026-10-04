@@ -79,12 +79,16 @@
   </head>
   <body>
     <div id="app">
-      <div style="min-height: 100vh; background-color: #F4F7F4; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1.5rem; text-align: center; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-        <div style="max-width: 48rem; margin: 0 auto;">
+      <div style="min-height: 100vh; background-color: #F4F7F4; display: flex; flex-direction: column; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+        <header style="height: 4rem; background-color: #ffffff; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between; padding: 0 1.5rem; max-width: 80rem; margin: 0 auto; width: 100%; box-sizing: border-box;">
+          <a href="/" style="font-weight: 800; font-size: 1.25rem; color: #355245; text-decoration: none;">StudentCare</a>
+          <a href="/login" style="padding: 0.5rem 1rem; border-radius: 0.75rem; background-color: #355245; color: #ffffff; font-weight: 600; font-size: 0.875rem; text-decoration: none;">Masuk Akun</a>
+        </header>
+        <main style="flex: 1; padding: 3rem 1.5rem; text-align: center; max-width: 56rem; margin: 0 auto; width: 100%; box-sizing: border-box;">
           <p style="display: inline-block; padding: 0.35rem 0.85rem; border-radius: 9999px; background-color: #E8EFEA; color: #273e34; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem;">
             Sistem Izin Keluar &amp; Konseling Siswa
           </p>
-          <h1 style="font-size: 2.25rem; font-weight: 900; color: #0f172a; line-height: 1.25; margin-bottom: 1rem; letter-spacing: -0.025em;">
+          <h1 style="font-size: 2.5rem; font-weight: 900; color: #0f172a; line-height: 1.2; margin-bottom: 1rem; letter-spacing: -0.025em;">
             Kelola Izin Siswa dan Layanan Konseling dalam Satu Sistem
           </h1>
           <p style="font-size: 1rem; color: #475569; line-height: 1.6; max-width: 36rem; margin: 0 auto 1.5rem auto;">
@@ -98,7 +102,7 @@
               Lihat Alur Izin
             </a>
           </div>
-        </div>
+        </main>
       </div>
     </div>
     <script type="module" src="/src/main.js"></script>
