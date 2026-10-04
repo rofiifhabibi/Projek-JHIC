@@ -86,12 +86,13 @@
           </button>
         </div>
 
-        <div class="bg-black/15 px-4 py-2 flex justify-around border-t border-white/10">
+        <div class="bg-black/25 border-t border-white/10 px-3 py-2 flex items-center justify-center gap-2">
           <router-link
             to="/bk/kanban"
-            class="text-xs font-bold py-1.5 px-3 rounded-lg text-[#E8EFEA]/90 hover:text-white flex items-center gap-1.5 transition"
-            active-class="!bg-white !text-[#355245] shadow-xs font-extrabold"
+            class="flex-1 max-w-[200px] text-xs font-bold py-2 px-3 rounded-xl flex items-center justify-center gap-1.5 transition-all text-[#E8EFEA]/90 hover:text-white"
+            active-class="!bg-white !text-[#355245] shadow-sm font-extrabold"
           >
+            <Kanban class="w-3.5 h-3.5 shrink-0" />
             <span>Kasus Siswa</span>
             <span
               v-if="openCasesCount > 0"
@@ -102,9 +103,10 @@
           </router-link>
           <router-link
             to="/bk/global-monitor"
-            class="text-xs font-bold py-1.5 px-3 rounded-lg text-[#E8EFEA]/90 hover:text-white flex items-center gap-1.5 transition"
-            active-class="!bg-white !text-[#355245] shadow-xs font-extrabold"
+            class="flex-1 max-w-[200px] text-xs font-bold py-2 px-3 rounded-xl flex items-center justify-center gap-1.5 transition-all text-[#E8EFEA]/90 hover:text-white"
+            active-class="!bg-white !text-[#355245] shadow-sm font-extrabold"
           >
+            <Globe class="w-3.5 h-3.5 shrink-0" />
             <span>Izin Siswa</span>
             <span
               v-if="overdueCount > 0"

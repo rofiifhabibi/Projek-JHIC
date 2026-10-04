@@ -1,12 +1,12 @@
 <template>
-  <div class="flex flex-col items-center justify-center text-center p-8 sm:p-12 bg-white/60 backdrop-blur-sm rounded-2xl border border-dashed border-slate-200">
-    <div class="w-14 h-14 rounded-2xl bg-slate-100 flex items-center justify-center text-slate-400 mb-4">
+  <div class="flex flex-col items-center justify-center text-center p-6 sm:p-10 bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-dashed border-slate-200 shadow-2xs">
+    <div class="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 mb-3">
       <slot name="icon">
-        <FolderOpen class="w-7 h-7" />
+        <FolderOpen class="w-6 h-6" />
       </slot>
     </div>
 
-    <h4 class="text-base font-bold text-slate-900 mb-1">
+    <h4 class="text-sm sm:text-base font-bold text-slate-900 mb-1">
       {{ title }}
     </h4>
 

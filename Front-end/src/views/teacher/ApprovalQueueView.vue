@@ -1,13 +1,13 @@
 <template>
   <div class="space-y-6">
-    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-      <div>
-        <h2 class="text-2xl font-black text-slate-900 tracking-tight">Persetujuan Izin Siswa</h2>
-        <p class="text-xs text-slate-500 mt-0.5">Daftar permohonan izin siswa yang menunggu persetujuan Bapak/Ibu guru.</p>
+    <div class="flex items-start sm:items-center justify-between gap-3">
+      <div class="min-w-0">
+        <h2 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight leading-tight">Persetujuan Izin Siswa</h2>
+        <p class="text-xs text-slate-500 mt-1 leading-relaxed">Daftar permohonan izin siswa yang menunggu persetujuan Bapak/Ibu guru.</p>
       </div>
-      <BaseButton variant="outline" size="sm" @click="loadRequests">
+      <BaseButton variant="outline" size="sm" @click="loadRequests" class="shrink-0">
         <template #icon-left><RefreshCw class="w-3.5 h-3.5" /></template>
-        Segarkan
+        <span class="hidden sm:inline">Segarkan</span>
       </BaseButton>
     </div>
 

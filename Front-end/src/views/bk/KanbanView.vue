@@ -1,30 +1,30 @@
 <template>
   <div class="space-y-6">
     <!-- Header -->
-    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-      <div>
-        <h2 class="text-2xl font-black text-slate-900 tracking-tight">Penanganan Kasus & Konseling BK</h2>
-        <p class="text-xs text-slate-500 mt-0.5">Kelola laporan siswa dan pantau perkembangan pendampingan konseling.</p>
+    <div class="flex items-start sm:items-center justify-between gap-3">
+      <div class="min-w-0">
+        <h2 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight leading-tight">Penanganan Kasus & Konseling BK</h2>
+        <p class="text-xs text-slate-500 mt-1 leading-relaxed">Kelola laporan siswa dan pantau perkembangan konseling.</p>
       </div>
-      <BaseButton variant="outline" size="sm" :loading="reportStore.loading" @click="loadKanban">
+      <BaseButton variant="outline" size="sm" :loading="reportStore.loading" @click="loadKanban" class="shrink-0">
         <template #icon-left><RefreshCw class="w-3.5 h-3.5" /></template>
-        Segarkan
+        <span class="hidden sm:inline">Segarkan</span>
       </BaseButton>
     </div>
 
     <!-- Search & Category Filter Toolbar -->
-    <div class="bg-white p-3.5 rounded-2xl border border-slate-200/80 shadow-xs flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+    <div class="bg-white p-3 sm:p-3.5 rounded-2xl border border-slate-200/80 shadow-xs flex flex-col md:flex-row items-stretch md:items-center justify-between gap-2.5 sm:gap-3">
       <div class="relative flex-1">
         <Search class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
         <input
           v-model="searchQuery"
           type="text"
-          placeholder="Cari nama siswa, NIS, atau kata kunci aduan..."
+          placeholder="Cari siswa, NIS, atau topik aduan..."
           class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-2 text-xs text-slate-900 placeholder:text-slate-400 focus:bg-white focus:border-[#355245] focus:outline-none transition"
         />
       </div>
 
-      <div class="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 shrink-0">
+      <div class="flex items-center gap-1.5 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] touch-pan-x pb-0.5 md:pb-0 shrink-0">
         <button
           v-for="cat in categoryFilters"
           :key="cat.value"
@@ -39,36 +39,36 @@
     </div>
 
     <!-- Mobile/Tablet Column Selector (below xl) -->
-    <div class="xl:hidden flex items-center bg-slate-200/70 p-1.5 rounded-2xl border border-slate-200 gap-1">
+    <div class="xl:hidden grid grid-cols-3 bg-slate-200/80 p-1 rounded-xl border border-slate-300/60 gap-1 shadow-2xs">
       <button
         type="button"
         @click="activeColumnTab = 'OPEN'"
-        class="flex-1 py-2 px-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer touch-manipulation active:scale-[0.98]"
-        :class="activeColumnTab === 'OPEN' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'"
+        class="py-2 px-1 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1 sm:gap-1.5 cursor-pointer touch-manipulation active:scale-[0.98]"
+        :class="activeColumnTab === 'OPEN' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-600 hover:text-slate-900'"
       >
         <span class="w-2 h-2 rounded-full bg-amber-500 shrink-0"></span>
-        <span class="truncate">Aduan Masuk</span>
-        <span class="ml-0.5 px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[10px] font-bold">{{ filteredOpen.length }}</span>
+        <span class="truncate text-[11px] sm:text-xs">Aduan Masuk</span>
+        <span class="px-1.5 py-0.2 rounded-full bg-amber-100 text-amber-900 text-[10px] font-black shrink-0">{{ filteredOpen.length }}</span>
       </button>
       <button
         type="button"
         @click="activeColumnTab = 'IN_PROGRESS'"
-        class="flex-1 py-2 px-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer touch-manipulation active:scale-[0.98]"
-        :class="activeColumnTab === 'IN_PROGRESS' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'"
+        class="py-2 px-1 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1 sm:gap-1.5 cursor-pointer touch-manipulation active:scale-[0.98]"
+        :class="activeColumnTab === 'IN_PROGRESS' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-600 hover:text-slate-900'"
       >
         <span class="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></span>
-        <span class="truncate">Ditangani</span>
-        <span class="ml-0.5 px-1.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold">{{ filteredInProgress.length }}</span>
+        <span class="truncate text-[11px] sm:text-xs">Ditangani</span>
+        <span class="px-1.5 py-0.2 rounded-full bg-emerald-100 text-emerald-900 text-[10px] font-black shrink-0">{{ filteredInProgress.length }}</span>
       </button>
       <button
         type="button"
         @click="activeColumnTab = 'RESOLVED'"
-        class="flex-1 py-2 px-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer touch-manipulation active:scale-[0.98]"
-        :class="activeColumnTab === 'RESOLVED' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'"
+        class="py-2 px-1 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1 sm:gap-1.5 cursor-pointer touch-manipulation active:scale-[0.98]"
+        :class="activeColumnTab === 'RESOLVED' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-600 hover:text-slate-900'"
       >
         <span class="w-2 h-2 rounded-full bg-slate-500 shrink-0"></span>
-        <span class="truncate">Selesai</span>
-        <span class="ml-0.5 px-1.5 py-0.5 rounded-full bg-slate-200 text-slate-700 text-[10px] font-bold">{{ filteredResolved.length }}</span>
+        <span class="truncate text-[11px] sm:text-xs">Selesai</span>
+        <span class="px-1.5 py-0.2 rounded-full bg-slate-200 text-slate-800 text-[10px] font-black shrink-0">{{ filteredResolved.length }}</span>
       </button>
     </div>
 
@@ -87,7 +87,7 @@
     <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
       <!-- COLUMN 1: OPEN -->
       <div
-        class="bg-slate-100/70 p-4 rounded-3xl border space-y-4 flex-col transition-all duration-200"
+        class="bg-slate-100/70 p-3.5 sm:p-4 rounded-2xl sm:rounded-3xl border space-y-3.5 sm:space-y-4 flex-col transition-all duration-200"
         :class="[
           activeColumnTab === 'OPEN' ? 'flex' : 'hidden xl:flex',
           dragOverColumn === 'OPEN' ? 'border-amber-400 ring-2 ring-amber-300 bg-amber-50/60' : 'border-slate-200/80'
@@ -96,17 +96,17 @@
         @dragleave="onDragLeave($event, 'OPEN')"
         @drop="onDrop($event, 'OPEN')"
       >
-        <div class="flex items-center justify-between px-2 shrink-0">
+        <div class="flex items-center justify-between px-1.5 shrink-0">
           <div class="flex items-center gap-2">
-            <span class="w-3 h-3 rounded-full bg-amber-500"></span>
-            <h3 class="font-bold text-sm text-slate-900 uppercase tracking-wider">Aduan Masuk</h3>
+            <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+            <h3 class="font-bold text-xs sm:text-sm text-slate-900 uppercase tracking-wider">Aduan Masuk</h3>
           </div>
-          <span class="px-2.5 py-0.5 rounded-full bg-amber-200/80 text-amber-900 text-xs font-bold">
+          <span class="px-2 py-0.5 rounded-full bg-amber-200/80 text-amber-900 text-xs font-bold">
             {{ filteredOpen.length }}
           </span>
         </div>
 
-        <div class="space-y-3 overflow-y-auto max-h-[calc(100vh-270px)] pr-1 min-h-[120px]">
+        <div class="space-y-3 xl:overflow-y-auto xl:max-h-[calc(100vh-270px)] pr-1 min-h-[120px]">
           <div
             v-for="rep in filteredOpen"
             :key="rep.report_id"
@@ -183,7 +183,7 @@
 
       <!-- COLUMN 2: IN_PROGRESS -->
       <div
-        class="bg-slate-100/70 p-4 rounded-3xl border space-y-4 flex-col transition-all duration-200"
+        class="bg-slate-100/70 p-3.5 sm:p-4 rounded-2xl sm:rounded-3xl border space-y-3.5 sm:space-y-4 flex-col transition-all duration-200"
         :class="[
           activeColumnTab === 'IN_PROGRESS' ? 'flex' : 'hidden xl:flex',
           dragOverColumn === 'IN_PROGRESS' ? 'border-emerald-400 ring-2 ring-emerald-300 bg-emerald-50/60' : 'border-slate-200/80'
@@ -192,17 +192,17 @@
         @dragleave="onDragLeave($event, 'IN_PROGRESS')"
         @drop="onDrop($event, 'IN_PROGRESS')"
       >
-        <div class="flex items-center justify-between px-2 shrink-0">
+        <div class="flex items-center justify-between px-1.5 shrink-0">
           <div class="flex items-center gap-2">
-            <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
-            <h3 class="font-bold text-sm text-slate-900 uppercase tracking-wider">Sedang Ditangani</h3>
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+            <h3 class="font-bold text-xs sm:text-sm text-slate-900 uppercase tracking-wider">Sedang Ditangani</h3>
           </div>
-          <span class="px-2.5 py-0.5 rounded-full bg-emerald-200/80 text-emerald-900 text-xs font-bold">
+          <span class="px-2 py-0.5 rounded-full bg-emerald-200/80 text-emerald-900 text-xs font-bold">
             {{ filteredInProgress.length }}
           </span>
         </div>
 
-        <div class="space-y-3 overflow-y-auto max-h-[calc(100vh-270px)] pr-1 min-h-[120px]">
+        <div class="space-y-3 xl:overflow-y-auto xl:max-h-[calc(100vh-270px)] pr-1 min-h-[120px]">
           <div
             v-for="rep in filteredInProgress"
             :key="rep.report_id"
@@ -292,7 +292,7 @@
 
       <!-- COLUMN 3: RESOLVED -->
       <div
-        class="bg-slate-100/70 p-4 rounded-3xl border space-y-4 flex-col transition-all duration-200"
+        class="bg-slate-100/70 p-3.5 sm:p-4 rounded-2xl sm:rounded-3xl border space-y-3.5 sm:space-y-4 flex-col transition-all duration-200"
         :class="[
           activeColumnTab === 'RESOLVED' ? 'flex' : 'hidden xl:flex',
           dragOverColumn === 'RESOLVED' ? 'border-slate-400 ring-2 ring-slate-300 bg-slate-200/60' : 'border-slate-200/80'
@@ -301,17 +301,17 @@
         @dragleave="onDragLeave($event, 'RESOLVED')"
         @drop="onDrop($event, 'RESOLVED')"
       >
-        <div class="flex items-center justify-between px-2 shrink-0">
+        <div class="flex items-center justify-between px-1.5 shrink-0">
           <div class="flex items-center gap-2">
-            <span class="w-3 h-3 rounded-full bg-slate-500"></span>
-            <h3 class="font-bold text-sm text-slate-900 uppercase tracking-wider">Selesai Ditangani</h3>
+            <span class="w-2.5 h-2.5 rounded-full bg-slate-500"></span>
+            <h3 class="font-bold text-xs sm:text-sm text-slate-900 uppercase tracking-wider">Selesai Ditangani</h3>
           </div>
-          <span class="px-2.5 py-0.5 rounded-full bg-slate-200 text-slate-800 text-xs font-bold">
+          <span class="px-2 py-0.5 rounded-full bg-slate-200 text-slate-800 text-xs font-bold">
             {{ filteredResolved.length }}
           </span>
         </div>
 
-        <div class="space-y-3 overflow-y-auto max-h-[calc(100vh-270px)] pr-1 min-h-[120px]">
+        <div class="space-y-3 xl:overflow-y-auto xl:max-h-[calc(100vh-270px)] pr-1 min-h-[120px]">
           <div
             v-for="rep in filteredResolved"
             :key="rep.report_id"

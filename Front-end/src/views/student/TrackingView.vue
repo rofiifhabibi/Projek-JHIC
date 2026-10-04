@@ -12,9 +12,10 @@
         variant="outline"
         size="sm"
         @click="refreshData"
+        class="shrink-0"
       >
         <template #icon-left><RefreshCw class="w-3.5 h-3.5" :class="{ 'animate-spin': isRefreshing }" /></template>
-        <span>Segarkan</span>
+        <span class="hidden sm:inline">Segarkan</span>
       </BaseButton>
     </div>
 

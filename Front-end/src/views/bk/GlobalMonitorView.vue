@@ -1,91 +1,91 @@
 <template>
   <div class="space-y-6">
     <!-- Header -->
-    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-      <div>
-        <h2 class="text-2xl font-black text-slate-900 tracking-tight">Monitoring Izin Seluruh Siswa</h2>
-        <p class="text-xs text-slate-500 mt-0.5">Pantauan status perizinan siswa dari seluruh kelas di SMKN 2 Depok Sleman.</p>
+    <div class="flex items-start sm:items-center justify-between gap-3">
+      <div class="min-w-0">
+        <h2 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight leading-tight">Monitoring Izin Seluruh Siswa</h2>
+        <p class="text-xs text-slate-500 mt-1 leading-relaxed">Pantauan status perizinan siswa dari seluruh kelas di SMKN 2 Depok Sleman.</p>
       </div>
-      <BaseButton variant="outline" size="sm" @click="loadData">
+      <BaseButton variant="outline" size="sm" @click="loadData" class="shrink-0">
         <template #icon-left><RefreshCw class="w-3.5 h-3.5" :class="{ 'animate-spin': isRefreshing }" /></template>
-        Perbarui Data
+        <span class="hidden sm:inline">Perbarui Data</span>
       </BaseButton>
     </div>
 
     <!-- Peringatan Keterlambatan -->
     <div
       v-if="overdueList.length > 0"
-      class="bg-rose-50 border border-rose-200 rounded-2xl p-5 shadow-xs flex items-start gap-4"
+      class="bg-rose-50 border border-rose-200 rounded-2xl p-4 sm:p-5 shadow-xs flex items-start gap-3 sm:gap-4"
     >
-      <div class="w-10 h-10 rounded-xl bg-rose-600 text-white flex items-center justify-center shrink-0 shadow-xs">
-        <AlertTriangle class="w-5 h-5" />
+      <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-rose-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+        <AlertTriangle class="w-4 h-4 sm:w-5 sm:h-5" />
       </div>
-      <div class="space-y-1 flex-1">
+      <div class="space-y-1 flex-1 min-w-0">
         <div class="flex items-center gap-2 flex-wrap">
-          <h3 class="text-base font-bold text-rose-950">
-            Perhatian: {{ overdueList.length }} Siswa Terlambat Kembali ke Sekolah
+          <h3 class="text-sm sm:text-base font-bold text-rose-950">
+            Perhatian: {{ overdueList.length }} Siswa Terlambat Kembali
           </h3>
-          <span class="px-2.5 py-0.5 rounded-full bg-rose-200 text-rose-800 text-xs font-bold">
+          <span class="px-2 py-0.5 rounded-full bg-rose-200 text-rose-800 text-[11px] font-bold">
             Terlambat
           </span>
         </div>
         <p class="text-xs text-rose-800 leading-relaxed">
-          Terdapat siswa yang melewati batas durasi izin dan belum tercatat kembali di gerbang sekolah. Tim BK dapat berkoordinasi dengan guru pengampu atau wali kelas terkait.
+          Siswa melewati batas durasi izin dan belum tercatat kembali di gerbang. Tim BK dapat berkoordinasi dengan guru pengampu terkait.
         </p>
       </div>
     </div>
 
-    <!-- Stat Widgets Grid for BK (Fully Symmetrical & Harmonized) -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs flex items-center justify-between">
-        <div>
-          <p class="text-xs font-semibold text-slate-500">Total Izin Hari Ini</p>
-          <p class="text-2xl font-black text-slate-900 mt-1">{{ todayPermitsCount }}</p>
+    <!-- Stat Widgets Grid for BK (2x2 on Mobile, 4-col on Desktop) -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+      <div class="bg-white p-3.5 sm:p-4 rounded-xl sm:rounded-2xl border border-slate-200 shadow-xs flex items-center justify-between gap-2">
+        <div class="min-w-0">
+          <p class="text-[11px] sm:text-xs font-semibold text-slate-500 truncate">Total Izin Hari Ini</p>
+          <p class="text-xl sm:text-2xl font-black text-slate-900 mt-0.5 sm:mt-1">{{ todayPermitsCount }}</p>
         </div>
-        <div class="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center font-bold">
-          <Users class="w-5 h-5" />
+        <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center font-bold shrink-0">
+          <Users class="w-4 h-4 sm:w-5 sm:h-5" />
         </div>
       </div>
 
       <div
-        class="bg-white p-4 rounded-2xl border transition-all shadow-xs flex items-center justify-between"
+        class="bg-white p-3.5 sm:p-4 rounded-xl sm:rounded-2xl border transition-all shadow-xs flex items-center justify-between gap-2"
         :class="activeCount > 0 ? 'border-emerald-200 bg-emerald-50/20' : 'border-slate-200'"
       >
-        <div>
-          <p class="text-xs font-semibold" :class="activeCount > 0 ? 'text-emerald-800' : 'text-slate-500'">Sedang Di Luar (Aktif)</p>
-          <p class="text-2xl font-black mt-1" :class="activeCount > 0 ? 'text-emerald-600' : 'text-slate-900'">{{ activeCount }}</p>
+        <div class="min-w-0">
+          <p class="text-[11px] sm:text-xs font-semibold truncate" :class="activeCount > 0 ? 'text-emerald-800' : 'text-slate-500'">Sedang Aktif</p>
+          <p class="text-xl sm:text-2xl font-black mt-0.5 sm:mt-1" :class="activeCount > 0 ? 'text-emerald-600' : 'text-slate-900'">{{ activeCount }}</p>
         </div>
         <div
-          class="w-10 h-10 rounded-xl flex items-center justify-center font-bold transition-colors"
+          class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center font-bold transition-colors shrink-0"
           :class="activeCount > 0 ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'"
         >
-          <Clock class="w-5 h-5" />
+          <Clock class="w-4 h-4 sm:w-5 sm:h-5" />
         </div>
       </div>
 
       <div
-        class="bg-white p-4 rounded-2xl border transition-all shadow-xs flex items-center justify-between"
+        class="bg-white p-3.5 sm:p-4 rounded-xl sm:rounded-2xl border transition-all shadow-xs flex items-center justify-between gap-2"
         :class="overdueList.length > 0 ? 'border-rose-300 bg-rose-50/40' : 'border-slate-200'"
       >
-        <div>
-          <p class="text-xs font-semibold" :class="overdueList.length > 0 ? 'text-rose-700' : 'text-slate-500'">Terlambat Kembali</p>
-          <p class="text-2xl font-black mt-1" :class="overdueList.length > 0 ? 'text-rose-600' : 'text-slate-900'">{{ overdueList.length }}</p>
+        <div class="min-w-0">
+          <p class="text-[11px] sm:text-xs font-semibold truncate" :class="overdueList.length > 0 ? 'text-rose-700' : 'text-slate-500'">Terlambat</p>
+          <p class="text-xl sm:text-2xl font-black mt-0.5 sm:mt-1" :class="overdueList.length > 0 ? 'text-rose-600' : 'text-slate-900'">{{ overdueList.length }}</p>
         </div>
         <div
-          class="w-10 h-10 rounded-xl flex items-center justify-center font-bold transition-colors"
+          class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center font-bold transition-colors shrink-0"
           :class="overdueList.length > 0 ? 'bg-rose-100 text-rose-700' : 'bg-slate-100 text-slate-500'"
         >
-          <AlertTriangle class="w-5 h-5" />
+          <AlertTriangle class="w-4 h-4 sm:w-5 sm:h-5" />
         </div>
       </div>
 
-      <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs flex items-center justify-between">
-        <div>
-          <p class="text-xs font-semibold text-slate-500">Selesai / Sudah Kembali</p>
-          <p class="text-2xl font-black text-slate-900 mt-1">{{ closedOrCompletedCount }}</p>
+      <div class="bg-white p-3.5 sm:p-4 rounded-xl sm:rounded-2xl border border-slate-200 shadow-xs flex items-center justify-between gap-2">
+        <div class="min-w-0">
+          <p class="text-[11px] sm:text-xs font-semibold text-slate-500 truncate">Sudah Kembali</p>
+          <p class="text-xl sm:text-2xl font-black text-slate-900 mt-0.5 sm:mt-1">{{ closedOrCompletedCount }}</p>
         </div>
-        <div class="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center font-bold">
-          <CheckCircle class="w-5 h-5" />
+        <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center font-bold shrink-0">
+          <CheckCircle class="w-4 h-4 sm:w-5 sm:h-5" />
         </div>
       </div>
     </div>
