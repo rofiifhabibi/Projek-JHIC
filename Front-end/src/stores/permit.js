@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import api from '@/api/axios'
 import { useWebNotification } from '@/composables/useWebNotification'
+import { useToast } from '@/composables/useToast'
 
 // Tracker internal untuk mendeteksi perubahan status secara otomatis
 let previousPermitId = null
@@ -121,35 +122,41 @@ export const usePermitStore = defineStore('permit', {
         const newPermit = res.data.data;
 
         if (newPermit) {
-          if (isPermitInitialized && previousPermitId === newPermit.id) {
+          if (isPermitInitialized && (!previousPermitId || previousPermitId === newPermit.id)) {
             const oldStatus = previousPermitStatus;
             const newStatus = newPermit.status;
 
             if (oldStatus && oldStatus !== newStatus) {
               const { showSystemNotification } = useWebNotification();
+              const toast = useToast();
 
               if (oldStatus === 'PENDING' && (newStatus === 'APPROVED' || newStatus === 'ACTIVE')) {
+                toast.success('Pengajuan izin Anda telah disetujui! QR Pass siap digunakan.');
                 showSystemNotification('Izin Disetujui', {
                   body: 'Pengajuan izin telah disetujui oleh guru pengajar. QR Pass siap digunakan.',
-                  url: '/student/pass'
+                  url: '/student/permit/pass'
                 });
               } else if (newStatus === 'REJECTED') {
                 const reason = newPermit.reject_reason ? `: ${newPermit.reject_reason}` : '';
+                toast.error(`Pengajuan izin tidak disetujui${reason}`);
                 showSystemNotification('Izin Tidak Disetujui', {
                   body: `Pengajuan izin tidak disetujui${reason}`,
                   url: '/student/tracking'
                 });
               } else if (newStatus === 'OVERDUE') {
+                toast.warning('Batas waktu izin berakhir! Harap segera kembali ke area kelas.');
                 showSystemNotification('Batas Waktu Izin Berakhir', {
                   body: 'Masa berlaku izin Anda telah habis. Harap segera kembali ke area kelas.',
                   url: '/student/tracking'
                 });
               } else if (newStatus === 'ALPHA') {
+                toast.error('Peringatan disiplin: Status izin ditandai Tidak Kembali (Alpha). Segera melapor ke Guru atau BK.');
                 showSystemNotification('Peringatan Disiplin Siswa', {
                   body: 'Status izin ditandai Tidak Kembali (Alpha). Segera melapor ke Guru atau BK.',
                   url: '/student/tracking'
                 });
               } else if (newStatus === 'COMPLETED') {
+                toast.info('Izin selesai: Presensi kepulangan atau kembali telah divalidasi oleh petugas keamanan.');
                 showSystemNotification('Izin Selesai', {
                   body: 'Presensi kepulangan atau kembali telah divalidasi oleh petugas keamanan.',
                   url: '/student/tracking'
@@ -165,6 +172,8 @@ export const usePermitStore = defineStore('permit', {
           // Jika sebelumnya berstatus ACTIVE atau OVERDUE lalu izin selesai (activePermit menjadi null)
           if (isPermitInitialized && previousPermitId && (previousPermitStatus === 'ACTIVE' || previousPermitStatus === 'OVERDUE')) {
             const { showSystemNotification } = useWebNotification();
+            const toast = useToast();
+            toast.info('Izin selesai: Presensi kepulangan atau kembali telah divalidasi oleh petugas keamanan.');
             showSystemNotification('Izin Selesai', {
               body: 'Presensi kepulangan atau kembali telah divalidasi oleh petugas keamanan.',
               url: '/student/tracking'
@@ -228,11 +237,13 @@ export const usePermitStore = defineStore('permit', {
           const newItems = currentList.filter(p => !previousPendingIds.includes(p.id));
           if (newItems.length > 0) {
             const { showSystemNotification } = useWebNotification();
+            const toast = useToast();
             const firstStudent = newItems[0]?.student?.name || 'Siswa';
             const bodyText = newItems.length === 1
               ? `${firstStudent} mengajukan izin keluar kelas.`
               : `${newItems.length} siswa mengajukan izin keluar kelas.`;
 
+            toast.info(`${bodyText} Silakan tinjau antrean persetujuan.`);
             showSystemNotification('Pengajuan Izin Siswa Baru', {
               body: `${bodyText} Silakan tinjau antrean persetujuan.`,
               url: '/teacher/approvals'
@@ -266,11 +277,13 @@ export const usePermitStore = defineStore('permit', {
           const newlyOverdue = currentOverdue.filter(p => !previousOverduePermitIds.includes(p.id));
           if (newlyOverdue.length > 0) {
             const { showSystemNotification } = useWebNotification();
+            const toast = useToast();
             const studentName = newlyOverdue[0]?.student_name || newlyOverdue[0]?.student?.name || 'Siswa';
             const bodyText = newlyOverdue.length === 1
               ? `${studentName} belum kembali melewati batas waktu izin.`
               : `${newlyOverdue.length} siswa belum kembali melewati batas waktu izin.`;
 
+            toast.warning(`Peringatan: ${bodyText}`);
             showSystemNotification('Peringatan Siswa Terlambat', {
               body: bodyText,
               url: '/teacher/monitoring'

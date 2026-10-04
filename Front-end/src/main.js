@@ -13,11 +13,17 @@ app.use(router)
 
 app.mount('#app')
 
-// Registrasi Service Worker untuk PWA Installability
+// Registrasi Service Worker untuk PWA Installability & Notifikasi Sistem
 if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
+  const registerSW = () => {
     navigator.serviceWorker.register('/sw.js').catch((err) => {
       console.warn('PWA SW registration failed:', err)
     })
-  })
+  }
+
+  if (document.readyState === 'complete') {
+    registerSW()
+  } else {
+    window.addEventListener('load', registerSW)
+  }
 }

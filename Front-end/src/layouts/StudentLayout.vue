@@ -163,10 +163,10 @@ const syncStudentData = async () => {
   ])
 }
 
-const startPolling = () => {
+const startPolling = (intervalMs = 15000) => {
   stopPolling()
-  const jitter = Math.floor(Math.random() * 4000)
-  pollTimer = setInterval(syncStudentData, 20000 + jitter)
+  const jitter = Math.floor(Math.random() * 3000)
+  pollTimer = setInterval(syncStudentData, intervalMs + jitter)
 }
 
 const stopPolling = () => {
@@ -178,10 +178,12 @@ const stopPolling = () => {
 
 const handleVisibilityChange = async () => {
   if (document.hidden) {
-    stopPolling()
+    // Di latar belakang tetap polling dengan interval santai (25 detik) agar notifikasi sistem tetap terkirim
+    startPolling(25000)
   } else {
+    // Kembali aktif ke layar: langsung sinkronkan seketika lalu kembali ke interval aktif (15 detik)
     await syncStudentData()
-    startPolling()
+    startPolling(15000)
   }
 }
 

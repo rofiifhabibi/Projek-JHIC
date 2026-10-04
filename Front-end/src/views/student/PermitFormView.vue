@@ -446,6 +446,14 @@ const handleSubmit = async () => {
 
   isSubmitting.value = true
   try {
+    // Minta izin notifikasi sistem secara proaktif selagi ada aksi klik pengguna
+    if (typeof window !== 'undefined' && 'Notification' in window && Notification.permission === 'default') {
+      try {
+        await Notification.requestPermission()
+      } catch (e) {
+        // Abaikan jika peramban membatasi permintaan izin
+      }
+    }
     await permitStore.submitPermit(payload)
     toast.success('Pengajuan izin berhasil dibuat!')
     router.push('/student/permit/pass')

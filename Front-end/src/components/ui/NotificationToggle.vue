@@ -90,7 +90,8 @@ const handleToggle = async () => {
       toast.success('Notifikasi sistem berhasil diaktifkan.')
       await showSystemNotification('Notifikasi Sistem Aktif', {
         body: 'Pembaruan status izin dan laporan akan ditampilkan secara langsung.',
-        url: window.location.pathname
+        url: window.location.pathname,
+        skipDedupe: true
       })
     } else if (permission.value === 'denied') {
       toast.warning('Izin notifikasi ditolak oleh peramban.')
@@ -101,10 +102,13 @@ const handleToggle = async () => {
   if (permission.value === 'granted') {
     const sent = await showSystemNotification('Tes Notifikasi Sistem', {
       body: 'Notifikasi sistem StudentCare aktif dan berfungsi normal.',
-      url: window.location.pathname
+      url: window.location.pathname,
+      skipDedupe: true
     })
     if (sent) {
       toast.info('Tes notifikasi sistem berhasil dikirim.')
+    } else {
+      toast.info('Notifikasi sistem aktif pada peramban ini.')
     }
     return
   }

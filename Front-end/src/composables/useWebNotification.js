@@ -39,22 +39,24 @@ export function useWebNotification() {
       return false
     }
 
-    // Hindari duplikasi spam notifikasi yang identik dalam interval 4 detik
+    // Hindari duplikasi spam notifikasi yang identik dalam interval 2.5 detik
     const dedupeKey = `${title}_${options.body || ''}`
-    if (recentNotificationKeys.has(dedupeKey)) {
-      return false
+    if (!options.skipDedupe) {
+      if (recentNotificationKeys.has(dedupeKey)) {
+        return false
+      }
+      recentNotificationKeys.add(dedupeKey)
+      setTimeout(() => {
+        recentNotificationKeys.delete(dedupeKey)
+      }, 2500)
     }
-    recentNotificationKeys.add(dedupeKey)
-    setTimeout(() => {
-      recentNotificationKeys.delete(dedupeKey)
-    }, 4000)
 
     const payload = {
       body: options.body || '',
       icon: '/logos/icon-192.png',
       badge: '/logos/icon-192.png',
       vibrate: [100, 50, 100],
-      tag: options.tag || dedupeKey,
+      tag: options.tag || (options.skipDedupe ? `test_${Date.now()}` : dedupeKey),
       renotify: true,
       data: {
         url: options.url || '/'
@@ -62,16 +64,38 @@ export function useWebNotification() {
     }
 
     try {
-      if ('serviceWorker' in navigator) {
-        const registration = await navigator.serviceWorker.ready
-        if (registration && registration.showNotification) {
-          await registration.showNotification(title, payload)
-          return true
+      // Prioritaskan ServiceWorkerRegistration (wajib untuk browser mobile / Android Chrome)
+      if (typeof navigator !== 'undefined' && 'serviceWorker' in navigator) {
+        try {
+          const registration = await Promise.race([
+            navigator.serviceWorker.ready,
+            new Promise((resolve) => setTimeout(() => resolve(null), 800))
+          ])
+
+          if (registration && typeof registration.showNotification === 'function') {
+            await registration.showNotification(title, payload)
+            return true
+          }
+
+          if (navigator.serviceWorker.getRegistration) {
+            const activeReg = await navigator.serviceWorker.getRegistration()
+            if (activeReg && typeof activeReg.showNotification === 'function') {
+              await activeReg.showNotification(title, payload)
+              return true
+            }
+          }
+        } catch (swErr) {
+          console.warn('Percobaan Service Worker notification dilewati:', swErr)
         }
       }
 
-      new Notification(title, payload)
-      return true
+      // Fallback ke Web Notification standar (desktop browser)
+      if (typeof Notification === 'function') {
+        new Notification(title, payload)
+        return true
+      }
+
+      return false
     } catch (err) {
       console.warn('Gagal memunculkan notifikasi sistem:', err)
       return false

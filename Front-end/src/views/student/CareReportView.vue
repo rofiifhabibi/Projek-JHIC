@@ -261,6 +261,14 @@ const handleSubmit = async () => {
 
   isSubmitting.value = true
   try {
+    // Minta izin notifikasi sistem secara proaktif selagi ada aksi klik pengguna
+    if (typeof window !== 'undefined' && 'Notification' in window && Notification.permission === 'default') {
+      try {
+        await Notification.requestPermission()
+      } catch (e) {
+        // Abaikan jika peramban membatasi permintaan izin
+      }
+    }
     await reportStore.submitReport(form.value)
     toast.success('Laporan berhasil dikirim ke Guru BK!')
     router.push('/student/tracking')

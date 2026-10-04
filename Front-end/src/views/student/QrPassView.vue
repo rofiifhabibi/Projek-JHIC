@@ -432,14 +432,14 @@ const refreshPass = async () => {
   }
 }
 
-const startPolling = () => {
+const startPolling = (intervalMs = 15000) => {
   stopPolling()
   // Tambahkan random jitter (0-3 detik) agar ratusan request klien tidak menabrak server di milidetik yang sama
   const jitter = Math.floor(Math.random() * 3000)
   pollingInterval = setInterval(async () => {
     await permitStore.fetchActivePermit()
     updateCountdown()
-  }, 15000 + jitter)
+  }, intervalMs + jitter)
 }
 
 const stopPolling = () => {
@@ -451,13 +451,13 @@ const stopPolling = () => {
 
 const handleVisibilityChange = async () => {
   if (document.hidden) {
-    // Layar HP mati / tab diminimize: hentikan polling untuk hemat sumber daya server
-    stopPolling()
+    // Di latar belakang tetap polling santai (25 detik) agar status persetujuan guru tetap terdeteksi
+    startPolling(25000)
   } else {
-    // Kembali aktif: langsung sync data terbaru lalu lanjutkan interval polling
+    // Kembali aktif: langsung sync data terbaru lalu lanjutkan interval polling normal
     await permitStore.fetchActivePermit()
     updateCountdown()
-    startPolling()
+    startPolling(15000)
   }
 }
 

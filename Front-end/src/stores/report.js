@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import api from '@/api/axios'
 import { useWebNotification } from '@/composables/useWebNotification'
+import { useToast } from '@/composables/useToast'
 
 let previousOpenReportIds = null
 let isKanbanInitialized = false
@@ -61,6 +62,8 @@ export const useReportStore = defineStore('report', {
 
           if (hasUpdate) {
             const { showSystemNotification } = useWebNotification();
+            const toast = useToast();
+            toast.info('Guru BK telah memberikan tanggapan atau pembaruan status pada laporan konseling Anda.');
             showSystemNotification('Pembaruan Laporan Konseling', {
               body: 'Guru BK telah memberikan tanggapan atau pembaruan status pada laporan Anda.',
               url: '/student/tracking'
@@ -106,10 +109,12 @@ export const useReportStore = defineStore('report', {
           const newOpen = openReports.filter(r => !previousOpenReportIds.includes(r.id));
           if (newOpen.length > 0) {
             const { showSystemNotification } = useWebNotification();
+            const toast = useToast();
             const bodyText = newOpen.length === 1
               ? 'Terdapat 1 laporan konseling siswa baru yang perlu ditinjau.'
               : `Terdapat ${newOpen.length} laporan konseling siswa baru yang perlu ditinjau.`;
 
+            toast.info(bodyText);
             showSystemNotification('Laporan Konseling Siswa Baru', {
               body: bodyText,
               url: '/bk/kanban'
