@@ -137,6 +137,21 @@
             <RefreshCw class="w-3.5 h-3.5 animate-spin" />
             Memeriksa persetujuan guru...
           </div>
+
+          <!-- Tombol aktivasi notifikasi jika belum diaktifkan di PWA -->
+          <div
+            v-if="isSupported && permission === 'default'"
+            class="pt-1 max-w-xs mx-auto"
+          >
+            <button
+              type="button"
+              @click="enableNotifications"
+              class="w-full py-2 px-3 rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-900 text-xs font-bold transition flex items-center justify-center gap-2 shadow-xs cursor-pointer touch-manipulation"
+            >
+              <Bell class="w-3.5 h-3.5 text-emerald-700" />
+              <span>Aktifkan Notifikasi PWA</span>
+            </button>
+          </div>
           <div class="pt-3">
             <BaseButton
               variant="outline"
@@ -328,15 +343,31 @@ import QrcodeVue from 'qrcode.vue'
 import { useAuthStore } from '@/stores/auth'
 import { usePermitStore } from '@/stores/permit'
 import { useToast } from '@/composables/useToast'
+import { useWebNotification } from '@/composables/useWebNotification'
 import BaseBadge from '@/components/ui/BaseBadge.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
 import EmptyState from '@/components/ui/EmptyState.vue'
 import ConfirmDialog from '@/components/ui/ConfirmDialog.vue'
-import { Clock, RefreshCw, CheckCircle, ShieldAlert, AlertTriangle, AlertOctagon, HeartHandshake, XCircle, FilePlus, Copy } from 'lucide-vue-next'
+import { Clock, RefreshCw, CheckCircle, ShieldAlert, AlertTriangle, AlertOctagon, HeartHandshake, XCircle, FilePlus, Copy, Bell } from 'lucide-vue-next'
 
 const authStore = useAuthStore()
 const permitStore = usePermitStore()
 const toast = useToast()
+const { isSupported, permission, checkPermission, requestPermission, showSystemNotification } = useWebNotification()
+
+const enableNotifications = async () => {
+  const granted = await requestPermission()
+  if (granted) {
+    toast.success('Notifikasi sistem PWA berhasil diaktifkan!')
+    await showSystemNotification('Notifikasi PWA Aktif', {
+      body: 'Status perizinan akan otomatis diberitahukan ke HP Anda.',
+      url: '/student/permit/pass',
+      skipDedupe: true
+    })
+  } else if (permission.value === 'denied') {
+    toast.warning('Izin notifikasi ditolak oleh sistem peramban.')
+  }
+}
 
 const activePermit = computed(() => permitStore.activePermit)
 
@@ -464,6 +495,7 @@ const handleVisibilityChange = async () => {
 const isLoadingInitial = ref(true)
 
 onMounted(async () => {
+  checkPermission()
   try {
     await permitStore.fetchActivePermit()
     updateCountdown()

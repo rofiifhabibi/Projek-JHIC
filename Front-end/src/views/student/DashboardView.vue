@@ -16,6 +16,41 @@
       </div>
     </div>
 
+    <!-- Banner Izin Notifikasi PWA jika belum aktif -->
+    <div
+      v-if="isSupported && permission === 'default' && !isNotificationBannerDismissed"
+      class="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-emerald-950 shadow-xs"
+    >
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0">
+          <Bell class="w-5 h-5" />
+        </div>
+        <div class="text-xs sm:text-sm">
+          <p class="font-bold text-slate-900 leading-tight">Aktifkan Notifikasi Aplikasi PWA</p>
+          <p class="text-slate-600 mt-0.5 leading-snug">
+            Dapatkan pemberitahuan langsung di layar HP saat izin keluar kelas disetujui atau ada respons dari Guru BK.
+          </p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 self-end sm:self-auto shrink-0">
+        <button
+          type="button"
+          @click="dismissNotificationBanner"
+          class="px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-500 hover:text-slate-800 hover:bg-black/5 transition cursor-pointer touch-manipulation"
+        >
+          Nanti
+        </button>
+        <button
+          type="button"
+          @click="enableNotifications"
+          class="px-3.5 py-1.5 rounded-xl bg-[#355245] hover:bg-[#273e34] active:scale-95 text-white text-xs font-bold transition shadow-xs flex items-center gap-1.5 cursor-pointer touch-manipulation"
+        >
+          <Bell class="w-3.5 h-3.5" />
+          <span>Aktifkan Sekarang</span>
+        </button>
+      </div>
+    </div>
+
     <!-- Skeleton Loading Placeholder saat initial load -->
     <div
       v-if="isLoadingInitial"
@@ -274,15 +309,37 @@ import { useAuthStore } from '@/stores/auth'
 import { usePermitStore } from '@/stores/permit'
 import { useReportStore } from '@/stores/report'
 import { useToast } from '@/composables/useToast'
+import { useWebNotification } from '@/composables/useWebNotification'
 import BaseButton from '@/components/ui/BaseButton.vue'
 import BaseBadge from '@/components/ui/BaseBadge.vue'
 import ConfirmDialog from '@/components/ui/ConfirmDialog.vue'
-import { QrCode, FilePlus, ShieldAlert, AlertTriangle, AlertOctagon, HeartHandshake, Clock, CheckCircle, XCircle } from 'lucide-vue-next'
+import { QrCode, FilePlus, ShieldAlert, AlertTriangle, AlertOctagon, HeartHandshake, Clock, CheckCircle, XCircle, Bell } from 'lucide-vue-next'
 
 const authStore = useAuthStore()
 const permitStore = usePermitStore()
 const reportStore = useReportStore()
 const toast = useToast()
+const { isSupported, permission, checkPermission, requestPermission, showSystemNotification } = useWebNotification()
+
+const isNotificationBannerDismissed = ref(false)
+
+const enableNotifications = async () => {
+  const granted = await requestPermission()
+  if (granted) {
+    toast.success('Notifikasi sistem PWA berhasil diaktifkan!')
+    await showSystemNotification('Notifikasi PWA Aktif', {
+      body: 'Pembaruan status izin dan tindak lanjut BK akan masuk ke perangkat Anda.',
+      url: '/student/dashboard',
+      skipDedupe: true
+    })
+  } else if (permission.value === 'denied') {
+    toast.warning('Izin notifikasi ditolak oleh sistem peramban.')
+  }
+}
+
+const dismissNotificationBanner = () => {
+  isNotificationBannerDismissed.value = true
+}
 
 const showCancelConfirm = ref(false)
 const isCancelling = ref(false)
@@ -319,6 +376,7 @@ const greetingText = computed(() => {
 const isLoadingInitial = ref(true)
 
 onMounted(async () => {
+  checkPermission()
   try {
     await Promise.allSettled([
       permitStore.fetchActivePermit(),

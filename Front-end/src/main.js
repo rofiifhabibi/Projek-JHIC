@@ -16,7 +16,10 @@ app.mount('#app')
 // Registrasi Service Worker untuk PWA Installability & Notifikasi Sistem
 if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
   const registerSW = () => {
-    navigator.serviceWorker.register('/sw.js').catch((err) => {
+    navigator.serviceWorker.register('/sw.js').then((registration) => {
+      // Periksa pembaruan Service Worker secara proaktif saat PWA dibuka
+      registration.update().catch(() => {})
+    }).catch((err) => {
       console.warn('PWA SW registration failed:', err)
     })
   }
